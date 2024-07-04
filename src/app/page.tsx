@@ -1,5 +1,6 @@
 "use client";
 import { useQRCode } from "next-qrcode";
+import Link from "next/link";
 
 export default function Home() {
   // get the menus from the db
@@ -39,7 +40,11 @@ export default function Home() {
                   },
                 }}
               />
-              <div className="text-center text-xl">Menu number {index + 1}</div>
+              <div className="text-center text-xl">
+                <Link href={`/menu/1?table=${index + 1}`}>
+                  Menu number {index + 1}
+                </Link>
+              </div>
             </div>
           );
         })}

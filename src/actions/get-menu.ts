@@ -6,7 +6,6 @@ const getMenu = async (menu_id: number) => {
 
   const menu = await response.json();
 
-  console.log(menu);
   return menu;
 };
 
