@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { PlusIcon } from "lucide-react";
@@ -30,9 +30,6 @@ const MenuItemCard = (item: any) => {
           {item.price} DA
         </Badge>
       </div>
-      {/* <Button className="w-full lg:w-1/5 md:w-1/5">
-        <PlusIcon />
-      </Button> */}
       <MenuItemDrawer {...item} />
     </div>
   );

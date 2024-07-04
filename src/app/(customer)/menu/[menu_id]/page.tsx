@@ -1,7 +1,8 @@
 import getMenu from "@/actions/get-menu";
 import MenuItemCard from "@/components/menu/menuItemCard";
+import { Button } from "@/components/ui/button";
 import { MapPin, PhoneCall } from "lucide-react";
-import Image from "next/image";
+import Image from "next/legacy/image";
 
 const MenuPage = async ({
   params,
@@ -14,6 +15,7 @@ const MenuPage = async ({
   const menu = await getMenu(menu_id);
 
   const { menu_items, restaurant } = menu;
+  // console.log(menu_items);
   return (
     <div>
       <div className="flex gap-4 items-center w-full bg-slate-200 justify-between px-14 py-4">
@@ -40,10 +42,13 @@ const MenuPage = async ({
         <p className="text-xl font-bold">{menu.name}</p>
         <p>{menu.description}</p>
       </div>
-      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 px-4">
+      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 px-4 pb-20">
         {menu_items.map((item: any) => (
           <MenuItemCard {...item} key={item.menu_item_id} />
         ))}
+      </div>
+      <div className="fixed bottom-4 px-4 w-full">
+        <Button className="w-full">Order Now</Button>
       </div>
     </div>
   );
