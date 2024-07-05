@@ -1,5 +1,6 @@
 import getMenu from "@/actions/get-menu";
 import MenuItemCard from "@/components/menu/menuItemCard";
+import OrderDrawer from "@/components/menu/orderDrawer";
 import { Button } from "@/components/ui/button";
 import { MapPin, PhoneCall } from "lucide-react";
 import Image from "next/legacy/image";
@@ -48,7 +49,8 @@ const MenuPage = async ({
         ))}
       </div>
       <div className="fixed bottom-4 px-4 w-full">
-        <Button className="w-full">Order Now</Button>
+        {/* <Button className="w-full">Order Now</Button> */}
+        <OrderDrawer />
       </div>
     </div>
   );

@@ -1,7 +1,5 @@
 import Image from "next/legacy/image";
 import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
-import { PlusIcon } from "lucide-react";
 import MenuItemDrawer from "./menuItemDrawer";
 
 const MenuItemCard = (item: any) => {
