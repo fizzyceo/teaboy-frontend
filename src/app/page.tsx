@@ -3,18 +3,16 @@ import { useQRCode } from "next-qrcode";
 import Link from "next/link";
 
 export default function Home() {
-  // get the menus from the db
-  // generate QR code for each menu and show them as a grid
-  // when scanning the QR Code I can open the website on my phone , the qrcode should be {BASE_URL}/menu/{menu_id}
-  // Other informations can always be passed via query params
+  const { Canvas } = useQRCode();
+
+  const currentURL = window.location.href;
 
   const links = [
-    "https://basseer-internship-web-app.vercel.app/menu/1?table=1",
-    "https://basseer-internship-web-app.vercel.app/menu/1?table=2",
-    "https://basseer-internship-web-app.vercel.app/menu/1?table=3",
+    `${currentURL}/menu/1`,
+    `${currentURL}/menu/2`,
+    `${currentURL}/menu/3`,
   ];
 
-  const { Canvas } = useQRCode();
   return (
     <main className="w-full h-full flex flex-col items-center justify-center gap-4 p-4">
       <div className="text-3xl xl:text-2xl">Welcome to iMenu</div>
