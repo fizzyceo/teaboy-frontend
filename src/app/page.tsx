@@ -5,12 +5,10 @@ import Link from "next/link";
 export default function Home() {
   const { Canvas } = useQRCode();
 
-  const currentURL = window.location.href;
-
   const links = [
-    `${currentURL}/menu/1`,
-    `${currentURL}/menu/2`,
-    `${currentURL}/menu/3`,
+    "basseer-internship-web-app.vercel.app/menu/1?table=1",
+    "basseer-internship-web-app.vercel.app/menu/1?table=2",
+    "basseer-internship-web-app.vercel.app/menu/1?table=3",
   ];
 
   return (
