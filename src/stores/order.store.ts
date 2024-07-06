@@ -7,19 +7,23 @@ interface OrderStore {
   setTableNumber: (tableNumber: number) => void;
   note?: string | undefined;
   setNote: (note: string) => void;
-  currentOrderItem: OrderItem | undefined;
-  setCurrentOrderItem: (orderItem: OrderItem) => void;
+
   orderItems: OrderItem[];
+  setQuantity: (orderItemId: number, quantity: number) => void;
+
   addOrderItem: (orderItem: OrderItem) => void;
   removeOrderItem: (orderItemId: number) => void;
   updateOrderItem: (orderItemId: number, orderItem: OrderItem) => void;
 }
 
-interface OrderItem {
+export interface OrderItem {
   quantity: number;
   note?: string;
   menuItemId: number;
-  status: "PENDING" | "IN_PROGRESS" | "READY" | "DELIVERED" | "CANCELLED";
+  menuItemUrl: string;
+  menuItemTitle: string;
+  menuItemDescription: string;
+  menuItemPrice: number;
 }
 
 export const useOrderStore = create<OrderStore>((set) => ({
@@ -30,9 +34,14 @@ export const useOrderStore = create<OrderStore>((set) => ({
   note: undefined,
   setNote: (note) => set({ note }),
   orderItems: [],
-  currentOrderItem: undefined,
-  setCurrentOrderItem: (orderItem) => set({ currentOrderItem: orderItem }),
 
+  setQuantity: (orderItemId, quantity) => {
+    set((state) => ({
+      orderItems: state.orderItems.map((item) =>
+        item.menuItemId === orderItemId ? { ...item, quantity } : item
+      ),
+    }));
+  },
   addOrderItem: (orderItem) =>
     set((state) => ({ orderItems: [...state.orderItems, orderItem] })),
   removeOrderItem: (orderItemId) =>

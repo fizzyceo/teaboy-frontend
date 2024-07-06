@@ -49,7 +49,6 @@ const MenuPage = async ({
         ))}
       </div>
       <div className="fixed bottom-4 px-4 w-full">
-        {/* <Button className="w-full">Order Now</Button> */}
         <OrderDrawer />
       </div>
     </div>

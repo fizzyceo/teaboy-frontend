@@ -16,10 +16,12 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
+import { useOrderStore } from "@/stores/order.store";
 
 const MenuItemDrawer = (item: any) => {
   const [quantity, seQuantity] = useState(1);
   const [note, setNote] = useState("");
+  const { addOrderItem } = useOrderStore();
   return (
     <Drawer>
       <DrawerTrigger asChild>
@@ -62,9 +64,18 @@ const MenuItemDrawer = (item: any) => {
           </div>
           <Button
             className="text-xl"
-            onClick={() =>
-              toast.success(`Added ${quantity} ${item.title} to order`)
-            }
+            onClick={() => {
+              toast.success(`Added ${quantity} ${item.title} to order`);
+              addOrderItem({
+                menuItemId: item.menu_item_id,
+                menuItemUrl: item.item_images[0].image_url,
+                menuItemTitle: item.title,
+                menuItemDescription: item.description,
+                menuItemPrice: item.price,
+                quantity,
+                note,
+              });
+            }}
           >
             Add To order
           </Button>
