@@ -25,7 +25,9 @@ const MenuItemDrawer = (item: any) => {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button variant="outline">Add To Cart</Button>
+        <Button variant="outline" className="w-full">
+          Add To Cart
+        </Button>
       </DrawerTrigger>
       <DrawerContent className="h-auto">
         <DrawerClose className="absolute top-4 right-4">

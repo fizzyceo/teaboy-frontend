@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { CircleX, MinusSquare, PlusSquare } from "lucide-react";
+import { MinusSquare, PlusSquare } from "lucide-react";
 import {
   Drawer,
   DrawerClose,
@@ -26,7 +26,18 @@ const OrderDrawer = () => {
   );
 
   const handleSubmitOrder = async () => {
-    const response = await submitOrder({ orderItems });
+    const order = {
+      customer_name: "Moncef Moussaoui test",
+      table_number: 0,
+      order_items: orderItems.map((item) => ({
+        menu_item_id: item.menuItemId,
+        quantity: item.quantity,
+        note: item.note,
+        status: "PENDING",
+      })),
+    };
+    const response = await submitOrder(order);
+    console.log(response);
     if (response.success) {
       toast.success("Order submitted successfully");
     } else {
