@@ -64,6 +64,17 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
   }
+  .transition-max-height {
+    transition: max-height 0.5s ease, opacity 0.5s ease;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+  }
+
+  .transition-max-height.show {
+    max-height: 100px; /* or an appropriate value based on your input height */
+    opacity: 1;
+  }
 }
 
 @layer base {

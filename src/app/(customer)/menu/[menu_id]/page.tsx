@@ -1,6 +1,6 @@
 import getMenu from "@/actions/get-menu";
 import MenuItemCard from "@/components/menu/menuItemCard";
-import OrderDrawer from "@/components/menu/orderDrawer";
+import OrderDrawer from "@/components/order/orderDrawer";
 import RestaurantHeader from "@/components/menu/restaurantHeader";
 import { useOrderStore } from "@/stores/order.store";
 import { MapPin, PhoneCall, Utensils } from "lucide-react";
@@ -34,7 +34,7 @@ const MenuPage = async ({
         ))}
       </div>
       <div className="fixed bottom-4 px-4 w-full">
-        <OrderDrawer />
+        <OrderDrawer table_number={parseInt(searchParams.table as string)} />
       </div>
     </div>
   );

@@ -19,10 +19,10 @@ const submitOrder = async (order: any) => {
   const data = await response.json();
 
   if (!response.ok) {
-    return { success: false, error: data.error };
+    return { success: false, error: data.error, data: data };
   }
 
-  return { success: true };
+  return { success: true, data: data };
 };
 
 export default submitOrder;

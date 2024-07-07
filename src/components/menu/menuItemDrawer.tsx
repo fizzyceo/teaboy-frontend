@@ -1,28 +1,29 @@
 "use client";
+import { useState } from "react";
+import { useOrderStore } from "@/stores/order.store";
+import Image from "next/legacy/image";
+import { toast } from "sonner";
+
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+
 import { CircleX, MinusSquare, PlusSquare, ShoppingBag } from "lucide-react";
-import Image from "next/legacy/image";
-import { useState } from "react";
-import { toast } from "sonner";
-import { Label } from "../ui/label";
-import { Textarea } from "../ui/textarea";
-import { useOrderStore } from "@/stores/order.store";
-import { Badge } from "../ui/badge";
 
 const MenuItemDrawer = (item: any) => {
   const [quantity, seQuantity] = useState(1);
   const [note, setNote] = useState("");
-  const { addOrderItem, orderItems } = useOrderStore();
+  const { addOrderItem } = useOrderStore();
 
   const handleAddToOrder = () => {
     const orderItem = {
@@ -35,13 +36,6 @@ const MenuItemDrawer = (item: any) => {
       menuItemPrice: item.price,
     };
 
-    if (quantity === 0) {
-      toast.info("Please add at least one item to your order", {
-        duration: 3000,
-      });
-      return;
-    }
-
     addOrderItem(orderItem);
 
     toast.success(`Added ${quantity} ${item.title} to order`, {
@@ -53,7 +47,7 @@ const MenuItemDrawer = (item: any) => {
     <Drawer>
       <DrawerTrigger asChild>
         <Button variant="outline" className="w-full">
-          <ShoppingBag className="mr-2" />
+          <ShoppingBag className="mr-2" size={24} />
           Add To Cart
         </Button>
       </DrawerTrigger>
@@ -62,8 +56,10 @@ const MenuItemDrawer = (item: any) => {
           <CircleX size={34} className="hover:text-slate-700 z-50" />
         </DrawerClose>
         <DrawerHeader className="flex flex-col items-center gap-4 w-full h-full p-4 md:p-8 lg:p-8">
-          <DrawerTitle>{item.title}</DrawerTitle>
-          <div className="h-60 lg:h-full md:h-full w-full md:w-1/3 lg:w-1/3 relative rounded-md overflow-hidden bg-slate-500 ">
+          <DrawerTitle className="text-nowrap text-2xl">
+            {item.title}
+          </DrawerTitle>
+          <div className="h-52 lg:h-32 md:h-32 w-full relative rounded-md overflow-hidden  ">
             <Image
               src={item.item_images[0].image_url}
               alt={item.title}
@@ -71,13 +67,16 @@ const MenuItemDrawer = (item: any) => {
               objectFit="cover"
             />
             <Badge
-              className="text-xl absolute right-2 bottom-2 font-extrabold drop-shadow-md"
+              className="flex text-xl items-end space-x-3 absolute outline-offset-2 outline-2 outline-dashed right-2 bottom-2 font-extrabold drop-shadow-md"
               variant={"secondary"}
             >
-              {item.price} <span className="text-lg text-gray-500"> DA</span>
+              <span className="text-xl font-extrabold text-gray-900">
+                {item.price}
+              </span>
+              <span className="text-base font-semibold text-gray-500">DA</span>
             </Badge>
           </div>
-          <p className="text-start w-full">{item.description}</p>
+          <p className="text-start text-xl w-full">{item.description}</p>
           <div className="w-full flex flex-col justify-start items-start gap-4">
             <Label htmlFor="note">Note</Label>
             <Textarea
@@ -88,13 +87,14 @@ const MenuItemDrawer = (item: any) => {
             />
           </div>
         </DrawerHeader>
-        <DrawerFooter className="w-full">
-          <div className=" w-1/2  flex items-center justify-between  gap-4 mt-4 rounded-lg bg-slate-300 py-2 px-4 self-center">
+        <DrawerFooter className="w-full space-y-3">
+          <div className=" w-1/2  flex items-center justify-between  gap-4  rounded-2xl  bg-slate-300 py-2 px-4 self-center">
             <MinusSquare
               onClick={() => seQuantity(quantity > 0 ? quantity - 1 : 0)}
+              size={30}
             />
             <div className="text-3xl font-bold">{quantity}</div>
-            <PlusSquare onClick={() => seQuantity(quantity + 1)} />
+            <PlusSquare onClick={() => seQuantity(quantity + 1)} size={30} />
           </div>
           <Button className="text-xl" onClick={handleAddToOrder}>
             Add To order

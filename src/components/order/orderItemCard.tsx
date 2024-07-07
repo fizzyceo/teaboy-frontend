@@ -17,11 +17,15 @@ const OrderItemCard = (item: any) => {
         height={80}
         className="object-cover rounded-md basis-1/3"
       />
-      <div className="flex justify-between basis-1/3">
-        <div className="flex items-start justify-between flex-col gap-1">
-          <p className="text-lg font-semibold truncate">{item.menuItemTitle}</p>
-          <p className="text-sm text-gray-600 truncate">{item.note}</p>
-          <p className="text-md font-medium text-gray-800">
+      <div className="flex justify-between  basis-1/3">
+        <div className="flex items-start  justify-between flex-col gap-1">
+          <p className="text-lg font-semibold  overflow-hidden truncate">
+            {item.menuItemTitle}
+          </p>
+          <p className="text-sm text-gray-600 overflow-hidden truncate">
+            {item.note}
+          </p>
+          <p className="text-md font-medium overflow-hidden text-gray-800">
             {item.menuItemPrice} DA
           </p>
         </div>
@@ -35,12 +39,14 @@ const OrderItemCard = (item: any) => {
                 removeOrderItem(item.menuItemId);
               }
             }}
+            size={24}
           />
           <div className="text-2xl font-bold">{item.quantity}</div>
           <PlusSquare
             onClick={() => setQuantity(item.menuItemId, item.quantity + 1)}
           />
         </div>
+
         <Button
           variant="destructive"
           className="w-full"
