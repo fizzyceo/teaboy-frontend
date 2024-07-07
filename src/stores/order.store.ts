@@ -42,8 +42,21 @@ export const useOrderStore = create<OrderStore>((set) => ({
       ),
     }));
   },
-  addOrderItem: (orderItem) =>
-    set((state) => ({ orderItems: [...state.orderItems, orderItem] })),
+  // if the orderitm is already in the orderItems array, then update the quantity
+  // else add the orderItem to the orderItems array
+  addOrderItem: (orderItem) => {
+    set((state) => ({
+      orderItems: state.orderItems.some(
+        (item) => item.menuItemId === orderItem.menuItemId
+      )
+        ? state.orderItems.map((item) =>
+            item.menuItemId === orderItem.menuItemId
+              ? { ...item, quantity: item.quantity + orderItem.quantity }
+              : item
+          )
+        : [...state.orderItems, orderItem],
+    }));
+  },
   removeOrderItem: (orderItemId) =>
     set((state) => ({
       orderItems: state.orderItems.filter(
