@@ -30,7 +30,7 @@ const OrderDrawer = ({ table_number }: { table_number: number }) => {
   const [customerName, setCustomerName] = useState("");
 
   const total = orderItems.reduce(
-    (acc: number, item: OrderItem) => acc + item.menuItemPrice * item.quantity,
+    (acc: number, item: OrderItem) => acc + item.menuItemPrice,
     0
   );
 
@@ -49,7 +49,6 @@ const OrderDrawer = ({ table_number }: { table_number: number }) => {
       table_number: table_number,
       order_items: orderItems.map((item) => ({
         menu_item_id: item.menuItemId,
-        quantity: item.quantity,
         note: item.note,
         status: "PENDING",
       })),

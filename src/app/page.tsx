@@ -6,9 +6,9 @@ export default function Home() {
   const { Canvas } = useQRCode();
 
   const links = [
-    "basseer-internship-web-app.vercel.app/menu/1?table=1",
-    "basseer-internship-web-app.vercel.app/menu/1?table=2",
-    "basseer-internship-web-app.vercel.app/menu/1?table=3",
+    "https://basseer-internship-web-app.vercel.app/menu/2?table=2",
+    "https://basseer-internship-web-app.vercel.app/menu/2?table=1",
+    "https://basseer-internship-web-app.vercel.app/menu/2?table=3",
   ];
 
   return (
@@ -37,7 +37,7 @@ export default function Home() {
                 }}
               />
               <div className="text-center text-xl">
-                <Link href={`/menu/1?table=${index + 1}`}>
+                <Link href={`/menu/2?table=${index + 1}`}>
                   Menu number {index + 1}
                 </Link>
               </div>

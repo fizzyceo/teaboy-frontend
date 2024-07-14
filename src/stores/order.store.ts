@@ -1,5 +1,9 @@
 import { create } from "zustand";
 
+export type OrderOptionType = {
+  menu_item_option_choice_id: number;
+  menu_item_option_id: number;
+};
 interface OrderStore {
   customerName?: string | undefined;
   setCustomerName: (name: string) => void;
@@ -9,7 +13,6 @@ interface OrderStore {
   setNote: (note: string) => void;
 
   orderItems: OrderItem[];
-  setQuantity: (orderItemId: number, quantity: number) => void;
 
   addOrderItem: (orderItem: OrderItem) => void;
   removeOrderItem: (orderItemId: number) => void;
@@ -17,13 +20,13 @@ interface OrderStore {
 }
 
 export interface OrderItem {
-  quantity: number;
   note?: string;
   menuItemId: number;
   menuItemUrl: string;
   menuItemTitle: string;
   menuItemDescription: string;
   menuItemPrice: number;
+  choices?: OrderOptionType[];
 }
 
 export const useOrderStore = create<OrderStore>((set) => ({
@@ -35,26 +38,9 @@ export const useOrderStore = create<OrderStore>((set) => ({
   setNote: (note) => set({ note }),
   orderItems: [],
 
-  setQuantity: (orderItemId, quantity) => {
-    set((state) => ({
-      orderItems: state.orderItems.map((item) =>
-        item.menuItemId === orderItemId ? { ...item, quantity } : item
-      ),
-    }));
-  },
-  // if the orderitm is already in the orderItems array, then update the quantity
-  // else add the orderItem to the orderItems array
   addOrderItem: (orderItem) => {
     set((state) => ({
-      orderItems: state.orderItems.some(
-        (item) => item.menuItemId === orderItem.menuItemId
-      )
-        ? state.orderItems.map((item) =>
-            item.menuItemId === orderItem.menuItemId
-              ? { ...item, quantity: item.quantity + orderItem.quantity }
-              : item
-          )
-        : [...state.orderItems, orderItem],
+      orderItems: [...state.orderItems, orderItem],
     }));
   },
   removeOrderItem: (orderItemId) =>

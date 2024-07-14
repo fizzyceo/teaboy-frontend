@@ -18,17 +18,39 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 
-import { CircleX, MinusSquare, PlusSquare, ShoppingBag } from "lucide-react";
+import { CircleX, ShoppingBag } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+
+type OrderOptionType = {
+  menu_item_option_choice_id: number;
+  menu_item_option_id: number;
+};
 
 const MenuItemDrawer = (item: any) => {
-  const [quantity, seQuantity] = useState(1);
+  const { options } = item;
+
+  const [orderOptions, setOrderOptions] = useState<OrderOptionType[]>([]);
   const [note, setNote] = useState("");
-  const { addOrderItem } = useOrderStore();
+  const { addOrderItem, orderItems } = useOrderStore();
+
+  console.log("orderItems-->", orderItems);
+
+  const handleValueChange = (optionId: number, choiceId: number) => {
+    setOrderOptions((prevOptions) => {
+      const updatedOptions = prevOptions.filter(
+        (opt) => opt.menu_item_option_id !== optionId
+      );
+      return [
+        ...updatedOptions,
+        { menu_item_option_id: optionId, menu_item_option_choice_id: choiceId },
+      ];
+    });
+  };
 
   const handleAddToOrder = () => {
     const orderItem = {
-      quantity,
       note,
+      choices: orderOptions,
       menuItemId: item.menu_item_id,
       menuItemUrl: item.item_images[0].image_url,
       menuItemTitle: item.title,
@@ -36,9 +58,10 @@ const MenuItemDrawer = (item: any) => {
       menuItemPrice: item.price,
     };
 
+    console.log("orderItem", orderItem);
     addOrderItem(orderItem);
 
-    toast.success(`Added ${quantity} ${item.title} to order`, {
+    toast.success(`Added  ${item.title} to order`, {
       duration: 3000,
     });
   };
@@ -66,17 +89,50 @@ const MenuItemDrawer = (item: any) => {
               layout="fill"
               objectFit="cover"
             />
-            <Badge
-              className="flex text-xl items-end space-x-3 absolute outline-offset-2 outline-2 outline-dashed right-2 bottom-2 font-extrabold drop-shadow-md"
-              variant={"secondary"}
-            >
-              <span className="text-xl font-extrabold text-gray-900">
-                {item.price}
-              </span>
-              <span className="text-base font-semibold text-gray-500">DA</span>
-            </Badge>
+            {item.price > 0 ? (
+              <Badge
+                className="flex text-xl items-end space-x-3 absolute outline-offset-2 outline-2 outline-dashed right-2 bottom-2 font-extrabold drop-shadow-md"
+                variant={"secondary"}
+              >
+                <span className="text-xl font-extrabold text-gray-900">
+                  {item.price}
+                </span>
+                <span className="text-base font-semibold text-gray-500">
+                  DA
+                </span>
+              </Badge>
+            ) : null}
           </div>
           <p className="text-start text-xl w-full">{item.description}</p>
+          <div className="flex flex-col gap-4  w-full">
+            {options.map((option: any) => (
+              <RadioGroup
+                key={option.menu_item_option_id}
+                className="flex flex-col items-start w-full"
+                onValueChange={(value) =>
+                  handleValueChange(option.menu_item_option_id, parseInt(value))
+                }
+              >
+                <p className="basis-2 font-bold text-xl">{option.name}</p>
+                <div className="flex w-full gap-10  flex-wrap">
+                  {option.choices.map((choice: any) => (
+                    <div
+                      className="flex items-center space-x-2"
+                      key={choice.menu_item_option_choice_id}
+                    >
+                      <RadioGroupItem
+                        value={choice.menu_item_option_choice_id}
+                        id={choice.menu_item_option_choice_id}
+                      />
+                      <Label htmlFor={choice.menu_item_option_choice_id}>
+                        {choice.name}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </RadioGroup>
+            ))}
+          </div>
           <div className="w-full flex flex-col justify-start items-start gap-4">
             <Label htmlFor="note">Note</Label>
             <Textarea
@@ -88,14 +144,6 @@ const MenuItemDrawer = (item: any) => {
           </div>
         </DrawerHeader>
         <DrawerFooter className="w-full space-y-3">
-          <div className=" w-1/2  flex items-center justify-between  gap-4  rounded-2xl  bg-slate-300 py-2 px-4 self-center">
-            <MinusSquare
-              onClick={() => seQuantity(quantity > 0 ? quantity - 1 : 0)}
-              size={30}
-            />
-            <div className="text-3xl font-bold">{quantity}</div>
-            <PlusSquare onClick={() => seQuantity(quantity + 1)} size={30} />
-          </div>
           <Button className="text-xl" onClick={handleAddToOrder}>
             Add To order
           </Button>
