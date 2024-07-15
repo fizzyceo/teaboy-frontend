@@ -2,7 +2,7 @@ import { Edit, MinusSquare, PlusSquare, Trash } from "lucide-react";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { useOrderStore } from "@/stores/order.store";
-import OrderItemOptionDialog from "./orderItemOptionDialog";
+import EditOrderItemDrawer from "./EditOrderItemDrawer";
 
 const OrderItemCard = (item: any) => {
   const { removeOrderItem } = useOrderStore();
@@ -45,7 +45,7 @@ const OrderItemCard = (item: any) => {
         >
           <Trash size={24} />
         </Button>
-        <OrderItemOptionDialog {...item} />
+        <EditOrderItemDrawer {...item} />
       </div>
     </div>
   );

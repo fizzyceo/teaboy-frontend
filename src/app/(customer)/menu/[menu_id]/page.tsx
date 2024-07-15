@@ -1,23 +1,32 @@
+"use client";
 import getMenu from "@/actions/get-menu";
 import MenuItemCard from "@/components/menu/menuItemCard";
 import OrderDrawer from "@/components/order/orderDrawer";
 import RestaurantHeader from "@/components/menu/restaurantHeader";
-import { useOrderStore } from "@/stores/order.store";
-import { MapPin, PhoneCall, Utensils } from "lucide-react";
-import Image from "next/legacy/image";
-import { Badge } from "@/components/ui/badge";
+import { useEffect, useState } from "react";
+import { useMenuStore } from "@/stores/menu.store";
+import Loading from "@/components/shared/loading";
 
-const MenuPage = async ({
+const MenuPage = ({
   params,
   searchParams,
 }: {
   params: { menu_id: string };
   searchParams: { [key: string]: string | string[] | undefined };
 }) => {
-  const menu = await getMenu(parseInt(params.menu_id));
+  const { setMenuItems } = useMenuStore();
+  const [menu, setMenu] = useState<any>(null);
+  useEffect(() => {
+    const loadMenu = async () => {
+      const menu = await getMenu(parseInt(params.menu_id));
+      setMenu(menu);
+      setMenuItems(menu.menu_items);
+    };
+    loadMenu();
+  }, [params.menu_id, setMenuItems]);
 
   if (!menu) {
-    return <div>Failed to fetch menu</div>;
+    return <Loading />;
   }
 
   const { menu_items, restaurant } = menu;

@@ -1,8 +1,11 @@
 const getMenu = async (menu_id: number) => {
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/menu/${menu_id}`, {
-      cache: "no-store",
-    });
+    const response = await fetch(
+      `https://basseer-internship-backend.onrender.com/menu/${menu_id}`,
+      {
+        cache: "no-store",
+      }
+    );
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);

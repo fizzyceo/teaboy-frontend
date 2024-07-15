@@ -13,6 +13,9 @@ export default function Home() {
     setLinks(fetched_links);
   };
 
+  if (links.length === 0) {
+    loadLinks();
+  }
   return (
     <main className="w-full h-full flex flex-col items-center justify-center gap-4 p-4">
       <div className="text-3xl xl:text-2xl">Welcome to iMenu</div>

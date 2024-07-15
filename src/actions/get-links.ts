@@ -1,12 +1,9 @@
-import { randomInt } from "crypto";
-
 const getLinks = async () => {
-  const response = await fetch(`${process.env.BACKEND_URL}/menu`);
+  const response = await fetch(
+    `https://basseer-internship-backend.onrender.com/menu`
+  );
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! Status: ${response.status}`);
-  }
-
+  console.log("response", response);
   const data = await response.json();
 
   const links = data.map((menu: any, index: any) => {
