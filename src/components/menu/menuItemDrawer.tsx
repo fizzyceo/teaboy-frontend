@@ -108,7 +108,7 @@ const MenuItemDrawer = (item: any) => {
               </Badge>
             ) : null}
           </div>
-          <ScrollArea className=" w-full overflow-auto max-h-[40vh] no-scrollbar">
+          <ScrollArea className="w-full overflow-auto max-h-[40vh] no-scrollbar">
             <div className="flex flex-col gap-5  w-full">
               {options.map((option: any) => (
                 <RadioGroup

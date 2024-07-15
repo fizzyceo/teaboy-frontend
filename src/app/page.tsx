@@ -15,19 +15,20 @@ export default function Home() {
 
   if (links.length === 0) {
     loadLinks();
+    console.log("links", links);
   }
   return (
-    <main className="w-full h-full flex flex-col items-center justify-center gap-4 p-4">
+    <main className="flex h-full w-full flex-col items-center justify-center gap-4 p-4">
       <div className="text-3xl xl:text-2xl">Welcome to iMenu</div>
-      <div className="grid grid-cols-1 gap-8 xl:grid-cols-3 md:grid-cols-3">
-        {links.map((link, index) => {
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-3 xl:grid-cols-3">
+        {links.map((link: any, index) => {
           return (
             <div
               key={index}
-              className="flex flex-col items-center justify-center gap-4 rounded-md p-4 bg-slate-200 text-black drop-shadow-lg"
+              className="flex flex-col items-center justify-center gap-4 rounded-md bg-slate-200 p-4 text-black drop-shadow-lg"
             >
               <Canvas
-                text={link}
+                text={link?.url}
                 options={{
                   type: "image/jpeg",
                   quality: 0.4,
@@ -41,6 +42,14 @@ export default function Home() {
                   },
                 }}
               />
+              <Link
+                href={link.url.replace(
+                  "https://basseer-internship-web-app.vercel.app",
+                  "",
+                )}
+              >
+                <p>Menu {index + 1}</p>
+              </Link>
             </div>
           );
         })}
