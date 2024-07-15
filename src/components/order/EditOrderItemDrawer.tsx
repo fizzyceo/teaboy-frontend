@@ -1,4 +1,5 @@
 "use client";
+
 import { CircleX, Edit } from "lucide-react";
 import { Button } from "../ui/button";
 import {
@@ -16,14 +17,45 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { useState } from "react";
+import { useMenuStore } from "@/stores/menu.store";
+import EditOrderItem from "@/actions/edit-order";
 
-const OrderItemOptionDialog = (item: any) => {
-  const options = item.options || [];
+const EditOrderItemDrawer = (item: any) => {
+  const { menuItems } = useMenuStore();
+
+  const menuItem = menuItems.find(
+    (menuItem) => menuItem.menu_item_id === item.menuItemId
+  ) || {
+    options: [],
+  };
 
   const [note, setNote] = useState(item.note || "");
   const [selectedOptions, setSelectedOptions] = useState(item.choices);
 
-  const handleEditOrder = () => {};
+  console.log("selectedOptions", selectedOptions);
+
+  const handleValueChange = (optionId: number, choiceId: number) => {
+    setSelectedOptions((prevOptions: any) => {
+      const updatedOptions = prevOptions.filter(
+        (opt: any) => opt.menu_item_option_id !== optionId
+      );
+      return [
+        ...updatedOptions,
+        { menu_item_option_id: optionId, menu_item_option_choice_id: choiceId },
+      ];
+    });
+  };
+
+  const handleEditOrder = async () => {
+    const response = await EditOrderItem(item.orderItemId, {
+      note,
+      choices: selectedOptions.map((option: any) => ({
+        menu_item_option_choice_id: option.menu_item_option_choice_id,
+      })),
+    });
+    console.log(response);
+  };
+
   return (
     <Drawer>
       <DrawerTrigger asChild>
@@ -39,7 +71,7 @@ const OrderItemOptionDialog = (item: any) => {
           <DrawerTitle className="text-nowrap text-2xl">
             {item.title}
           </DrawerTitle>
-          <div className="h-52 lg:h-32 md:h-32 w-full relative rounded-md overflow-hidden  ">
+          <div className="h-52 lg:h-32 md:h-32 w-full relative rounded-md overflow-hidden">
             <Image
               src={item.menuItemUrl}
               alt={item.title}
@@ -61,17 +93,25 @@ const OrderItemOptionDialog = (item: any) => {
             ) : null}
           </div>
           <p className="text-start text-xl w-full">{item.description}</p>
-          <div className="flex flex-col gap-4  w-full">
-            {options.map((option: any) => (
+          <div className="flex flex-col gap-4 w-full">
+            {menuItem.options.map((option: any) => (
               <RadioGroup
+                value={
+                  selectedOptions.find(
+                    (selectedOption: any) =>
+                      selectedOption.menu_item_option_id ===
+                      option.menu_item_option_id
+                  )?.menu_item_option_choice_id ||
+                  option.choices[0].menu_item_option_choice_id
+                }
                 key={option.menu_item_option_id}
                 className="flex flex-col items-start w-full"
-                // onValueChange={(value) =>
-                //   handleValueChange(option.menu_item_option_id, parseInt(value))
-                // }
+                onValueChange={(value) =>
+                  handleValueChange(option.menu_item_option_id, parseInt(value))
+                }
               >
                 <p className="basis-2 font-bold text-xl">{option.name}</p>
-                <div className="flex w-full gap-10  flex-wrap">
+                <div className="flex w-full gap-10 flex-wrap">
                   {option.choices.map((choice: any) => (
                     <div
                       className="flex items-center space-x-2"
@@ -110,4 +150,4 @@ const OrderItemOptionDialog = (item: any) => {
   );
 };
 
-export default OrderItemOptionDialog;
+export default EditOrderItemDrawer;
