@@ -26,9 +26,11 @@ const MenuItemCard = (item: any) => {
         <div className="flex flex-col justify-between w-full">
           <h2 className="text-xl font-bold text-ellipsis">{item.title}</h2>
           <p className="text-xs text-ellipsis">{item.description}</p>
-          <p className="text-xl font-extrabold mt-2 text-gray-700">
-            {item.price} <span className="text-lg text-gray-500">DA</span>
-          </p>
+          {item.price > 0 && (
+            <p className="text-xl font-extrabold mt-2 text-gray-700">
+              {item.price} <span className="text-lg text-gray-500">$</span>
+            </p>
+          )}
         </div>
         <MenuItemDrawer {...item} />
       </div>

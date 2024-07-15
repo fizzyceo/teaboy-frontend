@@ -18,17 +18,41 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 
-import { CircleX, MinusSquare, PlusSquare, ShoppingBag } from "lucide-react";
+import { CircleX, ShoppingBag } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { ScrollArea } from "../ui/scroll-area";
+
+type OrderOptionType = {
+  menu_item_option_choice_id: number;
+  menu_item_option_id: number;
+};
 
 const MenuItemDrawer = (item: any) => {
-  const [quantity, seQuantity] = useState(1);
+  const { options } = item;
+
+  const [orderOptions, setOrderOptions] = useState<OrderOptionType[]>([]);
   const [note, setNote] = useState("");
-  const { addOrderItem } = useOrderStore();
+  const { addOrderItem, orderItems } = useOrderStore();
+
+  console.log("orderItems-->", orderItems);
+
+  const handleValueChange = (optionId: number, choiceId: number) => {
+    setOrderOptions((prevOptions) => {
+      const updatedOptions = prevOptions.filter(
+        (opt) => opt.menu_item_option_id !== optionId
+      );
+      return [
+        ...updatedOptions,
+        { menu_item_option_id: optionId, menu_item_option_choice_id: choiceId },
+      ];
+    });
+  };
 
   const handleAddToOrder = () => {
     const orderItem = {
-      quantity,
+      identifier: orderItems.length + 1,
       note,
+      choices: orderOptions,
       menuItemId: item.menu_item_id,
       menuItemUrl: item.item_images[0].image_url,
       menuItemTitle: item.title,
@@ -36,9 +60,10 @@ const MenuItemDrawer = (item: any) => {
       menuItemPrice: item.price,
     };
 
+    console.log("orderItem", orderItem);
     addOrderItem(orderItem);
 
-    toast.success(`Added ${quantity} ${item.title} to order`, {
+    toast.success(`Added  ${item.title} to order`, {
       duration: 3000,
     });
   };
@@ -51,7 +76,7 @@ const MenuItemDrawer = (item: any) => {
           Add To Cart
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="h-auto">
+      <DrawerContent className="h-auto  ">
         <DrawerClose className="absolute top-4 right-4">
           <CircleX size={34} className="hover:text-slate-700 z-50" />
         </DrawerClose>
@@ -66,36 +91,70 @@ const MenuItemDrawer = (item: any) => {
               layout="fill"
               objectFit="cover"
             />
-            <Badge
-              className="flex text-xl items-end space-x-3 absolute outline-offset-2 outline-2 outline-dashed right-2 bottom-2 font-extrabold drop-shadow-md"
-              variant={"secondary"}
-            >
-              <span className="text-xl font-extrabold text-gray-900">
-                {item.price}
-              </span>
-              <span className="text-base font-semibold text-gray-500">DA</span>
-            </Badge>
+            {item.description ? (
+              <p className="text-start absolute left-2 bottom-2 text-black bg-white w-fit text-xl px-2 bg-opacity-20 ">
+                {item.description}
+              </p>
+            ) : null}
+            {item.price > 0 ? (
+              <Badge
+                className="flex text-xl items-end space-x-3 absolute outline-offset-2 outline-2 outline-dashed right-2 bottom-2 font-extrabold drop-shadow-md"
+                variant={"secondary"}
+              >
+                <span className="text-xl font-extrabold text-gray-900">
+                  {item.price}
+                </span>
+                <span className="text-base font-semibold text-gray-500">$</span>
+              </Badge>
+            ) : null}
           </div>
-          <p className="text-start text-xl w-full">{item.description}</p>
-          <div className="w-full flex flex-col justify-start items-start gap-4">
-            <Label htmlFor="note">Note</Label>
-            <Textarea
-              placeholder="Anything you want to add ..."
-              id="note"
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-            />
-          </div>
+          <ScrollArea className=" w-full overflow-auto max-h-[40vh] no-scrollbar">
+            <div className="flex flex-col gap-5  w-full">
+              {options.map((option: any) => (
+                <RadioGroup
+                  key={option.menu_item_option_id}
+                  className="flex flex-col items-start w-full"
+                  onValueChange={(value) =>
+                    handleValueChange(
+                      option.menu_item_option_id,
+                      parseInt(value)
+                    )
+                  }
+                >
+                  <p className="basis-2 font-bold text-xl">{option.name}</p>
+                  <div className="flex w-full justify-start gap-4 gap-y-3   flex-wrap">
+                    {option.choices.map((choice: any) => (
+                      <div
+                        className="flex items-center space-x-2"
+                        key={choice.menu_item_option_choice_id}
+                      >
+                        <RadioGroupItem
+                          value={choice.menu_item_option_choice_id}
+                          id={choice.menu_item_option_choice_id}
+                        />
+                        <Label htmlFor={choice.menu_item_option_choice_id}>
+                          {choice.name}
+                        </Label>
+                      </div>
+                    ))}
+                  </div>
+                </RadioGroup>
+              ))}
+            </div>
+            <div className="w-full mt-8 mb-16 flex flex-col justify-start items-start gap-4">
+              <Label htmlFor="note" className="font-bold text-xl">
+                Note
+              </Label>
+              <Textarea
+                placeholder="Anything you want to add ..."
+                id="note"
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+              />
+            </div>
+          </ScrollArea>
         </DrawerHeader>
-        <DrawerFooter className="w-full space-y-3">
-          <div className=" w-1/2  flex items-center justify-between  gap-4  rounded-2xl  bg-slate-300 py-2 px-4 self-center">
-            <MinusSquare
-              onClick={() => seQuantity(quantity > 0 ? quantity - 1 : 0)}
-              size={30}
-            />
-            <div className="text-3xl font-bold">{quantity}</div>
-            <PlusSquare onClick={() => seQuantity(quantity + 1)} size={30} />
-          </div>
+        <DrawerFooter className="w-full space-y-3 fixed bottom-2">
           <Button className="text-xl" onClick={handleAddToOrder}>
             Add To order
           </Button>

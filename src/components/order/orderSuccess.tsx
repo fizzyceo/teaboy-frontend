@@ -11,6 +11,7 @@ const OrderSuccess = ({
   customer_name,
   setOrderStatus,
 }: OrderSuccessProps) => {
+  console.log("order number", orderNumber);
   return (
     <div className="w-full h-screen bg-green-500 flex flex-col justify-center items-center">
       <p className="text-white">Thank you for your order, {customer_name}</p>

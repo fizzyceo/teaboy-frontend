@@ -12,9 +12,12 @@ const RestaurantHeader = ({
     <div className="flex gap-4 items-center w-full bg-slate-200 justify-around md:justify-between lg:justify-between md:px-20 lg:px-20 py-4">
       <div className="flex flex-col gap-2 ">
         <h1 className="text-2xl font-bold">{restaurant.name}</h1>
-        <p className="flex gap-4 items-center">
-          <MapPin size={16} /> {restaurant.address}
-        </p>
+        {restaurant.address !== " " && (
+          <p className="flex gap-4 items-center">
+            <MapPin size={16} /> {restaurant.address}
+          </p>
+        )}
+
         <p className="flex gap-4 items-center">
           <PhoneCall size={16} /> {restaurant.phone}
         </p>
