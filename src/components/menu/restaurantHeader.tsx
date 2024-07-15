@@ -9,24 +9,24 @@ const RestaurantHeader = ({
   searchParams: { [key: string]: string | string[] | undefined };
 }) => {
   return (
-    <div className="flex gap-4 items-center w-full bg-slate-200 justify-around md:justify-between lg:justify-between md:px-20 lg:px-20 py-4">
-      <div className="flex flex-col gap-2 ">
+    <div className="flex w-full items-center justify-around gap-4 bg-gradient-to-tr from-slate-50 to-slate-400 py-4 md:justify-between md:px-20 lg:justify-between lg:px-20">
+      <div className="flex flex-col gap-2">
         <h1 className="text-2xl font-bold">{restaurant.name}</h1>
         {restaurant.address !== " " && (
-          <p className="flex gap-4 items-center">
+          <p className="flex items-center gap-4">
             <MapPin size={16} /> {restaurant.address}
           </p>
         )}
 
-        <p className="flex gap-4 items-center">
+        <p className="flex items-center gap-4">
           <PhoneCall size={16} /> {restaurant.phone}
         </p>
-        <p className="flex gap-4 items-center">
+        <p className="flex items-center gap-4">
           <Utensils size={16} /> Table N {searchParams.table}
         </p>
       </div>
 
-      <div className="w-32 h-32 relative rounded-xl overflow-hidden">
+      <div className="relative h-32 w-32 overflow-hidden rounded-xl">
         <Image
           src={restaurant.image_url}
           alt={restaurant.name}

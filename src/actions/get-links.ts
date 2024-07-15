@@ -10,6 +10,7 @@ const getLinks = async () => {
     return {
       id: index,
       url: `https://basseer-internship-web-app.vercel.app/menu/${menu.menu_id}?table=${randomInt(1, 10)}`,
+      restaurant_name: menu.restaurant.name,
     };
   });
 

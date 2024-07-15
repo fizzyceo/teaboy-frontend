@@ -44,19 +44,19 @@ const MenuPage = ({
   });
 
   return (
-    <div>
+    <div className="bg-slate-50">
       <RestaurantHeader restaurant={restaurant} searchParams={searchParams} />
-      <div className="w-full flex flex-col p-4 items-center ">
+      <div className="flex w-full flex-col items-center p-4">
         <p className="text-xl font-bold">{menu.name}</p>
         <p>{menu.description}</p>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 px-4 pb-20">
+      <div className="grid grid-cols-2 gap-4 px-4 pb-20 lg:grid-cols-3 xl:grid-cols-3">
         {menu_items.map((item: any) => (
           <MenuItemCard {...item} key={item.menu_item_id} />
         ))}
       </div>
-      <div className="fixed bottom-4 px-4 w-full">
+      <div className="fixed bottom-4 w-full px-4">
         <OrderDrawer table_number={parseInt(searchParams.table as string)} />
       </div>
     </div>
