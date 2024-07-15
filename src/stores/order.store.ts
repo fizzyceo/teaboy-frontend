@@ -20,6 +20,7 @@ interface OrderStore {
 }
 
 export interface OrderItem {
+  identifier?: number;
   note?: string;
   menuItemId: number;
   menuItemUrl: string;
@@ -46,7 +47,7 @@ export const useOrderStore = create<OrderStore>((set) => ({
   removeOrderItem: (orderItemId) =>
     set((state) => ({
       orderItems: state.orderItems.filter(
-        (item) => item.menuItemId !== orderItemId
+        (item) => item.identifier !== orderItemId && item
       ),
     })),
   updateOrderItem: (orderItemId, orderItem) =>

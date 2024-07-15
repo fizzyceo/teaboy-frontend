@@ -1,15 +1,17 @@
 "use client";
+import getLinks from "@/actions/get-links";
 import { useQRCode } from "next-qrcode";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function Home() {
   const { Canvas } = useQRCode();
+  const [links, setLinks] = useState([]);
 
-  const links = [
-    "https://basseer-internship-web-app.vercel.app/menu/2?table=2",
-    "https://basseer-internship-web-app.vercel.app/menu/2?table=1",
-    "https://basseer-internship-web-app.vercel.app/menu/2?table=3",
-  ];
+  const loadLinks = async () => {
+    const fetched_links = await getLinks();
+    setLinks(fetched_links);
+  };
 
   return (
     <main className="w-full h-full flex flex-col items-center justify-center gap-4 p-4">
@@ -36,11 +38,6 @@ export default function Home() {
                   },
                 }}
               />
-              <div className="text-center text-xl">
-                <Link href={`/menu/2?table=${index + 1}`}>
-                  Menu number {index + 1}
-                </Link>
-              </div>
             </div>
           );
         })}

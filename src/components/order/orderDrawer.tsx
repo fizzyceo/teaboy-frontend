@@ -51,8 +51,13 @@ const OrderDrawer = ({ table_number }: { table_number: number }) => {
         menu_item_id: item.menuItemId,
         note: item.note,
         status: "PENDING",
+        choices: item.choices?.map((choice) => ({
+          menu_item_option_choice_id: choice.menu_item_option_choice_id,
+        })),
       })),
     };
+
+    console.log("Order Submitted", order);
 
     const response = await submitOrder(order);
 
@@ -61,6 +66,7 @@ const OrderDrawer = ({ table_number }: { table_number: number }) => {
       setOrderResponse({
         order_id: response.data.order_id,
         customer_name: response.data.customer_name,
+        order_number: response.data.order_number,
       });
       toast.success("Order submitted successfully", { duration: 1000 });
     } else {
@@ -78,14 +84,16 @@ const OrderDrawer = ({ table_number }: { table_number: number }) => {
             orderItems.length === 0 ? "hidden" : "w-full flex gap-4"
           )}
         >
-          <div className="flex bg-white justify-center font-semibold text-lg items-center gap-2 basis-1/3 border-dotted rounded-sm border-gray-700">
-            <Receipt />
-            {total} DA
-          </div>
+          {total > 0 && (
+            <div className="flex bg-white justify-center font-semibold text-lg items-center gap-2 w-2/3 border-dotted rounded-sm border-gray-700">
+              <Receipt />
+              {total} DA
+            </div>
+          )}
           <Button
             className={cn(
               orderItems.length === 0 ? "hidden" : "",
-              "basis-2/3 w-full text-xl"
+              "w-full text-xl"
             )}
           >
             Check order
@@ -107,32 +115,30 @@ const OrderDrawer = ({ table_number }: { table_number: number }) => {
             </DrawerHeader>
             <DrawerFooter className="flex flex-col gap-4 w-full px-4 py-2">
               {total > 0 && (
-                <>
-                  <div className="flex justify-center px-4 py-2 bg-slate-200 rounded-md shadow-lg">
-                    <p className="text-xl">
-                      Total Price: <span className="font-bold">{total}</span> DA
-                    </p>
-                  </div>
-                  {orderStatus === "Viewed" ? (
-                    <div className="flex gap-2 w-full">
-                      <Button
-                        variant={"destructive"}
-                        onClick={handleOrderCancle}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        variant={"outline"}
-                        className="bg-green-600 text-lg w-full text-white"
-                        onClick={() => setOrderStatus("Submitted")}
-                      >
-                        View Order Number
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="flex gap-2 items-center">
-                      <div
-                        className={`
+                <div className="flex justify-center px-4 py-2 bg-slate-200 rounded-md shadow-lg">
+                  <p className="text-xl">
+                    Total Price: <span className="font-bold">{total}</span> DA
+                  </p>
+                </div>
+              )}
+
+              {orderStatus === "Viewed" ? (
+                <div className="flex gap-2 w-full">
+                  <Button variant={"destructive"} onClick={handleOrderCancle}>
+                    Cancel
+                  </Button>
+                  <Button
+                    variant={"outline"}
+                    className="bg-green-600 text-lg w-full text-white"
+                    onClick={() => setOrderStatus("Submitted")}
+                  >
+                    View Order Number
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex gap-2 items-center">
+                  <div
+                    className={`
                         overflow-hidden transition-all duration-300 ease-in-out
                         ${
                           showCustomerNameInput
@@ -140,36 +146,32 @@ const OrderDrawer = ({ table_number }: { table_number: number }) => {
                             : "w-0 opacity-0"
                         }
                       `}
-                      >
-                        <Input
-                          id="customer_name"
-                          name="customer_name"
-                          type="text"
-                          placeholder="Your name (optional)"
-                          className="w-full p-2 border text-lg border-gray-300 rounded-md"
-                          value={customerName}
-                          onChange={(e) => setCustomerName(e.target.value)}
-                        />
-                      </div>
-                      <Button
-                        className={`text-xl transition-all duration-300 ease-in-out ${
-                          showCustomerNameInput ? "w-1/2" : "w-full"
-                        }`}
-                        onClick={handleSubmitOrder}
-                      >
-                        {showCustomerNameInput
-                          ? "Confirm Order"
-                          : "Review Order"}
-                      </Button>
-                    </div>
-                  )}
-                </>
+                  >
+                    <Input
+                      id="customer_name"
+                      name="customer_name"
+                      type="text"
+                      placeholder="Your name (optional)"
+                      className="w-full p-2 border text-lg border-gray-300 rounded-md"
+                      value={customerName}
+                      onChange={(e) => setCustomerName(e.target.value)}
+                    />
+                  </div>
+                  <Button
+                    className={`text-xl transition-all duration-300 ease-in-out ${
+                      showCustomerNameInput ? "w-1/2" : "w-full"
+                    }`}
+                    onClick={handleSubmitOrder}
+                  >
+                    {showCustomerNameInput ? "Confirm Order" : "Review Order"}
+                  </Button>
+                </div>
               )}
             </DrawerFooter>
           </div>
         ) : (
           <OrderSuccess
-            orderNumber={orderResponse.order_id}
+            orderNumber={orderResponse.order_number}
             customer_name={orderResponse.customer_name}
             setOrderStatus={setOrderStatus}
           />

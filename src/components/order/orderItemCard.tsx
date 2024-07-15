@@ -2,6 +2,7 @@ import { Edit, MinusSquare, PlusSquare, Trash } from "lucide-react";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { useOrderStore } from "@/stores/order.store";
+import OrderItemOptionDialog from "./orderItemOptionDialog";
 
 const OrderItemCard = (item: any) => {
   const { removeOrderItem } = useOrderStore();
@@ -19,7 +20,7 @@ const OrderItemCard = (item: any) => {
           className="object-cover rounded-md w-full h-24"
         />
       </div>
-      <div className="flex w-2/5 ">
+      <div className="flex items-center w-2/5 ">
         <div className="flex items-start  justify-between flex-col gap-1">
           <p className="text-2xl font-semibold  overflow-hidden truncate">
             {item.menuItemTitle}
@@ -29,22 +30,22 @@ const OrderItemCard = (item: any) => {
               {item.note}
             </p>
           )}
-          <p className="text-xl font-medium overflow-hidden text-gray-800">
-            {item.menuItemPrice} DA
-          </p>
+          {item.menuItemPrice !== 0 && (
+            <p className="text-xl font-medium overflow-hidden text-gray-800">
+              {item.menuItemPrice} DA
+            </p>
+          )}
         </div>
       </div>
       <div className="flex w-1/5 flex-col gap-2 justify-center items-center  ">
         <Button
           variant="destructive"
           className="p-0 size-11 rounded-xl"
-          onClick={() => removeOrderItem(item.menuItemId)}
+          onClick={() => removeOrderItem(item.identifier)}
         >
           <Trash size={24} />
         </Button>
-        <Button className="p-0 size-11 rounded-xl">
-          <Edit size={24} />
-        </Button>
+        <OrderItemOptionDialog {...item} />
       </div>
     </div>
   );
