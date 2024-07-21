@@ -39,7 +39,7 @@ const MenuItemDrawer = (item: any) => {
   const handleValueChange = (optionId: number, choiceId: number) => {
     setOrderOptions((prevOptions) => {
       const updatedOptions = prevOptions.filter(
-        (opt) => opt.menu_item_option_id !== optionId
+        (opt) => opt.menu_item_option_id !== optionId,
       );
       return [
         ...updatedOptions,
@@ -76,15 +76,15 @@ const MenuItemDrawer = (item: any) => {
           Add To Cart
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="h-auto  ">
-        <DrawerClose className="absolute top-4 right-4">
-          <CircleX size={34} className="hover:text-slate-700 z-50" />
+      <DrawerContent className="h-auto">
+        <DrawerClose className="absolute right-4 top-4">
+          <CircleX size={34} className="z-50 hover:text-slate-700" />
         </DrawerClose>
-        <DrawerHeader className="flex flex-col items-center gap-4 w-full h-full p-4 md:p-8 lg:p-8">
+        <DrawerHeader className="flex h-full w-full flex-col items-center gap-4 p-4 md:p-8 lg:p-8">
           <DrawerTitle className="text-nowrap text-2xl">
             {item.title}
           </DrawerTitle>
-          <div className="h-52 lg:h-32 md:h-32 w-full relative rounded-md overflow-hidden  ">
+          <div className="relative h-52 w-full overflow-hidden rounded-md md:h-32 lg:h-32">
             <Image
               src={item.item_images[0].image_url}
               alt={item.title}
@@ -92,13 +92,13 @@ const MenuItemDrawer = (item: any) => {
               objectFit="cover"
             />
             {item.description ? (
-              <p className="text-start absolute left-2 bottom-2 text-black bg-white w-fit text-xl px-2 bg-opacity-20 ">
+              <p className="absolute bottom-2 left-2 w-fit rounded-lg bg-white bg-opacity-55 px-2 text-start text-xl text-black">
                 {item.description}
               </p>
             ) : null}
             {item.price > 0 ? (
               <Badge
-                className="flex text-xl items-end space-x-3 absolute outline-offset-2 outline-2 outline-dashed right-2 bottom-2 font-extrabold drop-shadow-md"
+                className="absolute bottom-2 right-2 flex items-end space-x-3 text-xl font-extrabold outline-dashed outline-2 outline-offset-2 drop-shadow-md"
                 variant={"secondary"}
               >
                 <span className="text-xl font-extrabold text-gray-900">
@@ -108,21 +108,21 @@ const MenuItemDrawer = (item: any) => {
               </Badge>
             ) : null}
           </div>
-          <ScrollArea className="w-full overflow-auto max-h-[40vh] no-scrollbar">
-            <div className="flex flex-col gap-5  w-full">
+          <ScrollArea className="no-scrollbar max-h-[40vh] w-full overflow-auto">
+            <div className="flex w-full flex-col gap-5">
               {options.map((option: any) => (
                 <RadioGroup
                   key={option.menu_item_option_id}
-                  className="flex flex-col items-start w-full"
+                  className="flex w-full flex-col items-start"
                   onValueChange={(value) =>
                     handleValueChange(
                       option.menu_item_option_id,
-                      parseInt(value)
+                      parseInt(value),
                     )
                   }
                 >
-                  <p className="basis-2 font-bold text-xl">{option.name}</p>
-                  <div className="flex w-full justify-start gap-4 gap-y-3   flex-wrap">
+                  <p className="basis-2 text-xl font-bold">{option.name}</p>
+                  <div className="flex w-full flex-wrap justify-start gap-4 gap-y-3">
                     {option.choices.map((choice: any) => (
                       <div
                         className="flex items-center space-x-2"
@@ -141,8 +141,8 @@ const MenuItemDrawer = (item: any) => {
                 </RadioGroup>
               ))}
             </div>
-            <div className="w-full mt-8 mb-16 flex flex-col justify-start items-start gap-4">
-              <Label htmlFor="note" className="font-bold text-xl">
+            <div className="mb-16 mt-8 flex w-full flex-col items-start justify-start gap-4">
+              <Label htmlFor="note" className="text-xl font-bold">
                 Note
               </Label>
               <Textarea
@@ -154,7 +154,7 @@ const MenuItemDrawer = (item: any) => {
             </div>
           </ScrollArea>
         </DrawerHeader>
-        <DrawerFooter className="w-full space-y-3 fixed bottom-2">
+        <DrawerFooter className="fixed bottom-2 w-full space-y-3">
           <Button className="text-xl" onClick={handleAddToOrder}>
             Add To order
           </Button>

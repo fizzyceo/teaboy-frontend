@@ -9,38 +9,38 @@ const OrderItemCard = (item: any) => {
   return (
     <div
       key={item.menuItemId}
-      className="flex gap-4 p-4 snap-start bg-slate-100 rounded-md shadow-lg"
+      className="flex snap-start gap-4 rounded-md bg-slate-100 p-4 shadow-lg"
     >
-      <div className="flex flex-col gap-2 w-2/5 h-full">
+      <div className="flex h-full w-2/5 flex-col gap-2">
         <Image
           src={item.menuItemUrl}
           alt={item.menuItemTitle}
           width={80}
           height={20}
-          className="object-cover rounded-md w-full h-24"
+          className="h-24 w-full rounded-md object-cover"
         />
       </div>
-      <div className="flex items-center w-2/5 ">
-        <div className="flex items-start  justify-between flex-col gap-1">
-          <p className="text-2xl font-semibold  overflow-hidden truncate">
+      <div className="flex w-2/5 items-center">
+        <div className="flex flex-col items-start justify-between gap-1">
+          <p className="overflow-hidden text-wrap text-2xl font-semibold">
             {item.menuItemTitle}
           </p>
           {item.note !== "" && (
-            <p className="text-sm text-gray-600 overflow-hidden truncate">
+            <p className="overflow-hidden truncate text-sm text-gray-600">
               {item.note}
             </p>
           )}
           {item.menuItemPrice !== 0 && (
-            <p className="text-xl font-medium overflow-hidden text-gray-800">
+            <p className="overflow-hidden text-xl font-medium text-gray-800">
               {item.menuItemPrice} DA
             </p>
           )}
         </div>
       </div>
-      <div className="flex w-1/5 flex-col gap-2 justify-center items-center  ">
+      <div className="flex w-1/5 flex-col items-center justify-center gap-2">
         <Button
           variant="destructive"
-          className="p-0 size-11 rounded-xl"
+          className="size-11 rounded-xl p-0"
           onClick={() => removeOrderItem(item.identifier)}
         >
           <Trash size={24} />

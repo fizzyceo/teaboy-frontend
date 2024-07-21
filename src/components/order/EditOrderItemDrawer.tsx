@@ -4,7 +4,7 @@ import { useState } from "react";
 import { CircleX, Edit } from "lucide-react";
 import Image from "next/legacy/image";
 import { useMenuStore } from "@/stores/menu.store";
-import EditOrderItem from "@/actions/edit-order";
+import EditOrderItem from "@/actions/order/edit-order";
 import { toast } from "sonner";
 
 import {
@@ -22,9 +22,11 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { ScrollArea } from "../ui/scroll-area";
+import { useOrderStore } from "@/stores/order.store";
 
-const EditOrderItemDrawer = (item: any) => {
+const EditOrderItemDrawer = (item: any, updateServer: boolean) => {
   const { menuItems } = useMenuStore();
+  const { setOrderItems } = useOrderStore();
 
   const menuItem = menuItems.find(
     (menuItem) => menuItem.menu_item_id === item.menuItemId,
@@ -50,13 +52,28 @@ const EditOrderItemDrawer = (item: any) => {
   };
 
   const handleEditOrder = async () => {
-    const response = await EditOrderItem(item.orderItemId, {
-      note,
-      choices: selectedOptions.map((option: any) => ({
-        menu_item_option_choice_id: option.menu_item_option_choice_id,
-      })),
-    });
-    console.log(response);
+    setOrderItems((prevItems: any) =>
+      prevItems.map((prevItem: any) =>
+        prevItem.orderItemId === item.orderItemId
+          ? {
+              ...prevItem,
+              note,
+              choices: selectedOptions,
+            }
+          : prevItem,
+      ),
+    );
+
+    // if the order is submitted, we need to update the order on the server
+
+    if (updateServer) {
+      const response = await EditOrderItem(item.orderItemId, {
+        note,
+        choices: selectedOptions.map((option: any) => ({
+          menu_item_option_choice_id: option.menu_item_option_choice_id,
+        })),
+      });
+    }
 
     toast.success(`Order for ${item.menuItemTitle} updated successfully`, {
       duration: 3000,

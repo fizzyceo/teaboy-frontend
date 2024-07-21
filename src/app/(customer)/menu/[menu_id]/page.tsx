@@ -1,5 +1,5 @@
 "use client";
-import getMenu from "@/actions/get-menu";
+import getMenu from "@/actions/menu/get-menu";
 import MenuItemCard from "@/components/menu/menuItemCard";
 import OrderDrawer from "@/components/order/orderDrawer";
 import RestaurantHeader from "@/components/menu/restaurantHeader";

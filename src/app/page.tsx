@@ -1,5 +1,5 @@
 "use client";
-import getLinks from "@/actions/get-links";
+import getLinks from "@/actions/menu/get-links";
 import { useQRCode } from "next-qrcode";
 import Link from "next/link";
 import { useState } from "react";

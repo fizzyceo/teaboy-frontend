@@ -1,11 +1,11 @@
-"use client";
-
 import { useState } from "react";
-import { toast } from "sonner";
-import { OrderItem, useOrderStore } from "@/stores/order.store";
-import submitOrder from "@/actions/submit-order";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
+import { OrderItem, useOrderStore } from "@/stores/order.store";
+import submitOrder from "@/actions/order/submit-order";
+
+import { Receipt } from "lucide-react";
 import {
   Drawer,
   DrawerContent,
@@ -18,35 +18,48 @@ import { Input } from "@/components/ui/input";
 
 import OrderItemCard from "./orderItemCard";
 import OrderSuccess from "./orderSuccess";
-import { Receipt } from "lucide-react";
+import cancelOrder from "@/actions/order/cancel-order";
 
 const OrderDrawer = ({ table_number }: { table_number: number }) => {
-  const { orderItems } = useOrderStore();
-  const [orderStatus, setOrderStatus] = useState<
-    "Submitted" | "Viewed" | "Not Submitted"
-  >("Not Submitted");
-  const [orderResponse, setOrderResponse] = useState({} as any);
+  const {
+    orderItems,
+    setOrderItems,
+    orderStatus,
+    customerName,
+    setCustomerName,
+    setOrderStatus,
+  } = useOrderStore();
+
   const [showCustomerNameInput, setShowCustomerNameInput] = useState(false);
-  const [customerName, setCustomerName] = useState("");
+  const [orderResponse, setOrderResponse] = useState<any>({});
 
   const total = orderItems.reduce(
     (acc: number, item: OrderItem) => acc + item.menuItemPrice,
-    0
+    0,
   );
 
-  const handleOrderCancle = async () => {
-    console.log("Order Cancelled");
+  const handleOrderCancel = async () => {
+    setOrderStatus("Canceled");
+    setShowCustomerNameInput(false);
+    setOrderItems([]);
+    await cancelOrder(orderResponse.order_id);
+    toast.success("Order Canceled", { duration: 1000 });
   };
 
   const handleSubmitOrder = async () => {
-    if (!showCustomerNameInput) {
+    if (
+      !showCustomerNameInput &&
+      orderItems.length > 0 &&
+      orderStatus === "Submitted" &&
+      orderResponse.order_id
+    ) {
       setShowCustomerNameInput(true);
       return;
     }
 
     const order = {
-      customer_name: customerName.trim() || "Anonymous",
-      table_number: table_number,
+      customer_name: customerName ? customerName : "Anonymous",
+      table_number,
       order_items: orderItems.map((item) => ({
         menu_item_id: item.menuItemId,
         note: item.note,
@@ -56,8 +69,6 @@ const OrderDrawer = ({ table_number }: { table_number: number }) => {
         })),
       })),
     };
-
-    console.log("Order Submitted", order);
 
     const response = await submitOrder(order);
 
@@ -71,7 +82,7 @@ const OrderDrawer = ({ table_number }: { table_number: number }) => {
       toast.success("Order submitted successfully", { duration: 1000 });
     } else {
       setOrderStatus("Not Submitted");
-      setOrderResponse({} as any);
+      setOrderResponse({});
       toast.error("Failed to submit order", { duration: 1000 });
     }
   };
@@ -81,19 +92,19 @@ const OrderDrawer = ({ table_number }: { table_number: number }) => {
       <DrawerTrigger asChild>
         <div
           className={cn(
-            orderItems.length === 0 ? "hidden" : "w-full flex gap-4"
+            orderItems.length === 0 ? "hidden" : "flex w-full gap-4",
           )}
         >
           {total > 0 && (
-            <div className="flex bg-white justify-center font-semibold text-lg items-center gap-2 w-2/3 border-dotted rounded-sm border-gray-700">
+            <div className="flex w-2/3 items-center justify-center gap-2 rounded-sm border-dotted border-gray-700 bg-white text-lg font-semibold">
               <Receipt />
-              {total} DA
+              {total} $
             </div>
           )}
           <Button
             className={cn(
               orderItems.length === 0 ? "hidden" : "",
-              "w-full text-xl"
+              "w-full text-xl",
             )}
           >
             Check order
@@ -103,56 +114,60 @@ const OrderDrawer = ({ table_number }: { table_number: number }) => {
       <DrawerContent
         className={orderStatus === "Submitted" ? "h-screen" : "h-auto pb-8"}
       >
-        {orderStatus === "Not Submitted" || orderStatus === "Viewed" ? (
+        {orderStatus === "Not Submitted" ||
+        orderStatus === "Viewed" ||
+        orderStatus === "Canceled" ? (
           <div>
             <DrawerHeader>
               <h1 className="text-2xl font-bold">Order Details</h1>
-              <div className="flex flex-col gap-2 max-h-[60vh] overflow-scroll no-scrollbar snap-y w-full">
+              <div className="no-scrollbar flex max-h-[60vh] w-full snap-y flex-col gap-2 overflow-scroll">
                 {orderItems.map((item: OrderItem) => (
                   <OrderItemCard {...item} key={item.menuItemId} />
                 ))}
               </div>
             </DrawerHeader>
-            <DrawerFooter className="flex flex-col gap-4 w-full px-4 py-2">
+            <DrawerFooter className="flex w-full flex-col gap-4 px-4 py-2">
               {total > 0 && (
-                <div className="flex justify-center px-4 py-2 bg-slate-200 rounded-md shadow-lg">
+                <div className="flex justify-center rounded-md bg-slate-200 px-4 py-2 shadow-lg">
                   <p className="text-xl">
                     Total Price: <span className="font-bold">{total}</span> DA
                   </p>
                 </div>
               )}
-
-              {orderStatus === "Viewed" ? (
-                <div className="flex gap-2 w-full">
-                  <Button variant={"destructive"} onClick={handleOrderCancle}>
+              {orderStatus === "Viewed" || orderStatus === "Canceled" ? (
+                <div className="flex w-full gap-2">
+                  <Button
+                    variant={"destructive"}
+                    onClick={handleOrderCancel}
+                    className="w-full"
+                  >
                     Cancel
                   </Button>
-                  <Button
-                    variant={"outline"}
-                    className="bg-green-600 text-lg w-full text-white"
-                    onClick={() => setOrderStatus("Submitted")}
-                  >
-                    View Order Number
-                  </Button>
+                  {orderStatus !== "Canceled" && (
+                    <Button
+                      variant={"outline"}
+                      className="w-full bg-green-600 text-lg text-white"
+                      onClick={() => setOrderStatus("Submitted")}
+                    >
+                      View Order Number
+                    </Button>
+                  )}
                 </div>
               ) : (
-                <div className="flex gap-2 items-center">
+                <div className="flex items-center gap-2">
                   <div
-                    className={`
-                        overflow-hidden transition-all duration-300 ease-in-out
-                        ${
-                          showCustomerNameInput
-                            ? "w-1/2 opacity-100"
-                            : "w-0 opacity-0"
-                        }
-                      `}
+                    className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                      showCustomerNameInput
+                        ? "w-1/2 opacity-100"
+                        : "w-0 opacity-0"
+                    } `}
                   >
                     <Input
                       id="customer_name"
                       name="customer_name"
                       type="text"
                       placeholder="Your name (optional)"
-                      className="w-full p-2 border text-lg border-gray-300 rounded-md"
+                      className="w-full rounded-md border border-gray-300 p-2 text-lg"
                       value={customerName}
                       onChange={(e) => setCustomerName(e.target.value)}
                     />
