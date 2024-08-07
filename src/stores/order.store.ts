@@ -12,7 +12,13 @@ interface OrderStore {
   note?: string | undefined;
   setNote: (note: string) => void;
 
+  orderStatus: "Not Submitted" | "Submitted" | "Viewed" | "Canceled";
+  setOrderStatus: (
+    value: "Not Submitted" | "Submitted" | "Viewed" | "Canceled",
+  ) => void;
+
   orderItems: OrderItem[];
+  setOrderItems: (orderItems: any) => void;
 
   addOrderItem: (orderItem: OrderItem) => void;
   removeOrderItem: (orderItemId: number) => void;
@@ -38,6 +44,10 @@ export const useOrderStore = create<OrderStore>((set) => ({
   note: undefined,
   setNote: (note) => set({ note }),
   orderItems: [],
+  setOrderItems: (orderItems) => set({ orderItems }),
+
+  orderStatus: "Not Submitted",
+  setOrderStatus: (value) => set({ orderStatus: value }),
 
   addOrderItem: (orderItem) => {
     set((state) => ({
@@ -47,13 +57,13 @@ export const useOrderStore = create<OrderStore>((set) => ({
   removeOrderItem: (orderItemId) =>
     set((state) => ({
       orderItems: state.orderItems.filter(
-        (item) => item.identifier !== orderItemId && item
+        (item) => item.identifier !== orderItemId && item,
       ),
     })),
   updateOrderItem: (orderItemId, orderItem) =>
     set((state) => ({
       orderItems: state.orderItems.map((item) =>
-        item.menuItemId === orderItemId ? orderItem : item
+        item.menuItemId === orderItemId ? orderItem : item,
       ),
     })),
 }));
