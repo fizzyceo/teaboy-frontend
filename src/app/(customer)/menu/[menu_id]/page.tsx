@@ -6,6 +6,7 @@ import RestaurantHeader from "@/components/menu/restaurantHeader";
 import { useEffect, useState } from "react";
 import { useMenuStore } from "@/stores/menu.store";
 import Loading from "@/components/shared/loading";
+import MenuItemDrawer from "@/components/menu/menuItemDrawer";
 
 const MenuPage = ({
   params,
@@ -53,7 +54,7 @@ const MenuPage = ({
 
       <div className="grid grid-cols-2 gap-4 px-4 pb-20 lg:grid-cols-3 xl:grid-cols-3">
         {menu_items.map((item: any) => (
-          <MenuItemCard {...item} key={item.menu_item_id} />
+          <MenuItemDrawer {...item} key={item.menu_item_id} />
         ))}
       </div>
       <div className="fixed bottom-4 w-full px-4">

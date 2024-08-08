@@ -9,7 +9,7 @@ const OrderItemCard = (item: any) => {
   return (
     <div
       key={item.menuItemId}
-      className="flex snap-start gap-4 rounded-md bg-slate-100 p-4 shadow-lg"
+      className="flex h-28 snap-start gap-4 rounded-md bg-slate-100 p-4 shadow-lg"
     >
       <div className="flex h-full w-2/5 flex-col gap-2">
         <Image

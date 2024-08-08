@@ -1,6 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import MenuItemDrawer from "./menuItemDrawer";
 import Image from "next/legacy/image";
+import { Button } from "../ui/button";
+import { ShoppingBag } from "lucide-react";
 
 const MenuItemCard = (item: any) => {
   return (
@@ -32,7 +34,11 @@ const MenuItemCard = (item: any) => {
             </p>
           )}
         </div>
-        <MenuItemDrawer {...item} />
+        <Button variant="outline" className="w-full">
+          <ShoppingBag className="mr-2" size={24} />
+          Add To Cart
+        </Button>
+        {/* <MenuItemDrawer {...item} /> */}
       </div>
     </div>
   );
