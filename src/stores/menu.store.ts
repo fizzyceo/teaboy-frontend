@@ -27,12 +27,18 @@ interface MenuItem {
   options: MenuItemOption[];
 }
 
-interface Restaurant {
-  restaurant_id: number;
+interface Site {
+  site_id: number;
   name: string;
   address: string;
   phone: string;
   image_url: string;
+}
+
+interface Space {
+  space_id: number;
+  name: string;
+  site: Site;
 }
 
 interface Menu {
@@ -42,7 +48,7 @@ interface Menu {
   restaurant_id: number;
   created_at: string;
   updated_at: string;
-  restaurant: Restaurant;
+  space: Space;
   menu_items: MenuItem[];
 }
 

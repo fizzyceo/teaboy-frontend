@@ -1,35 +1,30 @@
-import { MapPin, PhoneCall, Utensils } from "lucide-react";
+import { Home, MapPin, PhoneCall, Utensils } from "lucide-react";
 import Image from "next/image";
 
-const RestaurantHeader = ({
-  restaurant,
-  searchParams,
-}: {
-  restaurant: any;
-  searchParams: { [key: string]: string | string[] | undefined };
-}) => {
+const SiteHeader = ({ space }: { space: any }) => {
+  const { site } = space;
   return (
     <div className="flex w-full items-center justify-around gap-4 bg-gradient-to-tr from-slate-50 to-slate-400 py-4 md:justify-between md:px-20 lg:justify-between lg:px-20">
       <div className="flex flex-col gap-2">
-        <h1 className="text-2xl font-bold">{restaurant.name}</h1>
-        {restaurant.address !== " " && (
+        <h1 className="text-2xl font-bold">{site.name}</h1>
+        {site.address !== " " && (
           <p className="flex items-center gap-4">
-            <MapPin size={16} /> {restaurant.address}
+            <MapPin size={16} /> {site.address}
           </p>
         )}
 
         <p className="flex items-center gap-4">
-          <PhoneCall size={16} /> {restaurant.phone}
+          <PhoneCall size={16} /> {site.phone}
         </p>
         <p className="flex items-center gap-4">
-          <Utensils size={16} /> Table N {searchParams.table}
+          <Home size={16} /> Space : {space.name}
         </p>
       </div>
 
       <div className="relative h-32 w-32 overflow-hidden rounded-xl">
         <Image
-          src={restaurant.image_url}
-          alt={restaurant.name}
+          src={site.image_url}
+          alt={site.name}
           layout="fill"
           objectFit="cover"
         />
@@ -38,4 +33,4 @@ const RestaurantHeader = ({
   );
 };
 
-export default RestaurantHeader;
+export default SiteHeader;

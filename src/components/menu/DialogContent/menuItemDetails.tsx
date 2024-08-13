@@ -1,7 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -51,46 +50,50 @@ const MenuItemDetails = ({
         ) : null}
       </div>
       <ScrollArea className="no-scrollbar max-h-[40vh] overflow-scroll">
-        <div className="mb-4 flex w-full flex-col gap-3 pb-2">
-          {options.map((option: any) => (
-            <RadioGroup
-              key={option.menu_item_option_id}
-              className="flex w-full flex-col items-start gap-2"
-              onValueChange={(value) =>
-                handleValueChange(option.menu_item_option_id, parseInt(value))
-              }
-            >
-              <p className="basis-2 text-xl font-bold">{option.name}</p>
-              <div className="flex w-full flex-wrap justify-start gap-3 gap-y-2">
-                {option.choices.map((choice: any) => (
-                  <div
-                    className="flex items-center space-x-2"
-                    key={choice.menu_item_option_choice_id}
-                  >
-                    <RadioGroupItem
-                      value={choice.menu_item_option_choice_id}
-                      id={choice.menu_item_option_choice_id}
-                    />
-                    <Label htmlFor={choice.menu_item_option_choice_id}>
-                      {choice.name}
-                    </Label>
-                  </div>
-                ))}
-              </div>
-            </RadioGroup>
-          ))}
-        </div>
+        {options.length > 0 && (
+          <div className="mb-4 flex w-full flex-col gap-3 pb-2">
+            {options.map((option: any) => (
+              <RadioGroup
+                key={option.menu_item_option_id}
+                className="flex w-full flex-col items-start gap-2"
+                onValueChange={(value) =>
+                  handleValueChange(option.menu_item_option_id, parseInt(value))
+                }
+              >
+                <p className="basis-2 text-xl font-bold">{option.name}</p>
+                <div className="flex w-full flex-wrap justify-start gap-3 gap-y-2">
+                  {option.choices.map((choice: any) => (
+                    <div
+                      className="flex items-center space-x-2"
+                      key={choice.menu_item_option_choice_id}
+                    >
+                      <RadioGroupItem
+                        value={choice.menu_item_option_choice_id}
+                        id={choice.menu_item_option_choice_id}
+                      />
+                      <Label htmlFor={choice.menu_item_option_choice_id}>
+                        {choice.name}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </RadioGroup>
+            ))}
+          </div>
+        )}
         <div className="flex w-full flex-col items-start justify-start gap-2">
           <Label htmlFor="note" className="text-xl font-bold">
             Note
           </Label>
-          <Input
-            className="text-md"
-            placeholder="Anything you want to add ..."
-            id="note"
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-          />
+          <div className="w-full p-1">
+            <Input
+              className="text-md"
+              placeholder="Anything you want to add ..."
+              id="note"
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+            />
+          </div>
         </div>
       </ScrollArea>
       <DialogFooter>

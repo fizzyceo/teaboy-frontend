@@ -2,11 +2,11 @@
 import getMenu from "@/actions/menu/get-menu";
 import MenuItemCard from "@/components/menu/menuItemCard";
 import OrderDrawer from "@/components/order/orderDrawer";
-import RestaurantHeader from "@/components/menu/restaurantHeader";
 import { useEffect, useState } from "react";
 import { useMenuStore } from "@/stores/menu.store";
 import Loading from "@/components/shared/loading";
 import MenuItemDrawer from "@/components/menu/menuItemDrawer";
+import SiteHeader from "@/components/menu/siteHeader";
 
 const MenuPage = ({
   params,
@@ -19,34 +19,25 @@ const MenuPage = ({
   const [menu, setMenu] = useState<any>(null);
   useEffect(() => {
     const loadMenu = async () => {
-      const menu = await getMenu(parseInt(params.menu_id));
+      const menu = await getMenu(
+        parseInt(params.menu_id),
+        parseInt(searchParams.space_id as string),
+      );
       setMenu(menu);
       setMenuItems(menu.menu_items);
     };
     loadMenu();
-  }, [params.menu_id, setMenuItems]);
+  }, [params.menu_id, searchParams.space_id, setMenuItems]);
 
   if (!menu) {
     return <Loading />;
   }
 
-  const { menu_items, restaurant } = menu;
-
-  const categorySet = new Set();
-  const categories: any[] = [];
-
-  menu_items.forEach((menuItem: any) => {
-    menuItem.categories.forEach((category: any) => {
-      if (!categorySet.has(category.category_id)) {
-        categorySet.add(category.category_id);
-        categories.push(category);
-      }
-    });
-  });
+  const { menu_items, spaces } = menu;
 
   return (
     <div className="bg-slate-50">
-      <RestaurantHeader restaurant={restaurant} searchParams={searchParams} />
+      <SiteHeader space={spaces[0]} />
       <div className="flex w-full flex-col items-center p-4">
         <p className="text-xl font-bold">{menu.name}</p>
         <p>{menu.description}</p>

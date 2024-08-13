@@ -18,8 +18,7 @@ type OrderOptionType = {
 };
 
 const MenuItemDrawer = (item: any) => {
-  const { options } = item;
-
+  console.log("item:--->", item);
   const [orderOptions, setOrderOptions] = useState<OrderOptionType[]>([]);
   const [closeDialog, setCloseDialog] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);

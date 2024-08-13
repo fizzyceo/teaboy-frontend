@@ -1,16 +1,15 @@
 const getLinks = async () => {
-  const response = await fetch(
-    `https://basseer-internship-backend.onrender.com/menu`,
-  );
+  console.log("fetching_menus...", process.env.NEXT_PUBLIC_BACKEND_URL);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/menu`);
 
   const data = await response.json();
-  console.log("data", data);
+  console.log("fetched_menus:", data);
 
   const links = data.map((menu: any, index: any) => {
     return {
       id: index,
       url: `https://basseer-internship-web-app.vercel.app/menu/${menu.menu_id}?table=${randomInt(1, 10)}`,
-      restaurant_name: menu.restaurant.name,
+      restaurant_name: "menu.restaurant.name",
     };
   });
 
