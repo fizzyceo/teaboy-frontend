@@ -35,11 +35,11 @@ const OrderItemCard = (item: any) => {
   return (
     <div
       key={item.menuItemId}
-      className="flex h-28 snap-start items-center gap-4 rounded-lg bg-slate-100 p-3 shadow-lg"
+      className="flex h-auto max-h-36 min-h-28 snap-start items-center gap-4 rounded-lg bg-slate-100 p-3 shadow-lg"
     >
       <div className="flex w-2/5 items-center">
         <div className="flex flex-col items-start justify-between gap-1">
-          <p className="overflow-hidden text-wrap text-2xl font-semibold">
+          <p className="overflow-hidden text-wrap text-left text-xl font-semibold">
             {item.menuItemTitle}
           </p>
           {item.note !== "" && (

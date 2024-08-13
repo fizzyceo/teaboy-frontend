@@ -36,7 +36,7 @@ const MenuPage = ({
   const { menu_items, spaces } = menu;
 
   return (
-    <div className="bg-slate-50">
+    <div className="min-h-screen bg-slate-50">
       <SiteHeader space={spaces[0]} />
       <div className="flex w-full flex-col items-center p-4">
         <p className="text-xl font-bold">{menu.name}</p>

@@ -61,7 +61,7 @@ const MenuItemDrawer = (item: any) => {
   };
 
   return (
-    <Dialog>
+    <Dialog onOpenChange={() => setStepIndex(0)}>
       <DialogTrigger>
         <MenuItemCard {...item} />
       </DialogTrigger>

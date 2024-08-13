@@ -59,6 +59,9 @@ const MenuItemDetails = ({
                 onValueChange={(value) =>
                   handleValueChange(option.menu_item_option_id, parseInt(value))
                 }
+                defaultValue={
+                  options[0].default_choice.menu_item_option_choice_id
+                }
               >
                 <p className="basis-2 text-xl font-bold">{option.name}</p>
                 <div className="flex w-full flex-wrap justify-start gap-3 gap-y-2">
