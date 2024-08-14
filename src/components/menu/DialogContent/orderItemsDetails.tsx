@@ -25,10 +25,15 @@ const OrderItemsDetails = ({ handleNext }: any) => {
       <DialogFooter>
         <div className="flex gap-2">
           <DialogTrigger asChild>
-            <Button className="w-full text-lg">Add More</Button>
+            <Button className="w-full bg-blue-300 text-lg text-black">
+              Add More
+            </Button>
           </DialogTrigger>
 
-          <Button className="w-full text-lg" onClick={handleNext}>
+          <Button
+            className="w-full bg-green-500 text-lg text-black"
+            onClick={handleNext}
+          >
             Submit
           </Button>
         </div>

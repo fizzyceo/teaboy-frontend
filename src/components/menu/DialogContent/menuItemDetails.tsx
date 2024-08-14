@@ -49,6 +49,7 @@ const MenuItemDetails = ({
           </Badge>
         ) : null}
       </div>
+
       <ScrollArea className="no-scrollbar max-h-[40vh] overflow-scroll">
         {options.length > 0 && (
           <div className="mb-4 flex w-full flex-col gap-3 pb-2">

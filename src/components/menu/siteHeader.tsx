@@ -16,8 +16,8 @@ const SiteHeader = ({ space }: { space: any }) => {
         <p className="flex items-center gap-4">
           <PhoneCall size={16} /> {site.phone}
         </p>
-        <p className="flex items-center gap-4">
-          <Home size={16} /> Space : {space.name}
+        <p className="flex items-center gap-4 font-semibold">
+          <Home size={16} /> {space.name}
         </p>
       </div>
 

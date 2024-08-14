@@ -19,10 +19,7 @@ type OrderOptionType = {
 };
 
 const MenuItemDrawer = (item: any) => {
-  console.log("item--", item);
-  const [orderOptions, setOrderOptions] = useState<OrderOptionType[]>([
-    // { menu_item_option_id: 0, menu_item_option_choice_id: 0 },
-  ]);
+  const [orderOptions, setOrderOptions] = useState<OrderOptionType[]>([]);
 
   const [closeDialog, setCloseDialog] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
@@ -33,6 +30,7 @@ const MenuItemDrawer = (item: any) => {
     customerName,
     tableNumber,
     setOrderStatus,
+    orderStatus,
     orderNumber,
     setOrderNumber,
   } = useOrderStore();
@@ -110,7 +108,7 @@ const MenuItemDrawer = (item: any) => {
 
   return (
     <Dialog onOpenChange={() => setStepIndex(0)}>
-      <DialogTrigger>
+      <DialogTrigger disabled={orderStatus !== "Not Submitted"}>
         <MenuItemCard {...item} />
       </DialogTrigger>
 
