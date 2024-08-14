@@ -9,6 +9,8 @@ interface OrderStore {
   setCustomerName: (name: string) => void;
   tableNumber?: number;
   setTableNumber: (tableNumber: number) => void;
+  orderNumber?: string;
+  setOrderNumber: (orderNumber: string) => void;
   note?: string | undefined;
   setNote: (note: string) => void;
 
@@ -45,6 +47,8 @@ export const useOrderStore = create<OrderStore>((set) => ({
   setNote: (note) => set({ note }),
   orderItems: [],
   setOrderItems: (orderItems) => set({ orderItems }),
+  orderNumber: "",
+  setOrderNumber: (orderNumber) => set({ orderNumber }),
 
   orderStatus: "Not Submitted",
   setOrderStatus: (value) => set({ orderStatus: value }),

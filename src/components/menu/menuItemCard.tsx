@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
-import MenuItemDrawer from "./menuItemDrawer";
 import Image from "next/legacy/image";
+import { Button } from "../ui/button";
+import { ShoppingBag } from "lucide-react";
 
 const MenuItemCard = (item: any) => {
   return (
@@ -24,7 +25,7 @@ const MenuItemCard = (item: any) => {
 
       <div className="flex w-full flex-col justify-between gap-4 md:w-2/5 lg:w-2/5">
         <div className="flex w-full flex-col justify-between">
-          <h2 className="text-ellipsis text-xl font-bold">{item.title}</h2>
+          <h2 className="text-ellipsis text-lg font-bold">{item.title}</h2>
           <p className="text-ellipsis text-xs">{item.description}</p>
           {item.price > 0 && (
             <p className="mt-2 text-xl font-extrabold text-gray-700">
@@ -32,7 +33,10 @@ const MenuItemCard = (item: any) => {
             </p>
           )}
         </div>
-        <MenuItemDrawer {...item} />
+        <Button variant="outline" className="w-full">
+          <ShoppingBag className="mr-2" size={24} />
+          Add To Cart
+        </Button>
       </div>
     </div>
   );

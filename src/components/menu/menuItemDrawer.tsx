@@ -1,26 +1,17 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useOrderStore } from "@/stores/order.store";
-import Image from "next/legacy/image";
+
 import { toast } from "sonner";
 
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
-import { CircleX, ShoppingBag } from "lucide-react";
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import { ScrollArea } from "../ui/scroll-area";
+import MenuItemCard from "./menuItemCard";
+
+import MenuItemDetails from "./DialogContent/menuItemDetails";
+import OrderItemsDetails from "./DialogContent/orderItemsDetails";
+import ExtraInfoForm from "./DialogContent/extraInfoForm";
+import submitOrder from "@/actions/order/submit-order";
 
 type OrderOptionType = {
   menu_item_option_choice_id: number;
@@ -28,13 +19,29 @@ type OrderOptionType = {
 };
 
 const MenuItemDrawer = (item: any) => {
-  const { options } = item;
-
   const [orderOptions, setOrderOptions] = useState<OrderOptionType[]>([]);
-  const [note, setNote] = useState("");
-  const { addOrderItem, orderItems } = useOrderStore();
 
-  console.log("orderItems-->", orderItems);
+  const [closeDialog, setCloseDialog] = useState(false);
+  const [stepIndex, setStepIndex] = useState(0);
+  const [note, setNote] = useState("");
+  const {
+    addOrderItem,
+    orderItems,
+    customerName,
+    tableNumber,
+    setOrderStatus,
+    orderStatus,
+    orderNumber,
+    setOrderNumber,
+  } = useOrderStore();
+
+  useEffect(() => {
+    const initialOrderOptions = item.options.map((option: any) => ({
+      menu_item_option_id: option.menu_item_option_id,
+      menu_item_option_choice_id: option.default_choice_id,
+    }));
+    setOrderOptions(initialOrderOptions);
+  }, [item.options]);
 
   const handleValueChange = (optionId: number, choiceId: number) => {
     setOrderOptions((prevOptions) => {
@@ -49,118 +56,78 @@ const MenuItemDrawer = (item: any) => {
   };
 
   const handleAddToOrder = () => {
-    const orderItem = {
-      identifier: orderItems.length + 1,
-      note,
-      choices: orderOptions,
-      menuItemId: item.menu_item_id,
-      menuItemUrl: item.item_images[0].image_url,
-      menuItemTitle: item.title,
-      menuItemDescription: item.description,
-      menuItemPrice: item.price,
-    };
+    console.log("stepIndex--", stepIndex);
+    if (stepIndex === 0) {
+      const orderItem = {
+        identifier: orderItems.length + 1,
+        note,
+        choices: orderOptions,
+        menuItemId: item.menu_item_id,
+        menuItemUrl: item.item_images[0].image_url,
+        menuItemTitle: item.title,
+        menuItemDescription: item.description,
+        menuItemPrice: item.price,
+      };
 
-    console.log("orderItem", orderItem);
-    addOrderItem(orderItem);
+      addOrderItem(orderItem);
+    } else if (stepIndex === 2) {
+      // submitOrder();
+      const handleSubmitOrder = async () => {
+        const order = {
+          customer_name: customerName || "Anonymous",
+          table_number: tableNumber,
+          spaceId: 1,
+          order_items: orderItems.map((item) => ({
+            menu_item_id: item.menuItemId,
+            quantity: 1,
+            note: item.note,
+            status: "PENDING",
+            choices: item.choices?.map((choice) => ({
+              menu_item_option_choice_id: choice.menu_item_option_choice_id,
+            })),
+          })),
+        };
 
-    toast.success(`Added  ${item.title} to order`, {
-      duration: 3000,
-    });
+        const response = await submitOrder(order);
+
+        if (response.success) {
+          setOrderStatus("Submitted");
+          setOrderNumber(response.data.order_number);
+          toast.success("Order submitted successfully", { duration: 1000 });
+        } else {
+          setOrderStatus("Not Submitted");
+          toast.error("Failed to submit order", { duration: 1000 });
+        }
+      };
+
+      handleSubmitOrder();
+    }
+
+    setStepIndex((prevIndex) => prevIndex + 1);
   };
 
   return (
-    <Drawer>
-      <DrawerTrigger asChild>
-        <Button variant="outline" className="w-full">
-          <ShoppingBag className="mr-2" size={24} />
-          Add To Cart
-        </Button>
-      </DrawerTrigger>
-      <DrawerContent className="h-auto">
-        <DrawerClose className="absolute right-4 top-4">
-          <CircleX size={34} className="z-50 hover:text-slate-700" />
-        </DrawerClose>
-        <DrawerHeader className="flex h-full w-full flex-col items-center gap-4 p-4 md:p-8 lg:p-8">
-          <DrawerTitle className="text-nowrap text-2xl">
-            {item.title}
-          </DrawerTitle>
-          <div className="relative h-52 w-full overflow-hidden rounded-md md:h-32 lg:h-32">
-            <Image
-              src={item.item_images[0].image_url}
-              alt={item.title}
-              layout="fill"
-              objectFit="cover"
-            />
-            {item.description ? (
-              <p className="absolute bottom-2 left-2 w-fit rounded-lg bg-white bg-opacity-55 px-2 text-start text-xl text-black">
-                {item.description}
-              </p>
-            ) : null}
-            {item.price > 0 ? (
-              <Badge
-                className="absolute bottom-2 right-2 flex items-end space-x-3 text-xl font-extrabold outline-dashed outline-2 outline-offset-2 drop-shadow-md"
-                variant={"secondary"}
-              >
-                <span className="text-xl font-extrabold text-gray-900">
-                  {item.price}
-                </span>
-                <span className="text-base font-semibold text-gray-500">$</span>
-              </Badge>
-            ) : null}
-          </div>
-          <ScrollArea className="no-scrollbar max-h-[40vh] w-full overflow-auto">
-            <div className="flex w-full flex-col gap-5">
-              {options.map((option: any) => (
-                <RadioGroup
-                  key={option.menu_item_option_id}
-                  className="flex w-full flex-col items-start"
-                  onValueChange={(value) =>
-                    handleValueChange(
-                      option.menu_item_option_id,
-                      parseInt(value),
-                    )
-                  }
-                >
-                  <p className="basis-2 text-xl font-bold">{option.name}</p>
-                  <div className="flex w-full flex-wrap justify-start gap-4 gap-y-3">
-                    {option.choices.map((choice: any) => (
-                      <div
-                        className="flex items-center space-x-2"
-                        key={choice.menu_item_option_choice_id}
-                      >
-                        <RadioGroupItem
-                          value={choice.menu_item_option_choice_id}
-                          id={choice.menu_item_option_choice_id}
-                        />
-                        <Label htmlFor={choice.menu_item_option_choice_id}>
-                          {choice.name}
-                        </Label>
-                      </div>
-                    ))}
-                  </div>
-                </RadioGroup>
-              ))}
-            </div>
-            <div className="mb-16 mt-8 flex w-full flex-col items-start justify-start gap-4">
-              <Label htmlFor="note" className="text-xl font-bold">
-                Note
-              </Label>
-              <Textarea
-                placeholder="Anything you want to add ..."
-                id="note"
-                value={note}
-                onChange={(e) => setNote(e.target.value)}
-              />
-            </div>
-          </ScrollArea>
-        </DrawerHeader>
-        <DrawerFooter className="fixed bottom-2 w-full space-y-3">
-          <Button className="text-xl" onClick={handleAddToOrder}>
-            Add To order
-          </Button>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
+    <Dialog onOpenChange={() => setStepIndex(0)}>
+      <DialogTrigger disabled={orderStatus !== "Not Submitted"}>
+        <MenuItemCard {...item} />
+      </DialogTrigger>
+
+      <DialogContent>
+        {stepIndex === 0 ? (
+          <MenuItemDetails
+            item={item}
+            note={note}
+            setNote={setNote}
+            handleValueChange={handleValueChange}
+            handleNext={handleAddToOrder}
+          />
+        ) : stepIndex === 1 ? (
+          <OrderItemsDetails handleNext={handleAddToOrder} />
+        ) : (
+          <ExtraInfoForm handleNext={handleAddToOrder} />
+        )}
+      </DialogContent>
+    </Dialog>
   );
 };
 export default MenuItemDrawer;
