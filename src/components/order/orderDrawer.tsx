@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import OrderItemCard from "./orderItemCard";
 import OrderSuccess from "./orderSuccess";
 import cancelOrder from "@/actions/order/cancel-order";
+import { DialogTrigger } from "@radix-ui/react-dialog";
 
 const OrderDrawer = ({ table_number }: { table_number: number }) => {
   const {
@@ -43,25 +44,32 @@ const OrderDrawer = ({ table_number }: { table_number: number }) => {
     setShowCustomerNameInput(false);
     setOrderItems([]);
     await cancelOrder(orderResponse.order_id);
-    toast.success("Order Canceled", { duration: 1000 });
+    toast.info("Order Canceled", { duration: 1200 });
+    // wait for 1s then set the status to not submitted
+    setTimeout(() => {
+      setOrderStatus("Not Submitted");
+    }, 2000);
   };
 
   const handleSubmitOrder = async () => {
-    if (
-      !showCustomerNameInput &&
-      orderItems.length > 0 &&
-      orderStatus === "Submitted" &&
-      orderResponse.order_id
-    ) {
-      setShowCustomerNameInput(true);
-      return;
-    }
+    // if (
+    //   !showCustomerNameInput &&
+    //   orderItems.length > 0 &&
+    //   orderStatus === "Submitted" &&
+    //   orderResponse.order_id
+    // ) {
+    //   setShowCustomerNameInput(true);
+    //   return;
+    // }
 
+    console.log("orderItems--->", orderItems);
     const order = {
-      customer_name: customerName ? customerName : "Anonymous",
-      table_number,
+      customer_name: "Anonymous",
+      table_number: table_number || 0,
+      spaceId: 1,
       order_items: orderItems.map((item) => ({
         menu_item_id: item.menuItemId,
+        quantity: 1,
         note: item.note,
         status: "PENDING",
         choices: item.choices?.map((choice) => ({
@@ -70,6 +78,7 @@ const OrderDrawer = ({ table_number }: { table_number: number }) => {
       })),
     };
 
+    console.log("order--->", order);
     const response = await submitOrder(order);
 
     if (response.success) {
@@ -86,6 +95,8 @@ const OrderDrawer = ({ table_number }: { table_number: number }) => {
       toast.error("Failed to submit order", { duration: 1000 });
     }
   };
+
+  console.log("orderStatus", orderStatus);
 
   return (
     <Drawer>
@@ -107,7 +118,7 @@ const OrderDrawer = ({ table_number }: { table_number: number }) => {
               "w-full text-xl",
             )}
           >
-            Check order
+            {orderStatus === "Not Submitted" ? "Submit Order" : "Review Order"}
           </Button>
         </div>
       </DrawerTrigger>
@@ -118,69 +129,65 @@ const OrderDrawer = ({ table_number }: { table_number: number }) => {
         orderStatus === "Viewed" ||
         orderStatus === "Canceled" ? (
           <div>
-            <DrawerHeader>
-              <h1 className="text-2xl font-bold">Order Details</h1>
-              <div className="no-scrollbar flex max-h-[60vh] w-full snap-y flex-col gap-2 overflow-scroll">
-                {orderItems.map((item: OrderItem) => (
-                  <OrderItemCard {...item} key={item.menuItemId} />
-                ))}
-              </div>
-            </DrawerHeader>
+            {orderItems.length > 0 && (
+              <DrawerHeader>
+                <h1 className="text-2xl font-bold">Order Details</h1>
+              </DrawerHeader>
+            )}
+
+            <div className="no-scrollbar flex max-h-[60vh] w-full snap-y flex-col gap-2 overflow-scroll px-4">
+              {orderItems.map((item: OrderItem) => (
+                <OrderItemCard {...item} key={item.menuItemId} />
+              ))}
+            </div>
             <DrawerFooter className="flex w-full flex-col gap-4 px-4 py-2">
-              {total > 0 && (
-                <div className="flex justify-center rounded-md bg-slate-200 px-4 py-2 shadow-lg">
-                  <p className="text-xl">
-                    Total Price: <span className="font-bold">{total}</span> DA
-                  </p>
-                </div>
-              )}
-              {orderStatus === "Viewed" || orderStatus === "Canceled" ? (
-                <div className="flex w-full gap-2">
-                  <Button
-                    variant={"destructive"}
-                    onClick={handleOrderCancel}
-                    className="w-full"
-                  >
-                    Cancel
-                  </Button>
-                  {orderStatus !== "Canceled" && (
-                    <Button
-                      variant={"outline"}
-                      className="w-full bg-green-600 text-lg text-white"
-                      onClick={() => setOrderStatus("Submitted")}
-                    >
-                      View Order Number
-                    </Button>
-                  )}
-                </div>
+              {orderItems.length == 0 ? (
+                <DialogTrigger>
+                  <Button className="w-full text-xl">Add More</Button>
+                </DialogTrigger>
               ) : (
-                <div className="flex items-center gap-2">
-                  <div
-                    className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                      showCustomerNameInput
-                        ? "w-1/2 opacity-100"
-                        : "w-0 opacity-0"
-                    } `}
-                  >
-                    <Input
-                      id="customer_name"
-                      name="customer_name"
-                      type="text"
-                      placeholder="Your name (optional)"
-                      className="w-full rounded-md border border-gray-300 p-2 text-lg"
-                      value={customerName}
-                      onChange={(e) => setCustomerName(e.target.value)}
-                    />
-                  </div>
-                  <Button
-                    className={`text-xl transition-all duration-300 ease-in-out ${
-                      showCustomerNameInput ? "w-1/2" : "w-full"
-                    }`}
-                    onClick={handleSubmitOrder}
-                  >
-                    {showCustomerNameInput ? "Confirm Order" : "Review Order"}
-                  </Button>
-                </div>
+                <>
+                  {total > 0 && (
+                    <div className="flex justify-center rounded-md bg-slate-200 px-4 py-2 shadow-lg">
+                      <p className="text-xl">
+                        Total Price: <span className="font-bold">{total}</span>{" "}
+                        DA
+                      </p>
+                    </div>
+                  )}
+
+                  {orderStatus === "Viewed" || orderStatus === "Canceled" ? (
+                    <div className="flex w-full gap-2">
+                      <Button
+                        variant={"destructive"}
+                        onClick={handleOrderCancel}
+                        className="w-full"
+                      >
+                        Cancel
+                      </Button>
+                      {orderStatus !== "Canceled" && (
+                        <Button
+                          variant={"outline"}
+                          className="w-full bg-green-600 text-lg text-white"
+                          onClick={() => setOrderStatus("Submitted")}
+                        >
+                          View Order Number
+                        </Button>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <Button
+                        className="w-full text-xl"
+                        onClick={handleSubmitOrder}
+                      >
+                        {orderStatus == "Not Submitted"
+                          ? "Submit Order"
+                          : "Review Order"}
+                      </Button>
+                    </div>
+                  )}
+                </>
               )}
             </DrawerFooter>
           </div>

@@ -1,3 +1,4 @@
+"use client";
 import { X } from "lucide-react";
 import Image from "next/image";
 import { Button } from "../ui/button";
@@ -6,7 +7,7 @@ import EditOrderItemDrawer from "./EditOrderItemDrawer";
 import { useMenuStore } from "@/stores/menu.store";
 
 const OrderItemCard = (item: any) => {
-  const { removeOrderItem } = useOrderStore();
+  const { removeOrderItem, orderStatus } = useOrderStore();
   const { menuItems } = useMenuStore();
 
   const menuItem = menuItems.find(
@@ -81,15 +82,17 @@ const OrderItemCard = (item: any) => {
             </p>
           )}
         </div>
-        <div className="absolute bottom-[-6px] right-[-6px]">
-          <Button
-            variant="destructive"
-            className="size-8 rounded-3xl border-4 border-slate-100 p-0"
-            onClick={() => removeOrderItem(item.identifier)}
-          >
-            <X size={24} />
-          </Button>
-        </div>
+        {orderStatus !== "Submitted" && orderStatus !== "Viewed" && (
+          <div className="absolute bottom-[-6px] right-[-6px]">
+            <Button
+              variant="destructive"
+              className="size-8 rounded-3xl border-4 border-slate-100 p-0"
+              onClick={() => removeOrderItem(item.identifier)}
+            >
+              <X size={24} />
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
