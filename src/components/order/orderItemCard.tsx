@@ -3,7 +3,6 @@ import { X } from "lucide-react";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { useOrderStore } from "@/stores/order.store";
-import EditOrderItemDrawer from "./EditOrderItemDrawer";
 import { useMenuStore } from "@/stores/menu.store";
 
 const OrderItemCard = (item: any) => {
