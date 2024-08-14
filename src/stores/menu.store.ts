@@ -48,16 +48,18 @@ interface Menu {
   restaurant_id: number;
   created_at: string;
   updated_at: string;
-  space: Space;
+  ask_for_name: boolean;
+  ask_for_table: boolean;
+  spaces: Space[];
   menu_items: MenuItem[];
 }
 
-interface MenuItemsStore {
-  menuItems: MenuItem[];
-  setMenuItems: (menuItems: MenuItem[]) => void;
+interface MenuStore {
+  menu: Menu | null; // Allow menu to be null initially
+  setMenu: (menu: Menu) => void;
 }
 
-export const useMenuStore = create<MenuItemsStore>((set) => ({
-  menuItems: [],
-  setMenuItems: (menuItems) => set({ menuItems }),
+export const useMenuStore = create<MenuStore>((set) => ({
+  menu: null,
+  setMenu: (menu) => set({ menu }),
 }));

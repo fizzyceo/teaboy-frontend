@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useOrderStore } from "@/stores/order.store";
 
 import { toast } from "sonner";
@@ -11,6 +11,7 @@ import MenuItemCard from "./menuItemCard";
 import MenuItemDetails from "./DialogContent/menuItemDetails";
 import OrderItemsDetails from "./DialogContent/orderItemsDetails";
 import ExtraInfoForm from "./DialogContent/extraInfoForm";
+import submitOrder from "@/actions/order/submit-order";
 
 type OrderOptionType = {
   menu_item_option_choice_id: number;
@@ -18,12 +19,31 @@ type OrderOptionType = {
 };
 
 const MenuItemDrawer = (item: any) => {
-  console.log("item:--->", item);
-  const [orderOptions, setOrderOptions] = useState<OrderOptionType[]>([]);
+  console.log("item--", item);
+  const [orderOptions, setOrderOptions] = useState<OrderOptionType[]>([
+    // { menu_item_option_id: 0, menu_item_option_choice_id: 0 },
+  ]);
+
   const [closeDialog, setCloseDialog] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
   const [note, setNote] = useState("");
-  const { addOrderItem, orderItems } = useOrderStore();
+  const {
+    addOrderItem,
+    orderItems,
+    customerName,
+    tableNumber,
+    setOrderStatus,
+    orderNumber,
+    setOrderNumber,
+  } = useOrderStore();
+
+  useEffect(() => {
+    const initialOrderOptions = item.options.map((option: any) => ({
+      menu_item_option_id: option.menu_item_option_id,
+      menu_item_option_choice_id: option.default_choice_id,
+    }));
+    setOrderOptions(initialOrderOptions);
+  }, [item.options]);
 
   const handleValueChange = (optionId: number, choiceId: number) => {
     setOrderOptions((prevOptions) => {
@@ -38,6 +58,7 @@ const MenuItemDrawer = (item: any) => {
   };
 
   const handleAddToOrder = () => {
+    console.log("stepIndex--", stepIndex);
     if (stepIndex === 0) {
       const orderItem = {
         identifier: orderItems.length + 1,
@@ -51,13 +72,40 @@ const MenuItemDrawer = (item: any) => {
       };
 
       addOrderItem(orderItem);
+    } else if (stepIndex === 2) {
+      // submitOrder();
+      const handleSubmitOrder = async () => {
+        const order = {
+          customer_name: customerName || "Anonymous",
+          table_number: tableNumber,
+          spaceId: 1,
+          order_items: orderItems.map((item) => ({
+            menu_item_id: item.menuItemId,
+            quantity: 1,
+            note: item.note,
+            status: "PENDING",
+            choices: item.choices?.map((choice) => ({
+              menu_item_option_choice_id: choice.menu_item_option_choice_id,
+            })),
+          })),
+        };
+
+        const response = await submitOrder(order);
+
+        if (response.success) {
+          setOrderStatus("Submitted");
+          setOrderNumber(response.data.order_number);
+          toast.success("Order submitted successfully", { duration: 1000 });
+        } else {
+          setOrderStatus("Not Submitted");
+          toast.error("Failed to submit order", { duration: 1000 });
+        }
+      };
+
+      handleSubmitOrder();
     }
 
     setStepIndex((prevIndex) => prevIndex + 1);
-
-    // toast.success(`Added  ${item.title} to Cart`, {
-    //   duration: 3000,
-    // });
   };
 
   return (

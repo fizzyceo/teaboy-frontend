@@ -45,24 +45,12 @@ const OrderDrawer = ({ table_number }: { table_number: number }) => {
     setOrderItems([]);
     await cancelOrder(orderResponse.order_id);
     toast.info("Order Canceled", { duration: 1200 });
-    // wait for 1s then set the status to not submitted
     setTimeout(() => {
       setOrderStatus("Not Submitted");
     }, 2000);
   };
 
   const handleSubmitOrder = async () => {
-    // if (
-    //   !showCustomerNameInput &&
-    //   orderItems.length > 0 &&
-    //   orderStatus === "Submitted" &&
-    //   orderResponse.order_id
-    // ) {
-    //   setShowCustomerNameInput(true);
-    //   return;
-    // }
-
-    console.log("orderItems--->", orderItems);
     const order = {
       customer_name: "Anonymous",
       table_number: table_number || 0,
@@ -78,25 +66,17 @@ const OrderDrawer = ({ table_number }: { table_number: number }) => {
       })),
     };
 
-    console.log("order--->", order);
     const response = await submitOrder(order);
 
     if (response.success) {
       setOrderStatus("Submitted");
-      setOrderResponse({
-        order_id: response.data.order_id,
-        customer_name: response.data.customer_name,
-        order_number: response.data.order_number,
-      });
+
       toast.success("Order submitted successfully", { duration: 1000 });
     } else {
       setOrderStatus("Not Submitted");
-      setOrderResponse({});
       toast.error("Failed to submit order", { duration: 1000 });
     }
   };
-
-  console.log("orderStatus", orderStatus);
 
   return (
     <Drawer>
@@ -115,7 +95,7 @@ const OrderDrawer = ({ table_number }: { table_number: number }) => {
           <Button
             className={cn(
               orderItems.length === 0 ? "hidden" : "",
-              "w-full text-xl",
+              "h-14 w-full rounded-3xl text-2xl",
             )}
           >
             {orderStatus === "Not Submitted" ? "Submit Order" : "Review Order"}
@@ -158,13 +138,13 @@ const OrderDrawer = ({ table_number }: { table_number: number }) => {
 
                   {orderStatus === "Viewed" || orderStatus === "Canceled" ? (
                     <div className="flex w-full gap-2">
-                      <Button
+                      {/* <Button
                         variant={"destructive"}
                         onClick={handleOrderCancel}
                         className="w-full"
                       >
                         Cancel
-                      </Button>
+                      </Button> */}
                       {orderStatus !== "Canceled" && (
                         <Button
                           variant={"outline"}
@@ -192,11 +172,7 @@ const OrderDrawer = ({ table_number }: { table_number: number }) => {
             </DrawerFooter>
           </div>
         ) : (
-          <OrderSuccess
-            orderNumber={orderResponse.order_number}
-            customer_name={orderResponse.customer_name}
-            setOrderStatus={setOrderStatus}
-          />
+          <OrderSuccess />
         )}
       </DrawerContent>
     </Drawer>

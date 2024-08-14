@@ -8,9 +8,13 @@ import { useMenuStore } from "@/stores/menu.store";
 
 const OrderItemCard = (item: any) => {
   const { removeOrderItem, orderStatus } = useOrderStore();
-  const { menuItems } = useMenuStore();
+  const { menu } = useMenuStore();
 
-  const menuItem = menuItems.find(
+  if (!menu) {
+    return null;
+  }
+
+  const menuItem = menu.menu_items.find(
     (menuItem) => menuItem.menu_item_id === item.menuItemId,
   );
 
@@ -36,9 +40,9 @@ const OrderItemCard = (item: any) => {
   return (
     <div
       key={item.menuItemId}
-      className="flex h-auto max-h-36 min-h-28 snap-start items-center gap-4 rounded-lg bg-slate-100 p-3 shadow-lg"
+      className="flex h-auto max-h-36 min-h-20 snap-start items-center gap-4 rounded-lg bg-slate-100 p-3 shadow-lg"
     >
-      <div className="flex w-2/5 items-center">
+      <div className="flex flex-1 items-center">
         <div className="flex flex-col items-start justify-between gap-1">
           <p className="overflow-hidden text-wrap text-left text-xl font-semibold">
             {item.menuItemTitle}
@@ -52,7 +56,7 @@ const OrderItemCard = (item: any) => {
             return (
               <p
                 key={`${choice.menu_item_option_choice_id}-${choice.menu_item_option_id}`}
-                className="overflow-hidden truncate text-sm text-gray-600"
+                className="overflow-hidden truncate text-sm text-gray-600 md:text-lg lg:text-lg"
               >
                 <span className="font-semibold">
                   {getOrderOptionName(choice.menu_item_option_id)}:{" "}
@@ -67,14 +71,16 @@ const OrderItemCard = (item: any) => {
         </div>
       </div>
 
-      <div className="relative flex h-full w-3/5 flex-col gap-2">
-        <Image
-          src={item.menuItemUrl}
-          alt={item.menuItemTitle}
-          width={100}
-          height={50}
-          className="h-full w-full rounded-md object-cover"
-        />
+      <div className="relative flex h-full w-1/2 flex-col gap-2 md:w-1/5 lg:w-1/5">
+        <div className="h-24 w-full overflow-hidden rounded-md">
+          <Image
+            src={item.menuItemUrl}
+            alt={item.menuItemTitle}
+            layout="fill"
+            objectFit="cover"
+            className="rounded-md"
+          />
+        </div>
         <div className="absolute bottom-1 left-1 rounded-md bg-white bg-opacity-75 px-1">
           {item.menuItemPrice !== 0 && (
             <p className="overflow-hidden text-sm font-semibold text-gray-800">

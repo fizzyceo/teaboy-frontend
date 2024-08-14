@@ -1,6 +1,8 @@
 const getLinks = async () => {
   console.log("fetching_menus...", process.env.NEXT_PUBLIC_BACKEND_URL);
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/menu`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/menu`, {
+    cache: "no-store",
+  });
 
   const data = await response.json();
   console.log("fetched_menus:", data);
