@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { ChevronRight } from "lucide-react";
 
 import Image from "next/image";
 
@@ -25,7 +26,8 @@ const MenuItemDetails = ({
       <DialogHeader>
         <DialogTitle>{item.title}</DialogTitle>
       </DialogHeader>
-      <div className="relative h-36 w-full overflow-hidden rounded-md md:h-32 lg:h-32">
+
+      <div className="relative h-44 w-full overflow-hidden rounded-md md:h-48 lg:h-52">
         <Image
           src={item.item_images[0].image_url}
           alt={item.title}
@@ -101,8 +103,13 @@ const MenuItemDetails = ({
         </div>
       </ScrollArea>
       <DialogFooter>
-        <Button className="text-xl" onClick={handleNext}>
-          Next
+        <Button
+          className="flex h-12 w-full items-center justify-center gap-4 py-6 text-2xl text-black"
+          onClick={handleNext}
+          variant={"nextStep"}
+        >
+          <span>Next</span>
+          <ChevronRight />
         </Button>
       </DialogFooter>
     </>

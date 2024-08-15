@@ -77,10 +77,6 @@
     max-height: 100px;
     opacity: 1;
   }
-
-  [vaul-drawer][vaul-drawer-direction="bottom"]:after {
-    z-index: -1;
-  }
 }
 
 @layer base {

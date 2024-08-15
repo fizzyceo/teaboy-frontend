@@ -1,4 +1,4 @@
-const getLinks = async () => {
+const getLinks = async (base_url: string) => {
   console.log("fetching_menus...", process.env.NEXT_PUBLIC_BACKEND_URL);
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/menu/links/a`,
@@ -15,7 +15,7 @@ const getLinks = async () => {
       id: menu.encrypted,
       menu_name: menu.menu_name,
       space_name: menu.space_name,
-      url: `https://basseer-internship-web-app.vercel.app/menu/${menu.encrypted}`,
+      url: `${base_url}/menu/${menu.encrypted}`,
     };
   });
 

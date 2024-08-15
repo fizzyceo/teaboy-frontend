@@ -2,7 +2,7 @@
 import getMenu from "@/actions/menu/get-menu";
 import Loading from "@/components/shared/loading";
 import MenuItemDrawer from "@/components/menu/menuItemDrawer";
-import OrderDrawer from "@/components/order/orderDrawer";
+import OrderDrawer from "@/components/order/orderDialog";
 import SiteHeader from "@/components/menu/siteHeader";
 import { useEffect, useState } from "react";
 import { useMenuStore } from "@/stores/menu.store";
@@ -50,7 +50,7 @@ const MenuPage = ({
   const space = spaces[0];
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="no-scrollbar min-h-screen bg-slate-50">
       <SiteHeader space={space} />
       <div className="flex w-full flex-col items-center p-4">
         <p className="text-xl font-bold">{menu.name}</p>

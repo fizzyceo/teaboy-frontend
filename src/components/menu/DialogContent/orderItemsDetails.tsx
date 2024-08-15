@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { OrderItem, useOrderStore } from "@/stores/order.store";
 import { DialogTrigger } from "@radix-ui/react-dialog";
+import { BookmarkPlus, Send } from "lucide-react";
 
 const OrderItemsDetails = ({ handleNext }: any) => {
   const { orderItems } = useOrderStore();
@@ -25,16 +26,21 @@ const OrderItemsDetails = ({ handleNext }: any) => {
       <DialogFooter>
         <div className="flex gap-2">
           <DialogTrigger asChild>
-            <Button className="w-full bg-blue-300 text-lg text-black">
-              Add More
+            <Button
+              className="flex h-12 w-full items-center justify-center gap-4 py-6 text-xl text-black"
+              variant={"sendOrder"}
+            >
+              <span>Add More</span>
+              <BookmarkPlus />
             </Button>
           </DialogTrigger>
-
           <Button
-            className="w-full bg-green-500 text-lg text-black"
+            className="flex h-12 w-full items-center justify-center gap-4 py-6 text-xl text-black"
             onClick={handleNext}
+            variant={"nextStep"}
           >
-            Submit
+            <span>Submit</span>
+            <Send />
           </Button>
         </div>
       </DialogFooter>

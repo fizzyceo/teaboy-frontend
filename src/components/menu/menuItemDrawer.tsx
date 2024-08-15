@@ -56,7 +56,6 @@ const MenuItemDrawer = (item: any) => {
   };
 
   const handleAddToOrder = () => {
-    console.log("stepIndex--", stepIndex);
     if (stepIndex === 0) {
       const orderItem = {
         identifier: orderItems.length + 1,
@@ -71,7 +70,6 @@ const MenuItemDrawer = (item: any) => {
 
       addOrderItem(orderItem);
     } else if (stepIndex === 2) {
-      // submitOrder();
       const handleSubmitOrder = async () => {
         const order = {
           customer_name: customerName || "Anonymous",

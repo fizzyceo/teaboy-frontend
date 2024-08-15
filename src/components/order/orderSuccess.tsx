@@ -8,10 +8,10 @@ const OrderSuccess = ({
   stepIndex: number;
   setStepIndex: (index: number) => void;
 }) => {
-  const { customerName, setOrderStatus, orderNumber } = useOrderStore();
-  console.log("order number", orderNumber);
+  const { customerName, orderNumber } = useOrderStore();
+
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-center gap-6 bg-green-500">
+    <div className="flex h-full w-full flex-col items-center justify-center gap-6 bg-gradient-to-b from-green-500 via-green-500 to-green-600">
       <div className="flex flex-col items-center">
         <h1 className="text-xl font-bold text-white">
           Order Submitted{" "}

@@ -2,14 +2,22 @@
 import getLinks from "@/actions/menu/get-links";
 import { useQRCode } from "next-qrcode";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+  const [baseUrl, setBaseUrl] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const url = `${window.location.protocol}//${window.location.host}`;
+      setBaseUrl(url);
+    }
+  }, []);
   const { Canvas } = useQRCode();
   const [links, setLinks] = useState([]);
 
   const loadLinks = async () => {
-    const fetched_links = await getLinks();
+    const fetched_links = await getLinks(baseUrl);
     setLinks(fetched_links);
   };
 

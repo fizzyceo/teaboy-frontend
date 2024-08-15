@@ -39,9 +39,9 @@ const OrderItemCard = (item: any) => {
   return (
     <div
       key={item.menuItemId}
-      className="flex h-auto max-h-36 min-h-20 snap-start items-center gap-4 rounded-lg bg-slate-100 p-3 shadow-lg"
+      className="flex h-auto max-h-36 min-h-24 snap-start items-center gap-4 rounded-lg bg-slate-100 p-3 shadow-lg"
     >
-      <div className="flex flex-1 items-center">
+      <div className="flex w-1/2 flex-1 items-center">
         <div className="flex flex-col items-start justify-between gap-1">
           <p className="overflow-hidden text-wrap text-left text-xl font-semibold">
             {item.menuItemTitle}
@@ -70,7 +70,7 @@ const OrderItemCard = (item: any) => {
         </div>
       </div>
 
-      <div className="relative flex h-full w-1/2 flex-col gap-2 md:w-1/5 lg:w-1/5">
+      <div className="relative flex h-full w-[45%] flex-col gap-2 md:w-2/5 lg:w-2/5">
         <div className="h-24 w-full overflow-hidden rounded-md">
           <Image
             src={item.menuItemUrl}
