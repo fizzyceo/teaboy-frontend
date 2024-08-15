@@ -42,7 +42,7 @@ export default function Home() {
                   },
                 }}
               />
-              <Link href={link.id} className="hover:underline">
+              <Link href={`menu/${link.id}`} className="hover:underline">
                 <p className="text-xl font-semibold">
                   {link.menu_name} - {link.space_name}
                 </p>

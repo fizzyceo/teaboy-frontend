@@ -7,17 +7,15 @@ const MenuItemCard = (item: any) => {
   return (
     <div
       key={item.menu_item_id}
-      className="flex flex-col justify-between gap-4 rounded-md border-2 border-slate-300 bg-gradient-to-tr from-slate-100 to-slate-300 p-3 shadow-md md:flex-row md:gap-4 lg:flex-row lg:gap-4"
+      className="flex flex-col justify-between gap-4 rounded-md border-2 border-slate-300 bg-gradient-to-tr from-slate-100 to-slate-300 p-3 shadow-md md:flex-row lg:flex-row"
     >
-      <div className="relative h-40 w-full rounded-md bg-slate-500 sm:h-20 md:h-full md:w-3/5 lg:w-3/5">
+      <div className="relative h-40 w-full rounded-md bg-slate-500 sm:h-20 md:h-48 lg:h-40">
         <Image
           src={item.item_images[0].image_url}
           alt={item.name}
-          height={110}
-          width={200}
-          // className="h-full w-full rounded-md object-cover"
           layout="fill"
           objectFit="cover"
+          className="rounded-md"
         />
         {!item.available && (
           <Badge variant={"destructive"} className="absolute bottom-2 right-2">
