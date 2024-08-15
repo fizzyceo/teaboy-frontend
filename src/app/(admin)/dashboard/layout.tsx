@@ -32,7 +32,6 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="secondary"
-                  size="icon"
                   className="ml-auto h-8 w-8 rounded-full"
                 >
                   <CircleUser className="h-5 w-5" />
@@ -55,11 +54,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
         <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:hidden">
           <Sheet>
             <SheetTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                className="shrink-0 md:hidden"
-              >
+              <Button variant="outline" className="shrink-0 md:hidden">
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
