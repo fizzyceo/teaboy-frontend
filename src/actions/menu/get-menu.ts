@@ -1,7 +1,7 @@
-const getMenu = async (menu_id: number, space_id: number = 1) => {
+const getMenu = async (menu_id: string) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/menu/${menu_id}?space_id=${space_id}`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/menu/s/${menu_id}`,
       {
         cache: "no-store",
       },
@@ -12,7 +12,7 @@ const getMenu = async (menu_id: number, space_id: number = 1) => {
     }
 
     const menu = await response.json();
-    console.log("fetched_menu:", menu);
+
     return menu;
   } catch (error) {
     console.error("Failed to fetch menu:", error);

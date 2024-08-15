@@ -21,10 +21,7 @@ const MenuPage = ({
     const loadMenu = async () => {
       try {
         setLoading(true);
-        const my_menu = await getMenu(
-          parseInt(params.menu_id),
-          parseInt(searchParams.space_id as string),
-        );
+        const my_menu = await getMenu(params.menu_id);
         setMenu(my_menu);
       } catch (error) {
         console.error("Failed to load menu:", error);

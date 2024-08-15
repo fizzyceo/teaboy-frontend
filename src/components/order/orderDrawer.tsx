@@ -35,6 +35,7 @@ const OrderDrawer = ({ table_number }: { table_number: number }) => {
   const [showCustomerNameInput, setShowCustomerNameInput] = useState(false);
   const [orderResponse, setOrderResponse] = useState<any>({});
   const [stepIndex, setStepIndex] = useState(0);
+  const [openDialog, setOpenDialog] = useState(false);
 
   console.log("&&&stepIndex", stepIndex);
   console.log("````orderStatus", orderStatus);
@@ -85,6 +86,7 @@ const OrderDrawer = ({ table_number }: { table_number: number }) => {
         const response = await submitOrder(order);
 
         if (response.success) {
+          setOpenDialog(false);
           setOrderStatus("Submitted");
           setCustomerName(response.data.customer_name);
           setOrderNumber(response.data.order_number);
@@ -99,7 +101,7 @@ const OrderDrawer = ({ table_number }: { table_number: number }) => {
   };
 
   return (
-    <Drawer>
+    <Drawer open={openDialog} onOpenChange={setOpenDialog}>
       <DrawerTrigger asChild>
         <div
           className={cn(

@@ -18,14 +18,14 @@ export default function Home() {
     console.log("links", links);
   }
   return (
-    <main className="flex h-screen w-full flex-col items-center justify-center gap-4 px-4 py-10">
+    <main className="flex min-h-screen w-full flex-col items-center justify-center gap-4 px-4 py-10">
       <p>Scan the QR code to access the menu</p>
-      <div className="grid h-full grid-cols-1 gap-8 md:h-auto md:grid-cols-3 xl:h-auto xl:grid-cols-3">
-        {links.map((link: any, index) => {
+      <div className="grid h-full grid-cols-1 gap-8 md:h-auto md:grid-cols-2 lg:grid-cols-3 xl:h-auto xl:grid-cols-3">
+        {links.map((link: any) => {
           return (
             <div
-              key={index}
-              className="flex flex-col items-center justify-center gap-4 rounded-md border-4 border-slate-300 bg-slate-200 p-4 text-black drop-shadow-xl"
+              key={link.id}
+              className="flex flex-col items-center justify-center gap-1 rounded-md border-4 border-slate-300 bg-slate-200 p-2 text-black drop-shadow-xl"
             >
               <Canvas
                 text={link?.url}
@@ -42,14 +42,9 @@ export default function Home() {
                   },
                 }}
               />
-              <Link
-                href={link.url.replace(
-                  "https://basseer-internship-web-app.vercel.app",
-                  "",
-                )}
-              >
-                <p className="text-2xl font-semibold">
-                  {link.restaurant_name} Menu{" "}
+              <Link href={link.id} className="hover:underline">
+                <p className="text-xl font-semibold">
+                  {link.menu_name} - {link.space_name}
                 </p>
               </Link>
             </div>
