@@ -27,6 +27,7 @@ import { Input } from "@/components/ui/input";
 
 import OrderItemCard from "./orderItemCard";
 import OrderSuccess from "./orderSuccess";
+import OrderItemList from "./orderItemList";
 
 const OrderDialog = ({ table_number }: { table_number: number }) => {
   const {
@@ -149,11 +150,7 @@ const OrderDialog = ({ table_number }: { table_number: number }) => {
                   </DialogTitle>
                 </DialogHeader>
 
-                <div className="no-scrollbar flex max-h-[40vh] w-full snap-y flex-col gap-3 overflow-scroll">
-                  {orderItems.map((item: OrderItem) => (
-                    <OrderItemCard {...item} key={item.menuItemId} />
-                  ))}
-                </div>
+                <OrderItemList orderItems={orderItems} />
 
                 <DialogFooter>
                   {orderItems.length === 0 ? (

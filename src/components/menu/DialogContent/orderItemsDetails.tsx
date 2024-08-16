@@ -1,7 +1,6 @@
-import OrderItemCard from "@/components/order/orderItemCard";
+import OrderItemList from "@/components/order/orderItemList";
 import { Button } from "@/components/ui/button";
 import {
-  DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -16,13 +15,11 @@ const OrderItemsDetails = ({ handleNext }: any) => {
   return (
     <>
       <DialogHeader>
-        <DialogTitle>Order Items</DialogTitle>
+        <DialogTitle>
+          {orderItems.length > 0 ? "Order Details" : "Basket is Empty"}
+        </DialogTitle>
       </DialogHeader>
-      <div className="no-scrollbar flex max-h-[47vh] w-full snap-y flex-col gap-3 overflow-scroll px-1">
-        {orderItems.map((item: OrderItem) => (
-          <OrderItemCard {...item} key={item.menuItemId} />
-        ))}
-      </div>
+      <OrderItemList orderItems={orderItems} />
       <DialogFooter>
         <div className="flex w-full gap-2">
           <DialogTrigger asChild>
@@ -34,14 +31,16 @@ const OrderItemsDetails = ({ handleNext }: any) => {
               <BookmarkPlus />
             </Button>
           </DialogTrigger>
-          <Button
-            className="flex h-12 w-full items-center justify-center gap-4 py-6 text-xl text-black"
-            onClick={handleNext}
-            variant={"nextStep"}
-          >
-            <span>Submit</span>
-            <Send />
-          </Button>
+          {orderItems.length > 0 && (
+            <Button
+              className="flex h-12 w-full items-center justify-center gap-4 py-6 text-xl text-black"
+              onClick={handleNext}
+              variant={"nextStep"}
+            >
+              <span>Submit</span>
+              <Send />
+            </Button>
+          )}
         </div>
       </DialogFooter>
     </>

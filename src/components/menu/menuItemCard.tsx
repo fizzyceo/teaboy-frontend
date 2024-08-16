@@ -12,7 +12,7 @@ const MenuItemCard = (item: any) => {
       <div className="relative h-40 w-full rounded-md bg-slate-500 sm:h-20 md:h-32 lg:h-36">
         <Image
           src={item.item_images[0].image_url}
-          alt={item.name}
+          alt={item.title}
           layout="fill"
           objectFit="cover"
           className="rounded-md"

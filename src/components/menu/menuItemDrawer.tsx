@@ -20,10 +20,10 @@ type OrderOptionType = {
 
 const MenuItemDrawer = (item: any) => {
   const [orderOptions, setOrderOptions] = useState<OrderOptionType[]>([]);
-
   const [openDialog, setOpenDialog] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
   const [note, setNote] = useState("");
+
   const {
     addOrderItem,
     orderItems,
@@ -41,7 +41,6 @@ const MenuItemDrawer = (item: any) => {
       menu_item_option_choice_id: option.default_choice_id,
     }));
     setOrderOptions(initialOrderOptions);
-    setStepIndex(0);
   }, [item.options]);
 
   const handleValueChange = (optionId: number, choiceId: number) => {
@@ -105,10 +104,25 @@ const MenuItemDrawer = (item: any) => {
     setStepIndex((prevIndex) => prevIndex + 1);
   };
 
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+    // Keep the stepIndex unchanged during close to avoid flickering.
+  };
+
+  const handleDialogOpen = () => {
+    setStepIndex(0); // Reset stepIndex only when reopening the dialog.
+    setOpenDialog(true);
+  };
+
   return (
     <Dialog
-      onOpenChange={() => {
-        setOpenDialog(false);
+      open={openDialog}
+      onOpenChange={(isOpen) => {
+        if (isOpen) {
+          handleDialogOpen();
+        } else {
+          handleDialogClose();
+        }
       }}
     >
       <DialogTrigger disabled={orderStatus !== "Not Submitted"}>
@@ -133,4 +147,5 @@ const MenuItemDrawer = (item: any) => {
     </Dialog>
   );
 };
+
 export default MenuItemDrawer;
