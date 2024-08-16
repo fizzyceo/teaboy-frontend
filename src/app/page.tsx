@@ -5,11 +5,14 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [baseUrl, setBaseUrl] = useState("");
+  const [baseUrl, setBaseUrl] = useState(
+    "https://basseer-internship-web-app.vercel.app/",
+  );
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const url = `${window.location.protocol}//${window.location.host}`;
+      console.log("url-->", url);
       setBaseUrl(url);
     }
   }, []);
