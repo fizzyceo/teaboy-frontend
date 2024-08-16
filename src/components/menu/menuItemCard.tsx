@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import Image from "next/legacy/image";
 import { Button } from "../ui/button";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, ShoppingBasket } from "lucide-react";
 
 const MenuItemCard = (item: any) => {
   return (
@@ -34,9 +34,12 @@ const MenuItemCard = (item: any) => {
             </p>
           )}
         </div>
-        <Button variant="outline" className="w-full">
-          <ShoppingBag className="mr-2" size={24} />
-          Add To Cart
+        <Button
+          variant="outline"
+          className="flex w-full items-center justify-center font-semibold"
+        >
+          <ShoppingBasket size={24} className="mr-2" />
+          <span>Add To Cart</span>
         </Button>
       </div>
     </div>

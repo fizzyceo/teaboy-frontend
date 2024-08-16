@@ -21,7 +21,7 @@ type OrderOptionType = {
 const MenuItemDrawer = (item: any) => {
   const [orderOptions, setOrderOptions] = useState<OrderOptionType[]>([]);
 
-  const [closeDialog, setCloseDialog] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
   const [note, setNote] = useState("");
   const {
@@ -41,6 +41,7 @@ const MenuItemDrawer = (item: any) => {
       menu_item_option_choice_id: option.default_choice_id,
     }));
     setOrderOptions(initialOrderOptions);
+    setStepIndex(0);
   }, [item.options]);
 
   const handleValueChange = (optionId: number, choiceId: number) => {
@@ -105,13 +106,17 @@ const MenuItemDrawer = (item: any) => {
   };
 
   return (
-    <Dialog onOpenChange={() => setStepIndex(0)}>
+    <Dialog
+      onOpenChange={() => {
+        setOpenDialog(false);
+      }}
+    >
       <DialogTrigger disabled={orderStatus !== "Not Submitted"}>
         <MenuItemCard {...item} />
       </DialogTrigger>
 
       <DialogContent>
-        {stepIndex === 0 ? (
+        {stepIndex === 0 && orderStatus === "Not Submitted" ? (
           <MenuItemDetails
             item={item}
             note={note}
@@ -119,7 +124,7 @@ const MenuItemDrawer = (item: any) => {
             handleValueChange={handleValueChange}
             handleNext={handleAddToOrder}
           />
-        ) : stepIndex === 1 ? (
+        ) : stepIndex === 1 && orderStatus === "Not Submitted" ? (
           <OrderItemsDetails handleNext={handleAddToOrder} />
         ) : (
           <ExtraInfoForm handleNext={handleAddToOrder} />

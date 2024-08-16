@@ -11,6 +11,7 @@ import {
   ReceiptText,
   Send,
   ShoppingCart,
+  SquarePlus,
   Tag,
 } from "lucide-react";
 import {
@@ -157,7 +158,13 @@ const OrderDialog = ({ table_number }: { table_number: number }) => {
                 <DialogFooter>
                   {orderItems.length === 0 ? (
                     <DialogTrigger asChild>
-                      <Button className="w-full text-xl">Add Items</Button>
+                      <Button
+                        className="flex h-12 w-full items-center justify-center gap-4 py-6 text-xl"
+                        variant={"nextStep"}
+                      >
+                        <span>Add Items</span>
+                        <SquarePlus />
+                      </Button>
                     </DialogTrigger>
                   ) : (
                     <>

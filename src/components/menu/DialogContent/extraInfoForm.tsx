@@ -6,10 +6,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useMenuStore } from "@/stores/menu.store";
 import { useOrderStore } from "@/stores/order.store";
 import { DialogTrigger } from "@radix-ui/react-dialog";
+import { Send } from "lucide-react";
 
 const ExtraInfoForm = ({ handleNext }: any) => {
   const { menu } = useMenuStore();
@@ -27,43 +27,38 @@ const ExtraInfoForm = ({ handleNext }: any) => {
   return (
     <>
       <DialogHeader>
-        <DialogTitle>Extra Information</DialogTitle>
+        <DialogTitle className="text-left">Enter Your Name</DialogTitle>
       </DialogHeader>
       <div className="grid gap-4">
         {ask_for_name && (
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="col-span-1 text-left">
-              Name
-            </Label>
-            <Input
-              id="name"
-              className="col-span-3"
-              value={customerName || ""}
-              onChange={(e) => setCustomerName(e.target.value)}
-            />
-          </div>
+          <Input
+            placeholder="Customer Name"
+            value={customerName}
+            className="text-lg"
+            onChange={(e) => setCustomerName(e.target.value)}
+          />
         )}
         {ask_for_table && (
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="table" className="col-span-1 text-left">
-              Table
-            </Label>
-            <Input
-              id="table"
-              className="col-span-3"
-              type="number"
-              value={tableNumber !== undefined ? tableNumber : ""}
-              onChange={(e) =>
-                setTableNumber(e.target.value ? parseInt(e.target.value) : 0)
-              }
-            />
-          </div>
+          <Input
+            placeholder="Table Number"
+            value={tableNumber !== undefined ? tableNumber : ""}
+            onChange={(e) =>
+              setTableNumber(e.target.value ? parseInt(e.target.value) : 0)
+            }
+            className="text-lg"
+          />
         )}
       </div>
+
       <DialogFooter>
         <DialogTrigger asChild>
-          <Button className="text-xl" onClick={handleNext}>
-            Finish
+          <Button
+            className="flex h-12 w-full items-center justify-center gap-4 py-6 text-2xl text-black"
+            onClick={handleNext}
+            variant={"nextStep"}
+          >
+            <span>Send Order</span>
+            <Send />
           </Button>
         </DialogTrigger>
       </DialogFooter>
