@@ -18,13 +18,13 @@ const OrderItemsDetails = ({ handleNext }: any) => {
       <DialogHeader>
         <DialogTitle>Order Items</DialogTitle>
       </DialogHeader>
-      <div className="no-scrollbar flex max-h-[55vh] w-full snap-y flex-col gap-3 overflow-scroll">
+      <div className="no-scrollbar flex max-h-[47vh] w-full snap-y flex-col gap-3 overflow-scroll px-1">
         {orderItems.map((item: OrderItem) => (
           <OrderItemCard {...item} key={item.menuItemId} />
         ))}
       </div>
       <DialogFooter>
-        <div className="flex gap-2">
+        <div className="flex w-full gap-2">
           <DialogTrigger asChild>
             <Button
               className="flex h-12 w-full items-center justify-center gap-4 py-6 text-xl text-black"

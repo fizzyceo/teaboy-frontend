@@ -19,9 +19,9 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         sendOrder:
-          "bg-blue-500 text-black border-2 border-slate-700 hover:bg-blue-400 hover:border-slate-800 transition-all",
+          "bg-blue-500 text-black border-2 border-slate-700 hover:bg-blue-200 hover:border-slate-800 transition-all text-slate-black hover:text-slate-800",
         nextStep:
-          "bg-green-500 text-blakc border-2 border-slate-700 hover:bg-green-400 hover:border-slate-800 transition-all",
+          "bg-green-500 text-blakc border-2 border-slate-700 hover:bg-green-200 hover:border-slate-800 transition-all text-black",
       },
       size: {
         default: "h-10 px-4 py-2",

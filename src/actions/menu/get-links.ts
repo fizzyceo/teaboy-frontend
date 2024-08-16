@@ -8,7 +8,6 @@ const getLinks = async (base_url: string) => {
   );
 
   const data = await response.json();
-  console.log("fetched_menus:", data);
 
   const links = data.map((menu: any, index: any) => {
     return {

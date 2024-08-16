@@ -130,7 +130,7 @@ const OrderDialog = ({ table_number }: { table_number: number }) => {
       <DialogContent
         className={
           stepIndex === 2
-            ? "mt-16 h-screen bg-gradient-to-b from-green-500 via-green-500 to-green-600"
+            ? "mt-16 h-screen bg-green-500 bg-gradient-to-b landscape:mt-0 landscape:h-auto landscape:py-10"
             : "h-auto"
         }
       >
@@ -163,7 +163,7 @@ const OrderDialog = ({ table_number }: { table_number: number }) => {
                     <>
                       <Button
                         onClick={handleSubmitOrder}
-                        className="flex h-12 w-full items-center justify-center gap-4 py-6 text-xl text-black"
+                        className="flex h-12 w-full items-center justify-center gap-4 py-6 text-xl"
                         variant={
                           orderStatus === "Not Submitted"
                             ? "nextStep"

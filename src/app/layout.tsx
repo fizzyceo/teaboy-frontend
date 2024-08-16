@@ -19,7 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn(inter.className, "no-scrollbar bg-white")}>
+      <body
+        className={cn(inter.className, "no-scrollbar scrollbar-hide bg-white")}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

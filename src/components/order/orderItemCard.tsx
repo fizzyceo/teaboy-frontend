@@ -39,7 +39,7 @@ const OrderItemCard = (item: any) => {
   return (
     <div
       key={item.menuItemId}
-      className="flex h-auto max-h-36 min-h-24 snap-start items-center gap-4 rounded-lg bg-slate-100 p-3 shadow-lg"
+      className="flex h-auto max-h-36 min-h-28 snap-start items-center gap-4 rounded-lg bg-slate-100 p-3 shadow-lg"
     >
       <div className="flex w-1/2 flex-1 items-center">
         <div className="flex flex-col items-start justify-between gap-1">

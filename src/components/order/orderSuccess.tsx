@@ -11,8 +11,8 @@ const OrderSuccess = ({
   const { customerName, orderNumber } = useOrderStore();
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center gap-6 bg-gradient-to-b from-green-500 via-green-500 to-green-600">
-      <div className="flex flex-col items-center">
+    <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-green-500 bg-gradient-to-b landscape:items-center landscape:justify-start landscape:gap-4">
+      <div className="flex flex-col items-center gap-4 landscape:flex-row">
         <h1 className="text-xl font-bold text-white">
           Order Submitted{" "}
           {customerName && customerName !== "Anonymous"
@@ -20,17 +20,18 @@ const OrderSuccess = ({
             : ""}
         </h1>
 
-        <CheckCircle size={50} className="text-white" />
+        <CheckCircle className="text-white" />
       </div>
 
       <div className="text-center">
-        <p className="text-wrap text-3xl font-semibold">Order Number:</p>
+        <p className="text-wrap text-2xl font-semibold">Order Number:</p>
         <span className="text-8xl font-semibold tracking-wide">
           {orderNumber}
         </span>
       </div>
+
       <div
-        className="mt-4 flex cursor-pointer gap-4 text-black underline"
+        className="flex cursor-pointer gap-4 text-black underline"
         onClick={() => setStepIndex(0)}
       >
         <Undo size={24} className="inline-block" />
