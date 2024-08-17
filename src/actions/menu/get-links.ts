@@ -2,7 +2,7 @@ const getLinks = async (base_url: string) => {
   console.log("base_url...", base_url);
   console.log("fetching_menus...", process.env.NEXT_PUBLIC_BACKEND_URL);
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/menu/links/a`,
+    `https://basseer-internship-backend.onrender.com/menu/links/a`,
     {
       cache: "no-store",
     },

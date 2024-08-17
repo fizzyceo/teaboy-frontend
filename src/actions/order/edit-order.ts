@@ -1,6 +1,6 @@
 const EditOrderItem = async (order_item_id: number, orderItem: any) => {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/${order_item_id}`,
+    `https://basseer-internship-backend.onrender.com/${order_item_id}`,
     {
       method: "PATCH",
       headers: {
