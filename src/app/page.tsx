@@ -1,33 +1,43 @@
 "use client";
 import getLinks from "@/actions/menu/get-links";
+import LoadingHome from "@/components/shared/loadingHome";
 import { useQRCode } from "next-qrcode";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [baseUrl, setBaseUrl] = useState(
-    "https://basseer-internship-web-app.vercel.app/",
-  );
+  const [baseUrl, setBaseUrl] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [links, setLinks] = useState([]);
+
+  const { Canvas } = useQRCode();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const url = `${window.location.protocol}//${window.location.host}`;
-      console.log("url-->", url);
       setBaseUrl(url);
     }
   }, []);
-  const { Canvas } = useQRCode();
-  const [links, setLinks] = useState([]);
 
-  const loadLinks = async () => {
-    const fetched_links = await getLinks(baseUrl);
-    setLinks(fetched_links);
-  };
+  useEffect(() => {
+    const fetchLinks = async () => {
+      if (baseUrl) {
+        setLoading(true);
+        const fetched_links = await getLinks(baseUrl);
+        setLinks(fetched_links);
+        setTimeout(() => {
+          setLoading(false);
+        }, 4000);
+      }
+    };
 
-  if (links.length === 0) {
-    loadLinks();
-    console.log("links", links);
+    fetchLinks();
+  }, [baseUrl]);
+
+  if (loading) {
+    return <LoadingHome />;
   }
+
   return (
     <main className="flex min-h-screen w-full flex-col items-center justify-center gap-4 px-4 py-10">
       <p>Scan the QR code to access the menu</p>

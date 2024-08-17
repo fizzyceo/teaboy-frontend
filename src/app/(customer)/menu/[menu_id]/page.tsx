@@ -26,7 +26,7 @@ const MenuPage = ({
       } catch (error) {
         console.error("Failed to load menu:", error);
       } finally {
-        setLoading(false);
+        setTimeout(() => setLoading(false), 900);
       }
     };
 
