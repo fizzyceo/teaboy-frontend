@@ -14,10 +14,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
+import loginUser from "@/actions/auth/login-user";
 
 const formSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
+  email: z.string().email({ message: "Enter a valid email" }),
+  password: z.string().min(8, { message: "Password too short" }),
 });
 
 const LoginPage = () => {
@@ -29,13 +31,19 @@ const LoginPage = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const { email, password } = values;
+    const loginResponse = await loginUser(email, password);
   }
+
   return (
-    <div>
+    <div className="m-auto flex h-3/4 w-4/5 flex-col items-center justify-center rounded-lg bg-white bg-opacity-80 p-4 md:w-1/2 lg:w-1/2">
+      <h1 className="mb-4 w-full text-center text-3xl font-semibold">Login</h1>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex w-full flex-col justify-center gap-4"
+        >
           <FormField
             control={form.control}
             name="email"
@@ -67,9 +75,17 @@ const LoginPage = () => {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <Button type="submit" className="w-full">
+            Submit
+          </Button>
         </form>
       </Form>
+      <p className="mt-2 w-full space-x-4">
+        <span>New User ?</span>
+        <Link className="font-medium underline" href={"/auth/register"}>
+          Register
+        </Link>
+      </p>
     </div>
   );
 };

@@ -26,7 +26,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
             <Link href="/" className="flex items-center gap-2 font-semibold">
               <LogsIcon className="h-6 w-6" />
-              <span className="">iMenu</span>
+              <span className="">Teaboy</span>
             </Link>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
