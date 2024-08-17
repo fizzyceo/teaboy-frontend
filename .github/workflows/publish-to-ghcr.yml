@@ -10,8 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Build and push the image
+
+      - name: Log in to GitHub Container Registry
+        run: docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GH_PAT }}
+
+      - name: Build and push the Docker image
         run: |
-          docker login --username moncefme --password ${{ secrets.GH_PAT }} ghcr.io
-          docker build . --tag ghcr.io/moncefme/basseer-teaboy-frontend:latest
+          docker build . --tag ghcr.io/moncefme/basseer-teaboy-frontend:latest \
+                         --build-arg NEXT_PUBLIC_BACKEND_URL=${{ secrets.NEXT_PUBLIC_BACKEND_URL }}
           docker push ghcr.io/moncefme/basseer-teaboy-frontend:latest
