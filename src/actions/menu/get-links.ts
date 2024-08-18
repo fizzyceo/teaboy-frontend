@@ -1,6 +1,4 @@
 const getLinks = async (base_url: string) => {
-  console.log("base_url...", base_url);
-  console.log("fetching_menus...", process.env.NEXT_PUBLIC_BACKEND_URL);
   const response = await fetch(
     `https://basseer-internship-backend.onrender.com/menu/links/a`,
     {
@@ -15,6 +13,7 @@ const getLinks = async (base_url: string) => {
       id: menu.encrypted,
       menu_name: menu.menu_name,
       space_name: menu.space_name,
+      site_image_url: menu.menu_site_image,
       url: `${base_url}/menu/${menu.encrypted}`,
     };
   });

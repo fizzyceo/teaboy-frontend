@@ -50,9 +50,7 @@ const Phone = <TFormValues extends FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="text-kblack-text text-[16px]" htmlFor={name}>
-            {label}
-          </FormLabel>
+          <FormLabel htmlFor={name}>{label}</FormLabel>
           <FormControl>
             <RPNInput.default
               defaultCountry="DZ"

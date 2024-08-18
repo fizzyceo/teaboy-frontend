@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,8 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import loginUser from "@/actions/auth/login-user";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Enter a valid email" }),
@@ -23,6 +25,7 @@ const formSchema = z.object({
 });
 
 const LoginPage = () => {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,7 +36,23 @@ const LoginPage = () => {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { email, password } = values;
-    const loginResponse = await loginUser(email, password);
+
+    try {
+      const loginResponse = await loginUser(email, password);
+      console.log(loginResponse);
+
+      if (loginResponse.statusCode) {
+        toast.error(loginResponse.message);
+      } else if (loginResponse.accessToken) {
+        toast.success("Login Successful");
+        router.push("/dashboard");
+      } else {
+        toast.error("Unexpected response from server");
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
+      toast.error("An error occurred during login. Please try again.");
+    }
   }
 
   return (

@@ -16,7 +16,6 @@ const submitOrder = async (order: any) => {
     },
   );
   const data = await response.json();
-  console.log("after_order_submission:", data);
 
   if (!response.ok) {
     return { success: false, error: data.error, data: data };
