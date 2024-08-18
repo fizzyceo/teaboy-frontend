@@ -52,7 +52,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
 
-EXPOSE 80
+EXPOSE 3000
 
 # server.js is created by next build from the standalone output
 CMD HOSTNAME="0.0.0.0" node server.js
