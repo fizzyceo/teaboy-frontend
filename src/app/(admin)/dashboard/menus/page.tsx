@@ -1,4 +1,5 @@
 "use client";
+import AddMenuNameDialog from "@/components/admin/menu/addMenuNameDialog";
 import { PlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Tilt from "react-parallax-tilt";
@@ -31,14 +32,7 @@ const AdminMenuPage = () => {
     <section className="flex h-full w-full flex-col gap-4">
       <h1 className="text-xl font-semibold">Menus</h1>
       <div className="grid h-full w-full grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-4">
-        <div
-          className="animation flex h-60 items-center justify-center rounded border bg-slate-200 duration-300 hover:scale-[102%] hover:bg-slate-100"
-          onClick={() => {
-            router.push("/dashboard/menus/create");
-          }}
-        >
-          <PlusIcon size={50} />
-        </div>
+        <AddMenuNameDialog />
         {menus.map((menu) => (
           <Tilt key={menu.id}>
             <div

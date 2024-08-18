@@ -1,20 +1,17 @@
 const submitOrder = async (order: any) => {
   const { order_items, customer_name, table_number } = order;
-  const response = await fetch(
-    `https://basseer-internship-backend.onrender.com/order/create`,
-    {
-      method: "POST",
-      body: JSON.stringify({
-        ...order,
-        order_items,
-        customer_name,
-        table_number,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
+  const response = await fetch(`http://localhost:8000/order/create`, {
+    method: "POST",
+    body: JSON.stringify({
+      ...order,
+      order_items,
+      customer_name,
+      table_number,
+    }),
+    headers: {
+      "Content-Type": "application/json",
     },
-  );
+  });
   const data = await response.json();
 
   if (!response.ok) {

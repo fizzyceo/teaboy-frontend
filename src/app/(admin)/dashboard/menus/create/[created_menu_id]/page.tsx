@@ -14,7 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Sheet,
   SheetClose,
@@ -25,7 +25,9 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Label } from "@/components/ui/label";
-import { Image, PlusIcon } from "lucide-react";
+import { Image, ImageDown, PlusIcon } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import getCreatedMenu from "@/actions/menu/get-created-menu";
 
 type MenuItemType = {
   id: number;
@@ -33,7 +35,8 @@ type MenuItemType = {
 
 const formSchema = z.object({
   name: z.string().min(2),
-  description: z.string().optional(),
+  ask_for_name: z.boolean().default(false),
+  ask_for_table: z.boolean().default(false),
   menuItems: z.array(
     z.object({
       title: z.string().min(2),
@@ -44,12 +47,17 @@ const formSchema = z.object({
   ),
 });
 
-const CreateMenuPage = () => {
+const CreateMenuPage = ({
+  params,
+}: {
+  params: { created_menu_id: string };
+}) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      description: "",
+      ask_for_name: false,
+      ask_for_table: false,
     },
   });
 
@@ -74,21 +82,42 @@ const CreateMenuPage = () => {
       id: 5,
     },
   ]);
+
+  console.log(params);
+
+  const [currentMenu, setCurrentMenu] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchMenu = async () => {
+      if (params.created_menu_id) {
+        try {
+          const data = await getCreatedMenu(params.created_menu_id);
+          setCurrentMenu(data);
+        } catch (error) {
+          console.error("Failed to fetch menu:", error);
+        }
+      }
+    };
+
+    fetchMenu();
+  }, [params.created_menu_id]);
+
   return (
     <section className="flex h-full w-full flex-col gap-4">
       <h1 className="text-xl font-semibold">Create Menu</h1>
+      <p>{JSON.stringify(currentMenu)}</p>
 
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex h-full w-full flex-col justify-between gap-2"
         >
-          <div className="grid w-full grid-cols-3 gap-4">
+          <div className="flex w-full gap-4">
             <FormField
               name="name"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="col-span-1 flex w-full flex-col text-base">
+                <FormItem className="flex w-1/2 items-center gap-3 text-base">
                   <FormLabel htmlFor="name">Name</FormLabel>
                   <div className="flex w-full flex-col">
                     <FormControl className="">
@@ -100,17 +129,25 @@ const CreateMenuPage = () => {
               )}
             />
             <FormField
-              name="description"
+              name="name"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="col-span-2 flex w-full flex-col text-base">
-                  <FormLabel htmlFor="name">Description</FormLabel>
-                  <div className="flex w-full flex-col">
-                    <FormControl className="">
-                      <Input {...field} id="description" />
-                    </FormControl>
-                    <FormMessage />
-                  </div>
+                <FormItem className="flex w-1/2 items-center text-base">
+                  <FormControl className="">
+                    <RadioGroup
+                      defaultValue="option-one"
+                      className="flex h-full w-full items-center gap-10"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <Label htmlFor="option-one">Ask for Name: </Label>
+                        <RadioGroupItem value="option-one" id="option-one" />
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Label htmlFor="option-two">Ask for Table: </Label>
+                        <RadioGroupItem value="option-two" id="option-two" />
+                      </div>
+                    </RadioGroup>
+                  </FormControl>
                 </FormItem>
               )}
             />
@@ -178,7 +215,7 @@ const CreateMenuPage = () => {
                     className="flex min-h-20 w-full snap-start items-center justify-start gap-4 rounded-sm border bg-slate-50 p-2"
                   >
                     <div className="w-1/6">
-                      <Image size={38} />
+                      <ImageDown size={38} />
                     </div>
                     <p>Title</p>
                     <p>Description</p>

@@ -18,6 +18,7 @@ import Link from "next/link";
 import loginUser from "@/actions/auth/login-user";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { Send } from "lucide-react";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Enter a valid email" }),
@@ -56,7 +57,7 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="m-auto flex h-3/4 w-4/5 flex-col items-center justify-center rounded-lg bg-white bg-opacity-80 p-4 md:w-1/2 lg:w-1/2">
+    <div className="m-auto flex h-3/4 w-4/5 flex-col items-center justify-center rounded-2xl bg-white p-4 md:w-1/2 lg:w-1/2">
       <h1 className="mb-4 w-full text-center text-3xl font-semibold">Login</h1>
       <Form {...form}>
         <form
@@ -94,8 +95,13 @@ const LoginPage = () => {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full">
-            Submit
+          <Button
+            type="submit"
+            variant={"sendOrder"}
+            className="flex-center flex w-full items-center gap-4 text-xl font-semibold"
+          >
+            <span>Submit</span>
+            <Send />
           </Button>
         </form>
       </Form>

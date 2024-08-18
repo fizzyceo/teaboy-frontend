@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/select";
 import registerUser from "@/actions/auth/register-user";
 import { toast } from "sonner";
+import { Send } from "lucide-react";
 
 const formSchema = z
   .object({
@@ -82,7 +83,7 @@ const RegisterPage = () => {
   }
 
   return (
-    <div className="m-auto flex h-3/4 w-4/5 flex-col items-center justify-center rounded-lg bg-white bg-opacity-80 p-4 md:w-1/2 lg:w-1/2">
+    <div className="m-auto flex h-3/4 w-4/5 flex-col items-center justify-center rounded-2xl bg-white p-4 md:w-1/2 lg:w-1/2">
       <h1 className="mb-4 w-full text-center text-3xl font-semibold">
         Register
       </h1>
@@ -207,8 +208,13 @@ const RegisterPage = () => {
             />
           </div>
 
-          <Button type="submit" className="w-full">
-            Submit
+          <Button
+            type="submit"
+            variant={"sendOrder"}
+            className="flex-center flex w-full items-center gap-4 text-xl font-semibold"
+          >
+            <span>Submit</span>
+            <Send />
           </Button>
         </form>
       </Form>
