@@ -17,5 +17,4 @@ jobs:
       - name: Build and push the Docker image
         run: |
           docker build . --tag ghcr.io/moncefme/basseer-teaboy-frontend:latest \
-                         --build-arg NEXT_PUBLIC_BACKEND_URL=${{ secrets.NEXT_PUBLIC_BACKEND_URL }}
           docker push ghcr.io/moncefme/basseer-teaboy-frontend:latest

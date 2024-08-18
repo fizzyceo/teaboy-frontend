@@ -1,5 +1,5 @@
 const getLinks = async (base_url: string) => {
-  const response = await fetch(`http://localhost:8000/menu/links/a`, {
+  const response = await fetch(`http://195.110.34.57:8000/menu/links/a`, {
     cache: "no-store",
   });
 
