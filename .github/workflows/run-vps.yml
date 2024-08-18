@@ -8,9 +8,6 @@ jobs:
   build:
     runs-on: self-hosted
 
-    env:
-      NEXT_PUBLIC_BACKEND_URL: ${{secrets.NEXT_PUBLIC_BACKEND_URL}}
-
     strategy:
       matrix:
         node-version: [18.19.1]

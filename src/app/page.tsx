@@ -43,7 +43,7 @@ export default function Home() {
           return (
             <div
               key={link.id}
-              className="flex flex-col items-center justify-center gap-1 rounded-md border-4 border-slate-300 bg-slate-200 p-2 text-black drop-shadow-xl"
+              className="flex flex-col items-center justify-center gap-1 rounded-md border-4 border-slate-300 bg-white p-2 text-black drop-shadow-xl"
             >
               <QRCode
                 value={link?.url}
@@ -51,7 +51,7 @@ export default function Home() {
                 eyeRadius={10}
                 ecLevel="H"
                 logoPaddingStyle="circle"
-                bgColor="#e2e8f0"
+                bgColor="#ffffff"
                 logoImage={link?.site_image_url}
               />
               <Link href={`menu/${link.id}`} className="hover:underline">
