@@ -14,6 +14,9 @@ interface OrderStore {
   note?: string | undefined;
   setNote: (note: string) => void;
 
+  spaceId?: number;
+  setSpaceId: (spaceId: number) => void;
+
   orderStatus: "Not Submitted" | "Submitted" | "Viewed" | "Canceled";
   setOrderStatus: (
     value: "Not Submitted" | "Submitted" | "Viewed" | "Canceled",
@@ -49,6 +52,9 @@ export const useOrderStore = create<OrderStore>((set) => ({
   setOrderItems: (orderItems) => set({ orderItems }),
   orderNumber: "",
   setOrderNumber: (orderNumber) => set({ orderNumber }),
+
+  spaceId: 0,
+  setSpaceId: (spaceId) => set({ spaceId }),
 
   orderStatus: "Not Submitted",
   setOrderStatus: (value) => set({ orderStatus: value }),

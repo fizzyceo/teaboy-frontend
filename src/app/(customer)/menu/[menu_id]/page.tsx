@@ -6,6 +6,7 @@ import OrderDrawer from "@/components/order/orderDialog";
 import SiteHeader from "@/components/menu/siteHeader";
 import { useEffect, useState } from "react";
 import { useMenuStore } from "@/stores/menu.store";
+import { useOrderStore } from "@/stores/order.store";
 
 const MenuPage = ({
   params,
@@ -15,6 +16,7 @@ const MenuPage = ({
   searchParams: { [key: string]: string | string[] | undefined };
 }) => {
   const { menu, setMenu } = useMenuStore();
+  const { setSpaceId } = useOrderStore();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -23,6 +25,9 @@ const MenuPage = ({
         setLoading(true);
         const my_menu = await getMenu(params.menu_id);
         setMenu(my_menu);
+        setSpaceId(my_menu.spaces[0].space_id);
+        console.log("Menu loaded:", my_menu);
+        console.log("Space ID:", my_menu.spaces[0].space_id);
       } catch (error) {
         console.error("Failed to load menu:", error);
       } finally {
@@ -31,7 +36,7 @@ const MenuPage = ({
     };
 
     loadMenu();
-  }, [params.menu_id, searchParams.space_id, setMenu]);
+  }, [params.menu_id, searchParams.space_id, setMenu, setSpaceId]);
 
   if (loading) {
     return <Loading />;

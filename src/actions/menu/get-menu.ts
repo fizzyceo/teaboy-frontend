@@ -1,7 +1,7 @@
 const getMenu = async (menu_id: string) => {
   try {
     const response = await fetch(
-      `http://195.110.34.57:8000/menu/s/${menu_id}`,
+      `https://basseer-internship-backend.onrender.com/menu/s/${menu_id}`,
       {
         cache: "no-store",
       },

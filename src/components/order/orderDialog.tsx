@@ -37,6 +37,7 @@ const OrderDialog = ({ table_number }: { table_number: number }) => {
     setCustomerName,
     setOrderStatus,
     setOrderNumber,
+    spaceId,
   } = useOrderStore();
 
   const [stepIndex, setStepIndex] = useState(0);
@@ -69,7 +70,7 @@ const OrderDialog = ({ table_number }: { table_number: number }) => {
         const order = {
           customer_name: customerName || "Anonymous",
           table_number: table_number || 0,
-          spaceId: 1,
+          spaceId: spaceId,
           order_items: orderItems.map((item) => ({
             menu_item_id: item.menuItemId,
             quantity: 1,

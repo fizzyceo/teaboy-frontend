@@ -33,6 +33,7 @@ const MenuItemDrawer = (item: any) => {
     orderStatus,
     orderNumber,
     setOrderNumber,
+    spaceId,
   } = useOrderStore();
 
   useEffect(() => {
@@ -74,7 +75,7 @@ const MenuItemDrawer = (item: any) => {
         const order = {
           customer_name: customerName || "Anonymous",
           table_number: tableNumber,
-          spaceId: 1,
+          spaceId: spaceId,
           order_items: orderItems.map((item) => ({
             menu_item_id: item.menuItemId,
             quantity: 1,
@@ -85,6 +86,8 @@ const MenuItemDrawer = (item: any) => {
             })),
           })),
         };
+
+        console.log("order-->", order);
 
         const response = await submitOrder(order);
 
