@@ -8,8 +8,8 @@ import { cn } from "@/lib/utils";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "iMenu",
-  description: "A simple menu app - Basseer Internship",
+  title: "teaboy.io",
+  description: "Menu and Order made easy",
 };
 
 export default function RootLayout({

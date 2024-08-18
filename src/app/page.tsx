@@ -1,7 +1,6 @@
 "use client";
 import getLinks from "@/actions/menu/get-links";
 import LoadingHome from "@/components/shared/loadingHome";
-import { useQRCode } from "next-qrcode";
 import { QRCode } from "react-qrcode-logo";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -10,8 +9,6 @@ export default function Home() {
   const [baseUrl, setBaseUrl] = useState("");
   const [loading, setLoading] = useState(true);
   const [links, setLinks] = useState([]);
-
-  const { Canvas } = useQRCode();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
