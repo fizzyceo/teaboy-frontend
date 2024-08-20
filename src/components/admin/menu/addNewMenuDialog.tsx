@@ -51,12 +51,12 @@ const AddNewMenuDialog = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setLoading(true);
+    console.log("values-->", values);
     try {
       const createdMenu = await createMenu(values);
       if (createdMenu) {
-        localStorage.setItem("creating_menu", JSON.stringify(createdMenu));
+        router.push(`/dashboard/menus/${createdMenu.menu_id}`);
         form.reset();
-        router.push(`/dashboard/menus/${createdMenu.id}`);
       }
     } finally {
       setLoading(false);

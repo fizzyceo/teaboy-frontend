@@ -38,7 +38,13 @@ const formSchema = z.object({
     .refine((file) => file.size !== 0, "Please upload an image"),
 });
 
-const AddMenuItemSheet = ({ menu }: { menu: any }) => {
+const AddMenuItemSheet = ({
+  menu,
+  setCurrentMenu,
+}: {
+  menu: any;
+  setCurrentMenu: (menu: any) => void;
+}) => {
   const [preview, setPreview] = useState<string | ArrayBuffer | null>("");
   const [createMenuItemLoading, setCreateMenuItemLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
@@ -81,12 +87,15 @@ const AddMenuItemSheet = ({ menu }: { menu: any }) => {
     setCreateMenuItemLoading(true);
     console.log(values);
     const response = await createMenuItem(values, menu.menu_id);
-    console.log(response);
     if (response.error) {
       toast.error(response.errors[0]);
       setCreateMenuItemLoading(false);
     } else {
       toast.success(`Image uploaded successfully 🎉 ${values.image.name}`);
+      // setCurrentMenu({
+      //   ...menu,
+      //   menu_items: [...menu.menu_items, response],
+      // });
       setCreateMenuItemLoading(false);
     }
     // setTimeout(() => {

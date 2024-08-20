@@ -1,12 +1,10 @@
 const createMenu = async (menu: any) => {
-  const menuToCreate = {
-    name: menu.name || "",
-    ask_for_name: menu.ask_for_name || true,
-    ask_for_table: menu.ask_for_table || false,
-  };
+  if (!menu.name) {
+    return null;
+  }
   const response = await fetch("http://localhost:8000/menu/create", {
     method: "POST",
-    body: JSON.stringify(menuToCreate),
+    body: JSON.stringify(menu),
     headers: {
       "Content-Type": "application/json",
     },
