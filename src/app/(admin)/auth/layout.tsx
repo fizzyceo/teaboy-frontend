@@ -4,7 +4,7 @@ interface AuthLayoutProps {
 
 const AuthLayout = ({ children }: AuthLayoutProps) => {
   return (
-    <main className="bg-grid-black/[0.3] dark:bg-grid-white/[0.3] no-scrollbar relative flex min-h-screen w-full items-center justify-center bg-slate-200 py-10 dark:bg-white">
+    <main className="flex h-auto min-h-screen w-full overflow-y-scroll bg-gradient-to-tr from-slate-500 via-slate-300 to-slate-600 py-10">
       {children}
     </main>
   );

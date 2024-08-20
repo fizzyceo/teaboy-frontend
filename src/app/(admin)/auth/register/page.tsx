@@ -83,7 +83,7 @@ const RegisterPage = () => {
   }
 
   return (
-    <div className="m-auto flex h-3/4 w-4/5 flex-col items-center justify-center rounded-2xl bg-white p-4 md:w-1/2 lg:w-1/2">
+    <div className="m-auto flex h-3/4 w-4/5 flex-col items-center justify-center rounded-lg bg-white bg-opacity-80 p-4 drop-shadow-2xl md:w-1/2 lg:w-1/2">
       <h1 className="mb-4 w-full text-center text-3xl font-semibold">
         Register
       </h1>

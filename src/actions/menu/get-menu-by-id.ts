@@ -1,4 +1,4 @@
-const getCreatedMenu = async (menu_id: string) => {
+const getMenuById = async (menu_id: number) => {
   try {
     const response = await fetch(`http://localhost:8000/menu/${menu_id}`, {
       cache: "no-store",
@@ -17,4 +17,4 @@ const getCreatedMenu = async (menu_id: string) => {
   }
 };
 
-export default getCreatedMenu;
+export default getMenuById;
