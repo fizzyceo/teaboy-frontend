@@ -3,7 +3,7 @@
 import { createSession, decrypt } from "./session";
 
 const loginUser = async (email: string, password: string) => {
-  const response = await fetch(`http://localhost:8000/auth/login`, {
+  const response = await fetch(`http://localhost:8000/user/auth`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
