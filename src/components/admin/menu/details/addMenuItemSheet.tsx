@@ -29,6 +29,7 @@ import { ImagePlus } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
 import createMenuItem from "@/actions/menu/create-menu-item";
+import AddMenuItemOptions from "../options/addMenuItemOptions";
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -46,7 +47,6 @@ const AddMenuItemSheet = ({
   menu: any;
   setMenu: (menu: any) => void;
 }) => {
-  console.log("AddMenuItemsheetMenu", menu);
   const [preview, setPreview] = useState<string | ArrayBuffer | null>("");
   const [createMenuItemLoading, setCreateMenuItemLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
@@ -75,7 +75,7 @@ const AddMenuItemSheet = ({
     [form],
   );
 
-  const [stepIndex, setStepIndex] = useState(1);
+  const [stepIndex, setStepIndex] = useState(2);
 
   const { getRootProps, getInputProps, isDragActive, fileRejections } =
     useDropzone({
@@ -87,20 +87,29 @@ const AddMenuItemSheet = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setCreateMenuItemLoading(true);
-    console.log(values);
     const response = await createMenuItem(values, menu.menu_id);
-    console.log("response is ", response);
+    console.log("response->", response);
     if (response.error) {
       toast.error(response.errors[0]);
       setCreateMenuItemLoading(false);
     } else {
       toast.success(`Image uploaded successfully 🎉 ${values.image.name}`);
-
+      setMenu((prevMenu: any) => ({
+        ...prevMenu,
+        menu_items: [
+          ...prevMenu.menu_items,
+          {
+            ...response,
+            description: "",
+            options: response.menuItem_options,
+          },
+        ],
+      }));
       setCreateMenuItemLoading(false);
     }
-    // setTimeout(() => {
-    //   setStepIndex(2);
-    // }, 1000);
+    setTimeout(() => {
+      setStepIndex(2);
+    }, 1000);
   };
 
   return (
@@ -219,7 +228,7 @@ const AddMenuItemSheet = ({
                 />
               </div>
             ) : (
-              <div>Add Options</div>
+              <AddMenuItemOptions />
             )}
 
             <SheetFooter className="mt-auto">

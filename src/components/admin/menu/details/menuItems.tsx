@@ -6,6 +6,9 @@ import { useState } from "react";
 
 const MenuItems = ({ currentMenu }: { currentMenu: any }) => {
   const [menu, setMenu] = useState(currentMenu);
+
+  console.log("menu->", menu);
+
   return (
     <div className="mt-6 flex h-full w-full flex-col">
       <div className="flex w-full justify-start gap-4">

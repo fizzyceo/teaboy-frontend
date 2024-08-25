@@ -2,10 +2,9 @@
 import Image from "next/legacy/image";
 
 const AddedMenuItemCard = (item: any) => {
-  console.log(item.item_images[0].image_url, "---");
   return (
     <div
-      key={item.menu_item_id}
+      key={`${item.menu_item_id}-${item.title}`}
       className="flex h-56 w-full flex-col rounded-md bg-slate-200 p-2 sm:h-20 md:h-32 lg:h-36"
     >
       <div className="relative h-full w-full overflow-hidden">

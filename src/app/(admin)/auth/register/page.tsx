@@ -27,6 +27,7 @@ import {
 import registerUser from "@/actions/auth/register-user";
 import { toast } from "sonner";
 import { Send } from "lucide-react";
+import Image from "next/image";
 
 const formSchema = z
   .object({
@@ -83,10 +84,13 @@ const RegisterPage = () => {
   }
 
   return (
-    <div className="m-auto flex h-3/4 w-4/5 flex-col items-center justify-center rounded-lg bg-white bg-opacity-80 p-4 drop-shadow-2xl md:w-1/2 lg:w-1/2">
-      <h1 className="mb-4 w-full text-center text-3xl font-semibold">
-        Register
-      </h1>
+    <div className="m-auto flex h-3/4 w-4/5 flex-col items-center justify-center rounded-lg border border-gray-100 bg-slate-700 bg-opacity-10 bg-clip-padding p-4 drop-shadow-2xl backdrop-blur-sm backdrop-filter md:w-1/2 lg:w-1/2">
+      <div className="mb-4 flex w-full items-center justify-center gap-3">
+        <Link href={"/dashboard"}>
+          <Image src={"/teaboy-logo.png"} width={35} height={35} alt={""} />
+        </Link>
+        <h1 className="text-center text-3xl font-semibold">Register</h1>
+      </div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

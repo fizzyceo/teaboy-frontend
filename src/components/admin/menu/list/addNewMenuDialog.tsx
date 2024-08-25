@@ -51,7 +51,6 @@ const AddNewMenuDialog = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setLoading(true);
-    console.log("values-->", values);
     try {
       const createdMenu = await createMenu(values);
       if (createdMenu) {
@@ -66,7 +65,7 @@ const AddNewMenuDialog = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="animation flex h-60 w-full items-center justify-center rounded border bg-slate-200 duration-300 hover:scale-[102%] hover:bg-slate-100">
+        <div className="animation flex h-60 w-full cursor-pointer items-center justify-center rounded border bg-slate-200 duration-300 hover:scale-[102%] hover:bg-slate-100">
           <PlusIcon size={50} color="black" />
         </div>
       </DialogTrigger>

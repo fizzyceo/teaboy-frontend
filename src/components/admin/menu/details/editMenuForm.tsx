@@ -45,86 +45,19 @@ const EditMenuForm = ({ currentMenu }: { currentMenu: any }) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex h-auto w-full flex-col justify-between gap-3"
+        className="flex h-auto w-full flex-col gap-4 pt-2"
       >
-        <FormField
-          name="name"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem className="flex h-auto w-full flex-col justify-center">
-              <FormLabel htmlFor="name">Name</FormLabel>
-              <FormControl>
-                <Input {...field} id="name" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          name="ask_for_name"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem className="flex h-auto w-full flex-col">
-              <FormLabel>Settings</FormLabel>
-              <FormControl>
-                <RadioGroup
-                  value={field.value ? "ask_for_name" : "ask_for_table"}
-                  onValueChange={(value) => {
-                    if (value === "ask_for_name") {
-                      form.setValue("ask_for_name", true);
-                      form.setValue("ask_for_table", false);
-                    } else {
-                      form.setValue("ask_for_name", false);
-                      form.setValue("ask_for_table", true);
-                    }
-                  }}
-                  className="flex w-full items-center gap-10"
-                >
-                  <div className="flex items-center space-x-2">
-                    <Label
-                      className="text-sm font-normal"
-                      htmlFor="ask_for_name"
-                    >
-                      Ask for Name:{" "}
-                    </Label>
-                    <RadioGroupItem
-                      value="ask_for_name"
-                      id="ask_for_name"
-                      checked={form.watch("ask_for_name")}
-                    />
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Label
-                      className="text-sm font-normal"
-                      htmlFor="ask_for_table"
-                    >
-                      Ask for Table:
-                    </Label>
-                    <RadioGroupItem
-                      value="ask_for_table"
-                      id="ask_for_table"
-                      checked={form.watch("ask_for_table")}
-                    />
-                  </div>
-                </RadioGroup>
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <div className="flex flex-col">
-          <Button type="submit">
-            {editMenuLoading ? "Saving..." : "Save"}
-          </Button>
-          <div className="flex w-full flex-wrap justify-between gap-x-10">
-            <p className="space-x-3 text-xs">
+        <div className="mb-2 flex h-auto items-end justify-between text-xs">
+          <h1 className="text-3xl font-semibold">Menu Details</h1>
+          <div className="flex flex-col items-end gap-0">
+            <p className="space-x-2">
               <b>Created:</b>
               <span>
                 {currentMenu.created_at &&
                   new Date(currentMenu.created_at).toLocaleString()}
               </span>
             </p>
-            <p className="space-x-3 text-xs">
+            <p className="space-x-2">
               <b>Last Modified:</b>
               <span>
                 {currentMenu.updated_at &&
@@ -133,6 +66,80 @@ const EditMenuForm = ({ currentMenu }: { currentMenu: any }) => {
             </p>
           </div>
         </div>
+
+        <div className="flex h-full w-full items-end gap-4">
+          <FormField
+            name="name"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem className="flex w-3/5 flex-col justify-start">
+                <FormLabel htmlFor="name">Name</FormLabel>
+                <FormControl>
+                  <Input {...field} id="name" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="ask_for_name"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem className="flex w-3/5 flex-col justify-between">
+                <FormLabel>Settings</FormLabel>
+                <FormControl>
+                  <RadioGroup
+                    value={field.value ? "ask_for_name" : "ask_for_table"}
+                    onValueChange={(value) => {
+                      if (value === "ask_for_name") {
+                        form.setValue("ask_for_name", true);
+                        form.setValue("ask_for_table", false);
+                      } else {
+                        form.setValue("ask_for_name", false);
+                        form.setValue("ask_for_table", true);
+                      }
+                    }}
+                    className="flex h-10 w-full gap-4"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <Label
+                        className="text-sm font-normal"
+                        htmlFor="ask_for_name"
+                      >
+                        Ask for Name:
+                      </Label>
+                      <RadioGroupItem
+                        value="ask_for_name"
+                        id="ask_for_name"
+                        checked={form.watch("ask_for_name")}
+                      />
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Label
+                        className="text-sm font-normal"
+                        htmlFor="ask_for_table"
+                      >
+                        Ask for Table:
+                      </Label>
+                      <RadioGroupItem
+                        value="ask_for_table"
+                        id="ask_for_table"
+                        checked={form.watch("ask_for_table")}
+                      />
+                    </div>
+                  </RadioGroup>
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
+          <Button type="submit" className="w-1/4">
+            {editMenuLoading ? "Saving..." : "Save"}
+          </Button>
+        </div>
+        {/* 
+        <div className="flex w-full justify-between gap-4">
+        </div> */}
       </form>
     </Form>
   );

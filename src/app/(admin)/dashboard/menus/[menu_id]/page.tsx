@@ -12,7 +12,6 @@ const MenuDetailsPage = async ({ params }: { params: { menu_id: number } }) => {
 
   return (
     <section className="flex h-full w-full flex-col justify-start">
-      <h1 className="mb-4 text-2xl font-semibold">Menu Details</h1>
       <EditMenuForm currentMenu={currentMenu} />
       <MenuItems currentMenu={currentMenu} />
     </section>
