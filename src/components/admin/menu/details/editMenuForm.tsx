@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import editMenu from "@/actions/menu/edit-menu";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { Save, Trash2 } from "lucide-react";
 const formSchema = z.object({
   name: z.string().min(2),
   ask_for_name: z.boolean(),
@@ -47,8 +48,8 @@ const EditMenuForm = ({ currentMenu }: { currentMenu: any }) => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex h-auto w-full flex-col gap-4 pt-2"
       >
-        <div className="mb-2 flex h-auto items-end justify-between text-xs">
-          <h1 className="text-3xl font-semibold">Menu Details</h1>
+        <div className="flex h-auto items-end justify-between text-xs">
+          <h1 className="ml-1 text-2xl font-semibold">Menu Details</h1>
           <div className="flex flex-col items-end gap-0">
             <p className="space-x-2">
               <b>Created:</b>
@@ -67,12 +68,12 @@ const EditMenuForm = ({ currentMenu }: { currentMenu: any }) => {
           </div>
         </div>
 
-        <div className="flex h-full w-full items-end gap-4">
+        <div className="flex h-fit w-full flex-col gap-4 rounded-md md:flex-row md:items-center lg:flex-row lg:items-center">
           <FormField
             name="name"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="flex w-3/5 flex-col justify-start">
+              <FormItem className="flex w-2/5 flex-col justify-start rounded-md bg-gradient-to-br from-white via-slate-50 to-slate-200 p-2">
                 <FormLabel htmlFor="name">Name</FormLabel>
                 <FormControl>
                   <Input {...field} id="name" />
@@ -85,7 +86,7 @@ const EditMenuForm = ({ currentMenu }: { currentMenu: any }) => {
             name="ask_for_name"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="flex w-3/5 flex-col justify-between">
+              <FormItem className="flex w-2/5 flex-col justify-between rounded-md bg-gradient-to-br from-white via-slate-50 to-slate-200 p-2">
                 <FormLabel>Settings</FormLabel>
                 <FormControl>
                   <RadioGroup
@@ -133,13 +134,24 @@ const EditMenuForm = ({ currentMenu }: { currentMenu: any }) => {
             )}
           />
 
-          <Button type="submit" className="w-1/4">
-            {editMenuLoading ? "Saving..." : "Save"}
-          </Button>
+          <div className="flex h-full w-1/5 flex-col gap-2">
+            <Button
+              variant={"destructive"}
+              className="h-8 w-full space-x-2 border-2 border-black text-black"
+            >
+              <Trash2 size={20} color="black" />
+              <p>Delete Menu</p>
+            </Button>
+            <Button
+              variant="sendOrder"
+              type="submit"
+              className="h-8 w-full space-x-2"
+            >
+              <Save size={20} />
+              <p>{editMenuLoading ? "Saving..." : "Save Menu"}</p>
+            </Button>
+          </div>
         </div>
-        {/* 
-        <div className="flex w-full justify-between gap-4">
-        </div> */}
       </form>
     </Form>
   );

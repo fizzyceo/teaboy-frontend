@@ -56,10 +56,14 @@ interface Menu {
 
 interface MenuStore {
   menu: Menu | null; // Allow menu to be null initially
+  isOpen: boolean;
   setMenu: (menu: Menu) => void;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
 export const useMenuStore = create<MenuStore>((set) => ({
   menu: null,
+  isOpen: false,
   setMenu: (menu) => set({ menu }),
+  setIsOpen: (isOpen) => set({ isOpen }),
 }));

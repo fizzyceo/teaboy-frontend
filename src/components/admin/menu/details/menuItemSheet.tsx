@@ -11,7 +11,6 @@ import {
   SheetTitle,
   SheetFooter,
 } from "@/components/ui/sheet";
-import { PlusIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 
 import {
@@ -28,8 +27,11 @@ import { z } from "zod";
 import { ImagePlus } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
+
 import createMenuItem from "@/actions/menu/create-menu-item";
-import AddMenuItemOptions from "../options/addMenuItemOptions";
+import MenuItemCard from "@/components/admin/menu/details/menuItemCard";
+import AddItemButton from "@/components/admin/menu/details/addItemButton";
+import MenuItemOptions from "@/components/admin/menu/options/menuItemOptions";
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -40,15 +42,20 @@ const formSchema = z.object({
     .refine((file) => file.size !== 0, "Please upload an image"),
 });
 
-const AddMenuItemSheet = ({
+const MenuItemSheet = ({
+  item,
   menu,
   setMenu,
+  mode,
 }: {
-  menu: any;
+  item?: any;
+  menu?: any;
   setMenu: (menu: any) => void;
+  mode: "ADD" | "EDIT";
 }) => {
   const [preview, setPreview] = useState<string | ArrayBuffer | null>("");
   const [createMenuItemLoading, setCreateMenuItemLoading] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -75,7 +82,7 @@ const AddMenuItemSheet = ({
     [form],
   );
 
-  const [stepIndex, setStepIndex] = useState(2);
+  const [stepIndex, setStepIndex] = useState(1);
 
   const { getRootProps, getInputProps, isDragActive, fileRejections } =
     useDropzone({
@@ -88,7 +95,7 @@ const AddMenuItemSheet = ({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setCreateMenuItemLoading(true);
     const response = await createMenuItem(values, menu.menu_id);
-    console.log("response->", response);
+
     if (response.error) {
       toast.error(response.errors[0]);
       setCreateMenuItemLoading(false);
@@ -114,27 +121,28 @@ const AddMenuItemSheet = ({
 
   return (
     <Sheet>
-      <SheetTrigger asChild>
-        <Button
-          variant="outline"
-          className="h-8 border-slate-800 bg-slate-200 font-semibold"
-        >
-          <PlusIcon />
-        </Button>
+      <SheetTrigger>
+        {mode === "ADD" ? <AddItemButton /> : <MenuItemCard item={item} />}
       </SheetTrigger>
       <SheetContent className="flex flex-col overflow-y-scroll">
         <SheetHeader>
           <SheetTitle>
-            {stepIndex === 1 ? "[1/2] Add Menu Item" : "[2/2] Add Options"}
+            {mode === "ADD"
+              ? stepIndex === 1
+                ? "Add Menu Item"
+                : "Add Menu Item Options"
+              : stepIndex === 1
+                ? "Edit Menu Item"
+                : "Edit Menu Item Options"}
           </SheetTitle>
         </SheetHeader>
 
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex w-full flex-1 flex-col"
-          >
-            {stepIndex === 1 ? (
+        {stepIndex === 1 ? (
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="flex w-full flex-1 flex-col"
+            >
               <div className="no-scrollbar mt-2 flex w-full flex-col gap-4 px-2">
                 <FormField
                   control={form.control}
@@ -227,28 +235,28 @@ const AddMenuItemSheet = ({
                   )}
                 />
               </div>
-            ) : (
-              <AddMenuItemOptions />
-            )}
 
-            <SheetFooter className="mt-auto">
-              <Button
-                type="submit"
-                className="w-1/2"
-                disabled={createMenuItemLoading}
-              >
-                {stepIndex === 1
-                  ? createMenuItemLoading
-                    ? "Creating Menu Item"
-                    : "Create Menu Item"
-                  : "Validate Options"}
-              </Button>
-            </SheetFooter>
-          </form>
-        </Form>
+              <SheetFooter className="mt-auto">
+                <Button
+                  type="submit"
+                  className="w-1/2"
+                  disabled={createMenuItemLoading}
+                >
+                  {stepIndex === 1
+                    ? createMenuItemLoading
+                      ? "Creating Menu Item"
+                      : "Create Menu Item"
+                    : "Validate Options"}
+                </Button>
+              </SheetFooter>
+            </form>
+          </Form>
+        ) : (
+          <MenuItemOptions />
+        )}
       </SheetContent>
     </Sheet>
   );
 };
 
-export default AddMenuItemSheet;
+export default MenuItemSheet;

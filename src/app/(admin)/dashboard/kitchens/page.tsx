@@ -1,7 +1,9 @@
+import AddNewKitchenDialog from "@/components/admin/kitchens/addKitchenDialog";
+
 const KitchensPage = () => {
   return (
     <div>
-      <h1>Kitchens</h1>
+      <AddNewKitchenDialog />
     </div>
   );
 };

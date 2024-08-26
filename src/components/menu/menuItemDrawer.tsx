@@ -12,6 +12,7 @@ import MenuItemDetails from "./DialogContent/menuItemDetails";
 import OrderItemsDetails from "./DialogContent/orderItemsDetails";
 import ExtraInfoForm from "./DialogContent/extraInfoForm";
 import submitOrder from "@/actions/order/submit-order";
+import { useMenuStore } from "@/stores/menu.store";
 
 type OrderOptionType = {
   menu_item_option_choice_id: number;
@@ -35,6 +36,8 @@ const MenuItemDrawer = (item: any) => {
     setOrderNumber,
     spaceId,
   } = useOrderStore();
+
+  const { isOpen } = useMenuStore();
 
   useEffect(() => {
     const initialOrderOptions = item.options.map((option: any) => ({
@@ -128,7 +131,7 @@ const MenuItemDrawer = (item: any) => {
         }
       }}
     >
-      <DialogTrigger disabled={orderStatus !== "Not Submitted"}>
+      <DialogTrigger disabled={orderStatus !== "Not Submitted" || !isOpen}>
         <MenuItemCard {...item} />
       </DialogTrigger>
 

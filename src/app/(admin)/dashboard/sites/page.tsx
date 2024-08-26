@@ -1,7 +1,9 @@
+import AddNewSiteDialog from "@/components/admin/sites/addSiteDialog";
+
 const SitesPage = () => {
   return (
     <div>
-      <h1>Sites</h1>
+      <AddNewSiteDialog />
     </div>
   );
 };

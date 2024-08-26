@@ -1,7 +1,9 @@
+import AddNewSpaceDialog from "@/components/admin/spaces/addSpaceDialog";
+
 const SpacesPage = () => {
   return (
     <div>
-      <h1>Spaces</h1>
+      <AddNewSpaceDialog />
     </div>
   );
 };

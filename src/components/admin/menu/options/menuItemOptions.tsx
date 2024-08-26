@@ -9,7 +9,7 @@ export interface MenuItemOption {
   default_choice: { name: string };
 }
 
-const AddMenuItemOptions = () => {
+const MenuItemOptions = () => {
   const [menuItemOptions, setMenuItemOptions] = useState<MenuItemOption[]>([]);
 
   return (
@@ -18,9 +18,12 @@ const AddMenuItemOptions = () => {
         menuItemOptions={menuItemOptions}
         setMenuItemOptions={setMenuItemOptions}
       />
-      <OptionsList menuItemOptions={menuItemOptions} />
+      <OptionsList
+        menuItemOptions={menuItemOptions}
+        setMenuItemOptions={setMenuItemOptions}
+      />
     </div>
   );
 };
 
-export default AddMenuItemOptions;
+export default MenuItemOptions;
