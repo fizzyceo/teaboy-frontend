@@ -82,7 +82,7 @@ const MenuItemSheet = ({
     [form],
   );
 
-  const [stepIndex, setStepIndex] = useState(1);
+  const [stepIndex, setStepIndex] = useState(2);
 
   const { getRootProps, getInputProps, isDragActive, fileRejections } =
     useDropzone({

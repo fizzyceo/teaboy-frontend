@@ -44,23 +44,17 @@ const KitchenDetailsPage = async ({
   };
 
   return (
-    <div className="grid h-full w-full grid-cols-2 gap-2">
-      <h1 className="col-span-2 mb-2 px-2 text-xl font-semibold">
-        Kitchen Details
-      </h1>
-      <div className="col-span-1 flex flex-col gap-2">
-        <KitchenDetailsForm
-          kitchen={{
-            name: kitchen.name,
-            is_open: kitchen.isOpen,
-            token: kitchen.token,
-          }}
-        />
-        <LinkTabletDialog kitchen_token={kitchen.token} />
-        <KitchenSpaces />
-      </div>
-      <div className="col-span-1 h-full w-full">
-        <OpeningHoursForm />
+    <div className="flex w-full flex-1 flex-col gap-2">
+      <h1 className="w-full text-2xl font-semibold">Kitchen Details</h1>
+      <div className="flex w-full flex-1 gap-2">
+        <div className="flex w-2/5 flex-col gap-2">
+          <KitchenDetailsForm />
+          <LinkTabletDialog kitchen_token={kitchen.token} />
+          <KitchenSpaces />
+        </div>
+        <div className="w-3/5 flex-1">
+          <OpeningHoursForm />
+        </div>
       </div>
     </div>
   );

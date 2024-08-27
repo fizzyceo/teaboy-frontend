@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { TimePickerInput } from "@/components/ui/time-picker-input";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
+import { Save } from "lucide-react";
 
 interface DaySchedule {
   start: Date | undefined;
@@ -45,16 +46,16 @@ export function OpeningHoursForm() {
   };
 
   return (
-    <div className="flex h-full w-full flex-col justify-between rounded-md bg-slate-100 px-2 pb-2">
+    <div className="flex h-full flex-col justify-between gap-7 rounded-md bg-slate-100 px-2 pb-2">
       <div>
-        <h2 className="mb-2 text-lg font-semibold">Opening Hours</h2>
-        <div className="grid grid-rows-7 gap-1">
+        <h1 className="mb-2 mt-4 text-xl font-semibold">Opening Hours</h1>
+        <div className="grid grid-rows-7 gap-2">
           {Object.keys(schedule).map((day) => (
             <div
               key={day}
-              className="grid w-full grid-cols-3 items-center py-1"
+              className="grid h-12 w-full grid-cols-3 items-center py-1"
             >
-              <div className="col-span-1 flex items-center space-x-1 bg-blue-50">
+              <div className="col-span-1 flex items-center space-x-1">
                 <Switch
                   id={`switch-${day}`}
                   checked={schedule[day].isOpen}
@@ -70,12 +71,12 @@ export function OpeningHoursForm() {
                 </Label>
               </div>
 
-              {schedule[day].isOpen && (
-                <div className="col-span-2 flex space-x-2">
-                  <div className="flex items-center gap-2 rounded-sm bg-slate-200 p-1">
+              {schedule[day].isOpen ? (
+                <div className="col-span-2 flex justify-between space-x-2">
+                  <div className="flex w-1/2 items-center justify-between gap-2 rounded-sm bg-slate-200 p-1">
                     <Label
                       htmlFor={`start-${day}`}
-                      className="text-sm font-medium"
+                      className="w-full text-center text-sm font-medium"
                     >
                       Start
                     </Label>
@@ -102,10 +103,10 @@ export function OpeningHoursForm() {
                       />
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 rounded-sm bg-slate-200 p-1">
+                  <div className="flex w-1/2 items-center justify-between gap-2 rounded-sm bg-slate-200 p-1">
                     <Label
                       htmlFor={`end-${day}`}
-                      className="text-sm font-medium"
+                      className="w-full text-center text-sm font-medium"
                     >
                       End
                     </Label>
@@ -133,6 +134,8 @@ export function OpeningHoursForm() {
                     </div>
                   </div>
                 </div>
+              ) : (
+                <p className="col-span-2 text-center font-medium">Closed</p>
               )}
             </div>
           ))}
@@ -140,11 +143,12 @@ export function OpeningHoursForm() {
       </div>
 
       <div className="flex justify-between justify-items-end">
-        <p className="place-content-end text-xs">
+        <p className="place-content-end text-sm">
           <b>*</b>Start and End Time have the format HH:MM
         </p>
-        <Button className="w-1/4 rounded-md bg-green-500 p-2 text-white">
-          Save
+        <Button className="flex items-center justify-center gap-2 px-16 text-lg">
+          <Save />
+          <span>Save </span>
         </Button>
       </div>
     </div>

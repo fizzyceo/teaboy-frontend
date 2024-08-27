@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Unlink } from "lucide-react";
+import { Eye, Unlink } from "lucide-react";
 import LinkSpaceDialog from "./linkSpaceDialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -21,26 +21,33 @@ const KitchenSpaces = () => {
       space_id: 3,
       space_name: "Space 3",
     },
+    {
+      space_id: 8,
+      space_name: "Space 3",
+    },
   ];
 
   return (
-    <div className="flex flex-col gap-4 rounded-md bg-slate-100 p-2">
+    <div className="flex flex-1 flex-col gap-4 rounded-md bg-slate-100 p-2">
       <h1 className="text-xl font-semibold">Kitchen Spaces</h1>
       <LinkSpaceDialog />
-      <ScrollArea className="flex h-48 snap-y snap-mandatory flex-col gap-2 overflow-y-auto">
+      <ScrollArea className="no-scrollbar flex max-h-56 snap-y snap-mandatory flex-col gap-2 overflow-y-scroll">
         {kitchenSpaces.map((space) => (
           <div
             key={space.space_id}
-            className="mb-2 flex snap-start items-center justify-between rounded-md bg-slate-300 px-4 py-2 shadow-sm"
+            className="mb-2 mr-3 flex snap-start items-center justify-between rounded-md bg-slate-300 p-2 shadow-sm"
           >
             <span className="text-lg font-medium">{space.space_name}</span>
-            <Button
-              variant="destructive"
-              className="flex items-center space-x-2 p-2"
-            >
-              <span>Unlink</span>
-              <Unlink size={16} />
-            </Button>
+            <div className="flex gap-2">
+              <Button className="flex items-center space-x-1 p-2 text-sm">
+                <Eye size={16} />
+                <span>Details </span>
+              </Button>
+              <Button className="flex items-center space-x-1 p-2 text-sm">
+                <Unlink size={16} />
+                <span>Unlink </span>
+              </Button>
+            </div>
           </div>
         ))}
       </ScrollArea>

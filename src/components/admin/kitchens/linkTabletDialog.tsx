@@ -49,12 +49,11 @@ const LinkTabletDialog = ({ kitchen_token }: { kitchen_token: string }) => {
 
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <div className="rounded-md bg-slate-100 p-2">
-          <Button variant="outline" className="w-full space-x-3">
-            <span>Link Tablet</span>
+          <Button className="flex w-full items-center justify-center space-x-3 rounded-md text-lg">
             <Tablet />
-            <Link />
+            <span>Link Tablet</span>
           </Button>
         </div>
       </DialogTrigger>

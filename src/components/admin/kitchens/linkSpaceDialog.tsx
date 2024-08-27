@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
-import { PlusIcon } from "lucide-react";
+import { Link, PlusIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -48,7 +48,6 @@ const LinkSpaceDialog = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setLoading(true);
     try {
-      // Replace this with actual linking logic
       console.log("Selected Space ID:", values.spaceId);
       form.reset();
     } finally {
@@ -56,7 +55,6 @@ const LinkSpaceDialog = () => {
     }
   };
 
-  // Fake data for spaces
   const spaces = [
     { id: "1", name: "Space A" },
     { id: "2", name: "Space B" },
@@ -65,11 +63,11 @@ const LinkSpaceDialog = () => {
 
   return (
     <Dialog>
-      <DialogTrigger>
-        <div className="animation flex h-10 w-full cursor-pointer items-center justify-center rounded border bg-slate-200 duration-300 hover:scale-[102%] hover:bg-slate-100">
-          <PlusIcon size={25} color="black" />
-          <p>Link Space</p>
-        </div>
+      <DialogTrigger asChild>
+        <Button className="flex w-full items-center justify-center space-x-3 rounded-md text-lg">
+          <Link />
+          <span>Link Space</span>
+        </Button>
       </DialogTrigger>
 
       <DialogContent>
