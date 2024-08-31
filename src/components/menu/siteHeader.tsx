@@ -13,12 +13,16 @@ const SiteHeader = ({ space }: { space: any }) => {
           </p>
         )}
 
-        <p className="flex items-center gap-4">
-          <PhoneCall size={16} /> {site.phone}
-        </p>
-        <p className="flex items-center gap-4 font-semibold">
-          <Home size={16} /> {space.name}
-        </p>
+        {site.phone !== " " && (
+          <p className="flex items-center gap-4">
+            <PhoneCall size={16} /> {site.phone}
+          </p>
+        )}
+        {space.name !== " " && (
+          <p className="flex items-center gap-4 font-semibold">
+            <Home size={16} /> {space.name}
+          </p>
+        )}
       </div>
 
       <div className="relative h-32 w-32 overflow-hidden rounded-xl">

@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const OrderItemList = ({ orderItems }: { orderItems: OrderItem[] }) => {
   return (
-    <div className="no-scrollbar flex max-h-[47vh] w-full snap-y flex-col gap-3 overflow-scroll px-1">
+    <div className="no-scrollbar flex max-h-[47vh] w-full snap-y flex-col gap-3 overflow-x-hidden overflow-y-scroll px-1">
       <AnimatePresence>
         {orderItems.map((item: OrderItem) => (
           <motion.div

@@ -46,27 +46,28 @@ const OrderItemCard = (item: any) => {
           <p className="overflow-hidden text-wrap text-left text-xl font-semibold">
             {item.menuItemTitle}
           </p>
-          {item.note !== "" && (
-            <p className="overflow-hidden truncate text-sm text-gray-600">
-              {item.note}
-            </p>
-          )}
-          {choices.map((choice: any) => {
-            return (
-              <p
-                key={`${choice.menu_item_option_choice_id}-${choice.menu_item_option_id}`}
-                className="overflow-hidden truncate text-sm text-gray-600 md:text-lg lg:text-lg"
-              >
-                <span className="font-semibold">
-                  {getOrderOptionName(choice.menu_item_option_id)}:{" "}
-                </span>
-                {getOrderChoiceName(
-                  choice.menu_item_option_choice_id,
-                  choice.menu_item_option_id,
-                )}
+          <div className="w-1/2 overflow-hidden">
+            {item.note && (
+              <p className="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-gray-600">
+                {item.note}
               </p>
-            );
-          })}
+            )}
+          </div>
+
+          {choices.map((choice: any) => (
+            <p
+              key={`${choice.menu_item_option_choice_id}-${choice.menu_item_option_id}`}
+              className="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-gray-600 md:text-lg lg:text-lg"
+            >
+              <span className="font-semibold">
+                {getOrderOptionName(choice.menu_item_option_id)}:{" "}
+              </span>
+              {getOrderChoiceName(
+                choice.menu_item_option_choice_id,
+                choice.menu_item_option_id,
+              )}
+            </p>
+          ))}
         </div>
       </div>
 
