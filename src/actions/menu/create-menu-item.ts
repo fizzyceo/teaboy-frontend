@@ -15,7 +15,7 @@ const createMenuItem = async (menuItem: any, menu_id: number) => {
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/menu-item`,
+      `https://basseer-internship-backend-davh.onrender.com/menu-item`,
       {
         method: "POST",
         body: formData,

@@ -1,6 +1,6 @@
 const cancelOrder = async (orderId: string) => {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/order/${orderId}/cancel`,
+    `https://basseer-internship-backend-davh.onrender.com/order/${orderId}/cancel`,
     {
       method: "POST",
     },

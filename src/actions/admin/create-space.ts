@@ -4,7 +4,7 @@ const createSpace = async (values: any) => {
     return null;
   }
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/site/${site_id}/spaces`,
+    `https://basseer-internship-backend-davh.onrender.com/site/${site_id}/spaces`,
     {
       method: "POST",
       body: JSON.stringify({

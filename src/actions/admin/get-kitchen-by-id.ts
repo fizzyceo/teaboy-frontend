@@ -1,7 +1,7 @@
 const getKitchenById = async (kitchen_id: number) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/${kitchen_id}`,
+      `https://basseer-internship-backend-davh.onrender.com/${kitchen_id}`,
       {
         cache: "no-store",
       },

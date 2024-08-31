@@ -14,7 +14,7 @@ const createSite = async (site: {
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/site/create`,
+      `https://basseer-internship-backend-davh.onrender.com/site/create`,
       {
         method: "POST",
         body: formData,

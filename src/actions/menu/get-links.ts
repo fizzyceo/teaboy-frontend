@@ -1,6 +1,6 @@
 const getLinks = async (base_url: string) => {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/menu/links/a`,
+    `https://basseer-internship-backend-davh.onrender.com/menu/links/a`,
     {
       cache: "no-store",
     },

@@ -1,7 +1,7 @@
 "use server";
 const registerUser = async (credentials: any) => {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/create`,
+    `https://basseer-internship-backend-davh.onrender.com/user/create`,
     {
       method: "POST",
       headers: {

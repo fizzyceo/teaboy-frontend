@@ -3,7 +3,7 @@ const createMenu = async (menu: any) => {
     return null;
   }
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/menu/create`,
+    `https://basseer-internship-backend-davh.onrender.com/menu/create`,
     {
       method: "POST",
       body: JSON.stringify(menu),
