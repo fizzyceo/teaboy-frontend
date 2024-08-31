@@ -5,6 +5,17 @@ import MenuCard from "@/components/admin/menu/list/menuCard";
 const AdminMenuPage = async () => {
   const menus = await getMenuList();
 
+  if (menus.length === 0) {
+    return (
+      <section className="flex h-full w-full flex-col gap-4">
+        <h1 className="text-xl font-semibold">Menus</h1>
+        <div className="flex h-full w-full items-center justify-center">
+          <p>Failed to fetch menus</p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="flex h-full w-full flex-col gap-4">
       <h1 className="text-xl font-semibold">Menus</h1>
