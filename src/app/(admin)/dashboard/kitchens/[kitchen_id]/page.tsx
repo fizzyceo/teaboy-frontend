@@ -49,8 +49,8 @@ const KitchenDetailsPage = async ({
       <div className="flex w-full flex-1 gap-2">
         <div className="flex w-2/5 flex-col gap-2">
           <KitchenDetailsForm />
-          <LinkTabletDialog kitchen_token={kitchen.token} />
           <KitchenSpaces />
+          <LinkTabletDialog kitchen_token={kitchen.token} />
         </div>
         <div className="w-3/5 flex-1">
           <OpeningHoursForm />

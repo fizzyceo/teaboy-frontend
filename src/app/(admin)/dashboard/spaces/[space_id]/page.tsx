@@ -1,3 +1,6 @@
+import EditSpaceForm from "@/components/admin/spaces/editSpaceForm";
+import SpaceMenus from "@/components/admin/spaces/spaceMenus";
+
 const SpaceDetailsPage = async ({
   params,
 }: {
@@ -7,6 +10,8 @@ const SpaceDetailsPage = async ({
   return (
     <div>
       <h1>Space Details</h1>
+      <EditSpaceForm />
+      <SpaceMenus />
     </div>
   );
 };

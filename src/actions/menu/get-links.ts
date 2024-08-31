@@ -1,7 +1,10 @@
 const getLinks = async (base_url: string) => {
-  const response = await fetch(`http://localhost:8000/menu/links/a`, {
-    cache: "no-store",
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/menu/links/a`,
+    {
+      cache: "no-store",
+    },
+  );
 
   const data = await response.json();
 

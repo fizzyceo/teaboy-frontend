@@ -14,10 +14,13 @@ const createMenuItem = async (menuItem: any, menu_id: number) => {
   formData.append("item_images", menuItem.image);
 
   try {
-    const response = await fetch("http://localhost:8000/menu-item", {
-      method: "POST",
-      body: formData,
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/menu-item`,
+      {
+        method: "POST",
+        body: formData,
+      },
+    );
     const data = await response.json();
     return data;
   } catch (e) {

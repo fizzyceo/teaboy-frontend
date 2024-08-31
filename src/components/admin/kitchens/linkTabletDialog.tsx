@@ -60,11 +60,6 @@ const LinkTabletDialog = ({ kitchen_token }: { kitchen_token: string }) => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Link Tablet</DialogTitle>
-          <p className="text-sm text-gray-600">
-            This dialog allows you to manage the link for the tablet. The token
-            displayed below is used to link the tablet to your system. You can
-            regenerate the token if needed and share it via email or WhatsApp.
-          </p>
         </DialogHeader>
         <div className="flex items-center gap-4">
           <div className="relative">

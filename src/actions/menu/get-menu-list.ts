@@ -1,8 +1,11 @@
 const getMenuList = async () => {
   try {
-    const response = await fetch(`http://localhost:8000/menu/list/a/`, {
-      cache: "no-store",
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/menu/list/a/`,
+      {
+        cache: "no-store",
+      },
+    );
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);

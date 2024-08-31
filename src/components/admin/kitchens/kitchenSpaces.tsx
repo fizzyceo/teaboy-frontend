@@ -31,10 +31,10 @@ const KitchenSpaces = () => {
     <div className="flex flex-1 flex-col gap-4 rounded-md bg-slate-100 p-2">
       <h1 className="text-xl font-semibold">Kitchen Spaces</h1>
       <LinkSpaceDialog />
-      <ScrollArea className="no-scrollbar flex max-h-56 snap-y snap-mandatory flex-col gap-2 overflow-y-scroll">
-        {kitchenSpaces.map((space) => (
+      <ScrollArea className="no-scrollbar flex snap-y flex-col overflow-y-scroll">
+        {kitchenSpaces.map((space, index) => (
           <div
-            key={space.space_id}
+            key={index}
             className="mb-2 mr-3 flex snap-start items-center justify-between rounded-md bg-slate-300 p-2 shadow-sm"
           >
             <span className="text-lg font-medium">{space.space_name}</span>
