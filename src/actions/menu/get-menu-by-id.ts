@@ -1,7 +1,7 @@
 const getMenuById = async (menu_id: number) => {
   try {
     const response = await fetch(
-      `https://basseer-internship-backend-davh.onrender.com/menu/${menu_id}`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/menu/${menu_id}`,
       {
         cache: "no-store",
       },

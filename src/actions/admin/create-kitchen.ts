@@ -1,6 +1,6 @@
 const createKitchen = async (name: string) => {
   const response = await fetch(
-    `https://basseer-internship-backend-davh.onrender.com/kitchen/create`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/kitchen/create`,
     {
       method: "POST",
       body: JSON.stringify({

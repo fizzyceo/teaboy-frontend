@@ -1,7 +1,7 @@
 const submitOrder = async (order: any) => {
   const { order_items, customer_name, table_number } = order;
   const response = await fetch(
-    `https://basseer-internship-backend-davh.onrender.com/order/create`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/order/create`,
     {
       method: "POST",
       body: JSON.stringify({

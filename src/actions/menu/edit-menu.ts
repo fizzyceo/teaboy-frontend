@@ -1,7 +1,7 @@
 const editMenu = async (menu_id: number, editedMenuData: any) => {
   try {
     const response = await fetch(
-      `https://basseer-internship-backend-davh.onrender.com/menu/${menu_id}`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/menu/${menu_id}`,
       {
         method: "Patch",
         body: JSON.stringify(editedMenuData),

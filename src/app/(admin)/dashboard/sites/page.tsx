@@ -1,5 +1,10 @@
-import AddNewSiteDialog from "@/components/admin/sites/addSiteDialog";
+import dynamic from "next/dynamic";
 import SiteCard from "@/components/admin/sites/siteCard";
+
+const AddNewSiteDialog = dynamic(
+  () => import("@/components/admin/sites/addSiteDialog"),
+  { ssr: false },
+);
 
 const SitesPage = () => {
   const sites = [

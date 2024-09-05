@@ -1,7 +1,7 @@
 const getMenuList = async () => {
   try {
     const response = await fetch(
-      `https://basseer-internship-backend-davh.onrender.com/menu/list/a/`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/menu/list/a/`,
     );
 
     if (!response.ok) {
