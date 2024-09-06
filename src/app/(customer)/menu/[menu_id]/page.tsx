@@ -59,7 +59,7 @@ const MenuPage = ({
   return (
     <div className="no-scrollbar min-h-screen bg-slate-50">
       {!isOpen && (
-        <div className="absolute bottom-0 left-0 z-50 flex h-full w-full flex-col items-center justify-center border border-gray-100 bg-opacity-10 bg-clip-padding py-4 text-center text-3xl font-medium text-black shadow-md backdrop-blur-sm backdrop-filter">
+        <div className="fixed bottom-0 left-0 z-50 flex h-screen w-full flex-col items-center justify-center border border-gray-100 bg-opacity-10 bg-clip-padding py-4 text-center text-3xl font-medium text-black shadow-md backdrop-blur-sm backdrop-filter">
           <p className="flex size-80 flex-col items-center justify-center gap-4 text-wrap rounded-full bg-red-500 bg-opacity-80 px-10 py-5 text-center backdrop-blur-sm backdrop-filter">
             <CircleAlert size={70} className="animate-pulse" />
             The kitchen is now closed, you cant place orders
