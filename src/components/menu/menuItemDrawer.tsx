@@ -112,11 +112,10 @@ const MenuItemDrawer = (item: any) => {
 
   const handleDialogClose = () => {
     setOpenDialog(false);
-    // Keep the stepIndex unchanged during close to avoid flickering.
   };
 
   const handleDialogOpen = () => {
-    setStepIndex(0); // Reset stepIndex only when reopening the dialog.
+    setStepIndex(0);
     setOpenDialog(true);
   };
 
@@ -131,7 +130,9 @@ const MenuItemDrawer = (item: any) => {
         }
       }}
     >
-      <DialogTrigger disabled={orderStatus !== "Not Submitted" || !isOpen}>
+      <DialogTrigger
+        disabled={orderStatus !== "Not Submitted" || !isOpen || !item.available}
+      >
         <MenuItemCard {...item} />
       </DialogTrigger>
 

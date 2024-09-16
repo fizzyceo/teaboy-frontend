@@ -28,8 +28,6 @@ const MenuPage = ({
         setIsOpen(my_menu.isOpen);
         setMenu(my_menu);
         setSpaceId(my_menu.spaces[0].space_id);
-        console.log("Menu loaded:", my_menu);
-        console.log("Space ID:", my_menu.spaces[0].space_id);
       } catch (error) {
         console.error("Failed to load menu:", error);
       } finally {
