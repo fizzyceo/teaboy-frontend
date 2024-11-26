@@ -49,6 +49,7 @@ const MenuPage = ({
   if (!menu) {
     return <p>{translateString("No menu data available.", lang)}</p>;
   }
+  console.log(menu);
 
   const { menu_items, spaces } = menu;
 

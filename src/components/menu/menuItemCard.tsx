@@ -17,6 +17,8 @@ const MenuItemCard = ({
   VAT?: number;
   base_url?: string;
 }) => {
+  console.log(base_url + "" + item.images[0]);
+
   return (
     <div
       key={item.item_id}
@@ -29,6 +31,7 @@ const MenuItemCard = ({
           layout="fill"
           objectFit="cover"
           className="rounded-md"
+          unoptimized
         />
         {!item.available && (
           <Badge variant={"destructive"} className="absolute bottom-2 right-2">
