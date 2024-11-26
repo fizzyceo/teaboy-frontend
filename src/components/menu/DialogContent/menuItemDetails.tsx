@@ -9,27 +9,35 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { translateString } from "@/lib/translate";
 import { ChevronRight } from "lucide-react";
 
 import Image from "next/image";
 
 const MenuItemDetails = ({
+  lang,
   item,
   note,
   setNote,
   handleValueChange,
   handleNext,
+  currency,
+  VAT,
+  base_url,
 }: any) => {
   const { options } = item;
   return (
     <>
       <DialogHeader>
-        <DialogTitle>{item.title}</DialogTitle>
+        <DialogTitle>
+          {" "}
+          {lang === "ar" && item?.title_ar ? item?.title_ar : item.title}
+        </DialogTitle>
       </DialogHeader>
 
       <div className="relative h-44 w-full overflow-hidden rounded-md md:h-48 lg:h-52">
         <Image
-          src={item.item_images[0].image_url}
+          src={base_url + "/" + item.images[0]}
           alt={item.title}
           layout="fill"
           objectFit="cover"
@@ -47,7 +55,9 @@ const MenuItemDetails = ({
             <span className="text-xl font-extrabold text-gray-900">
               {item.price}
             </span>
-            <span className="text-base font-semibold text-gray-500">$</span>
+            <span className="text-base font-semibold text-gray-500">
+              {currency}
+            </span>
           </Badge>
         ) : null}
       </div>
@@ -62,21 +72,27 @@ const MenuItemDetails = ({
                 onValueChange={(value) =>
                   handleValueChange(option.menu_item_option_id, parseInt(value))
                 }
-                defaultValue={option.default_choice.menu_item_option_choice_id}
+                defaultValue={option.default_choice_id}
               >
-                <p className="basis-2 text-xl font-bold">{option.name}</p>
+                <p className="basis-2 text-xl font-bold">
+                  {lang === "ar" && option?.name_ar
+                    ? option.name_ar
+                    : option.name}
+                </p>
                 <div className="flex w-full flex-wrap justify-start gap-3 gap-y-2">
                   {option.choices.map((choice: any) => (
                     <div
                       className="flex items-center space-x-2"
-                      key={choice.menu_item_option_choice_id}
+                      key={choice.choice_id}
                     >
                       <RadioGroupItem
-                        value={choice.menu_item_option_choice_id}
-                        id={choice.menu_item_option_choice_id}
+                        value={choice.choice_id}
+                        id={choice.choice_id}
                       />
-                      <Label htmlFor={choice.menu_item_option_choice_id}>
-                        {choice.name}
+                      <Label htmlFor={choice.choice_id}>
+                        {lang === "ar" && choice?.name_ar
+                          ? choice?.name_ar
+                          : choice.name}
                       </Label>
                     </div>
                   ))}
@@ -87,12 +103,12 @@ const MenuItemDetails = ({
         )}
         <div className="flex w-full flex-col items-start justify-start gap-2">
           <Label htmlFor="note" className="text-xl font-bold">
-            Note
+            {translateString("Note", lang)}
           </Label>
           <div className="w-full p-1">
             <Input
               className="text-md"
-              placeholder="Anything you want to add ..."
+              placeholder={`${translateString("Anything you want to add ...", lang)}`}
               id="note"
               value={note}
               onChange={(e) => setNote(e.target.value)}
@@ -106,7 +122,7 @@ const MenuItemDetails = ({
           onClick={handleNext}
           variant={"nextStep"}
         >
-          <span>Next</span>
+          <span> {translateString("Next", lang)}</span>
           <ChevronRight />
         </Button>
       </DialogFooter>

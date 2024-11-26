@@ -4,6 +4,7 @@ import LoadingHome from "@/components/shared/loadingHome";
 import { QRCode } from "react-qrcode-logo";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { translateString } from "@/lib/translate";
 
 export default function Home() {
   const [baseUrl, setBaseUrl] = useState("");

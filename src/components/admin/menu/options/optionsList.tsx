@@ -42,7 +42,7 @@ const OptionsList = ({
                   </Badge>
                   {option.choices.map((choice, choiceIndex) => {
                     const isDefault =
-                      choice.name === option.default_choice.name;
+                      choice.choice_id === option.default_choice_id;
                     return (
                       <div
                         key={choiceIndex}

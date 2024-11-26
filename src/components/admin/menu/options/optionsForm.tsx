@@ -1,4 +1,5 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,30 +19,24 @@ const OptionsForm = ({
 }: OptionsFormProps) => {
   const [option, setOption] = useState({
     option_name: "",
-    option_choices: [""],
-    default_choice: "",
+    option_choices: [{ choice_id: 1, name: "" }],
+    default_choice_id: 1,
   });
   const [error, setError] = useState("");
 
   const handleInputChange = (index: number, value: string) => {
     const newChoices = [...option.option_choices];
-    newChoices[index] = value;
-
-    let newDefaultChoice = option.default_choice;
-    if (
-      newDefaultChoice === "" ||
-      newDefaultChoice === option.option_choices[index]
-    ) {
-      newDefaultChoice = newChoices[0];
-    }
+    newChoices[index].name = value;
 
     setOption({
       ...option,
       option_choices: newChoices,
-      default_choice: newDefaultChoice,
     });
 
-    if (new Set(newChoices).size !== newChoices.length) {
+    if (
+      new Set(newChoices.map((choice) => choice.name)).size !==
+      newChoices.length
+    ) {
       setError("Duplicate choices are not allowed.");
     } else {
       setError("");
@@ -54,14 +49,17 @@ const OptionsForm = ({
       return;
     }
 
-    if (option.option_choices.some((choice) => choice === "")) {
+    if (option.option_choices.some((choice) => choice.name === "")) {
       setError("Please fill in the existing choices before adding a new one.");
       return;
     }
 
     setOption({
       ...option,
-      option_choices: [...option.option_choices, ""],
+      option_choices: [
+        ...option.option_choices,
+        { choice_id: option.option_choices.length + 1, name: "" },
+      ],
     });
     setError("");
   };
@@ -71,19 +69,18 @@ const OptionsForm = ({
 
     const newChoices = option.option_choices.filter((_, i) => i !== index);
 
-    if (option.default_choice === option.option_choices[index]) {
-      setOption((prev) => ({
-        ...prev,
-        option_choices: newChoices,
-        default_choice: newChoices[0],
-      }));
-    }
+    setOption((prev) => ({
+      ...prev,
+      option_choices: newChoices,
+      default_choice_id: newChoices[0]?.choice_id || 1,
+    }));
   };
 
   const handleSubmit = () => {
     if (
-      option.option_choices.some((choice) => choice === "") ||
-      new Set(option.option_choices).size !== option.option_choices.length
+      option.option_choices.some((choice) => choice.name === "") ||
+      new Set(option.option_choices.map((choice) => choice.name)).size !==
+        option.option_choices.length
     ) {
       setError("Please resolve all errors before submitting.");
       return;
@@ -91,16 +88,16 @@ const OptionsForm = ({
 
     const payload: MenuItemOption = {
       name: option.option_name,
-      choices: option.option_choices.map((choice) => ({ name: choice })),
-      default_choice: { name: option.default_choice },
+      choices: option.option_choices,
+      default_choice_id: option.default_choice_id,
     };
 
     setMenuItemOptions([...menuItemOptions, payload]);
 
     setOption({
       option_name: "",
-      option_choices: [""],
-      default_choice: "",
+      option_choices: [{ choice_id: 1, name: "" }],
+      default_choice_id: 1,
     });
     setError("");
 
@@ -108,20 +105,17 @@ const OptionsForm = ({
   };
 
   useEffect(() => {
-    if (option.option_choices.length === 1 && option.default_choice === "") {
+    if (
+      !option.option_choices.some(
+        (choice) => choice.choice_id === option.default_choice_id,
+      )
+    ) {
       setOption((prev) => ({
         ...prev,
-        default_choice: prev.option_choices[0],
+        default_choice_id: prev.option_choices[0]?.choice_id || 1,
       }));
     }
-
-    if (!option.option_choices.includes(option.default_choice)) {
-      setOption((prev) => ({
-        ...prev,
-        default_choice: prev.option_choices[0],
-      }));
-    }
-  }, [option.default_choice, option.option_choices]);
+  }, [option.default_choice_id, option.option_choices]);
 
   return (
     <>
@@ -143,7 +137,7 @@ const OptionsForm = ({
           variant="sendOrder"
           className="ml-2 space-x-1 px-2"
           disabled={
-            option.option_choices.some((choice) => choice === "") ||
+            option.option_choices.some((choice) => choice.name === "") ||
             option.option_choices.length >= 3
           }
         >
@@ -153,21 +147,24 @@ const OptionsForm = ({
       </div>
       <RadioGroup
         className="mt-2"
-        value={option.default_choice}
+        value={option.default_choice_id.toString()}
         onValueChange={(value) =>
-          setOption({ ...option, default_choice: value })
+          setOption({ ...option, default_choice_id: parseInt(value, 10) })
         }
       >
         {option.option_choices.map((choice, index) => (
-          <div key={index} className="flex items-center">
+          <div key={choice.choice_id} className="flex items-center">
             <div className="flex h-full w-1/4 items-center justify-center">
-              <RadioGroupItem value={choice} id={`choice-${index}`} />
+              <RadioGroupItem
+                value={choice.choice_id.toString()}
+                id={`choice-${index}`}
+              />
             </div>
             <div className="flex w-full gap-2">
               <Input
                 type="text"
                 placeholder="Option Choice"
-                value={choice}
+                value={choice.name}
                 onChange={(e) => handleInputChange(index, e.target.value)}
                 className=""
               />
@@ -193,8 +190,8 @@ const OptionsForm = ({
           onClick={handleSubmit}
           variant={"nextStep"}
           disabled={
-            option.option_choices.some((choice) => choice === "") ||
-            new Set(option.option_choices).size !==
+            option.option_choices.some((choice) => choice.name === "") ||
+            new Set(option.option_choices.map((choice) => choice.name)).size !==
               option.option_choices.length ||
             option.option_name === "" ||
             option.option_choices.length === 1

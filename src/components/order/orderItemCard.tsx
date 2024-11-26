@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 import { useOrderStore } from "@/stores/order.store";
 import { useMenuStore } from "@/stores/menu.store";
 
-const OrderItemCard = (item: any) => {
+const OrderItemCard = ({ lang, item }: { lang: string; item: any }) => {
   const { removeOrderItem, orderStatus } = useOrderStore();
   const { menu } = useMenuStore();
 
@@ -14,7 +14,7 @@ const OrderItemCard = (item: any) => {
   }
 
   const menuItem = menu.menu_items.find(
-    (menuItem) => menuItem.menu_item_id === item.menuItemId,
+    (menuItem) => menuItem.item_id === item.menuItemId,
   );
 
   const { choices } = item;
@@ -23,7 +23,10 @@ const OrderItemCard = (item: any) => {
     const option = menuItem?.options.find(
       (option) => option.menu_item_option_id === optionId,
     );
-    return option?.name;
+    let name =
+      lang === "ar" && option?.name_ar ? option?.name_ar : option?.name;
+
+    return name;
   };
 
   const getOrderChoiceName = (choiceId: number, optionId: number) => {
@@ -31,8 +34,11 @@ const OrderItemCard = (item: any) => {
       (option) => option.menu_item_option_id === optionId,
     );
     const choice = option?.choices.find(
-      (choice) => choice.menu_item_option_choice_id === choiceId,
+      (choice) => choice.choice_id === choiceId,
     );
+    let name =
+      lang === "ar" && choice?.name_ar ? choice?.name_ar : choice?.name;
+
     return choice?.name;
   };
 
@@ -44,7 +50,9 @@ const OrderItemCard = (item: any) => {
       <div className="flex w-1/2 flex-1 items-center">
         <div className="flex flex-col items-start justify-between gap-1">
           <p className="overflow-hidden text-wrap text-left text-xl font-semibold">
-            {item.menuItemTitle}
+            {lang === "ar" && item.menuItemTitleAR
+              ? item.menuItemTitleAR
+              : item.menuItemTitle}
           </p>
           <div className="w-1/2 overflow-hidden">
             {item.note && (
@@ -56,16 +64,13 @@ const OrderItemCard = (item: any) => {
 
           {choices.map((choice: any) => (
             <p
-              key={`${choice.menu_item_option_choice_id}-${choice.menu_item_option_id}`}
+              key={`${choice.choice_id}-${choice.menu_item_option_id}`}
               className="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-gray-600 md:text-lg lg:text-lg"
             >
               <span className="font-semibold">
                 {getOrderOptionName(choice.menu_item_option_id)}:{" "}
               </span>
-              {getOrderChoiceName(
-                choice.menu_item_option_choice_id,
-                choice.menu_item_option_id,
-              )}
+              {getOrderChoiceName(choice.choice_id, choice.menu_item_option_id)}
             </p>
           ))}
         </div>
@@ -84,7 +89,7 @@ const OrderItemCard = (item: any) => {
         <div className="absolute bottom-1 left-1 rounded-md bg-white bg-opacity-75 px-1">
           {item.menuItemPrice !== 0 && (
             <p className="overflow-hidden text-sm font-semibold text-gray-800">
-              {item.menuItemPrice} DA
+              {item.menuItemPrice}
             </p>
           )}
         </div>

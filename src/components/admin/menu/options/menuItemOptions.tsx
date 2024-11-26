@@ -5,8 +5,9 @@ import OptionsList from "./optionsList";
 
 export interface MenuItemOption {
   name: string;
-  choices: { name: string }[];
-  default_choice: { name: string };
+  choices: { choice_id: number; name: string }[];
+  default_choice?: { name: string };
+  default_choice_id: number;
 }
 
 const MenuItemOptions = () => {

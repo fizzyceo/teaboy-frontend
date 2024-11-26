@@ -5,21 +5,30 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { translateString } from "@/lib/translate";
 import { OrderItem, useOrderStore } from "@/stores/order.store";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { BookmarkPlus, Send } from "lucide-react";
 
-const OrderItemsDetails = ({ handleNext }: any) => {
+const OrderItemsDetails = ({
+  lang,
+  handleNext,
+}: {
+  lang: string;
+  handleNext: any;
+}) => {
   const { orderItems } = useOrderStore();
 
   return (
     <>
       <DialogHeader>
         <DialogTitle>
-          {orderItems.length > 0 ? "Order Details" : "Basket is Empty"}
+          {orderItems.length > 0
+            ? translateString("Order Details", lang)
+            : translateString("Basket is Empty", lang)}
         </DialogTitle>
       </DialogHeader>
-      <OrderItemList orderItems={orderItems} />
+      <OrderItemList lang={lang} orderItems={orderItems} />
       <DialogFooter>
         <div className="flex w-full gap-2">
           <DialogTrigger asChild>
@@ -27,7 +36,7 @@ const OrderItemsDetails = ({ handleNext }: any) => {
               className="flex h-12 w-full items-center justify-center gap-4 py-6 text-xl text-black"
               variant={"sendOrder"}
             >
-              <span>Add More</span>
+              <span>{translateString("Add More", lang)}</span>
               <BookmarkPlus />
             </Button>
           </DialogTrigger>
@@ -37,7 +46,7 @@ const OrderItemsDetails = ({ handleNext }: any) => {
               onClick={handleNext}
               variant={"nextStep"}
             >
-              <span>Submit</span>
+              <span>{translateString("Submit", lang)}</span>
               <Send />
             </Button>
           )}

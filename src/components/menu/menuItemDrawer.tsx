@@ -13,13 +13,26 @@ import OrderItemsDetails from "./DialogContent/orderItemsDetails";
 import ExtraInfoForm from "./DialogContent/extraInfoForm";
 import submitOrder from "@/actions/order/submit-order";
 import { useMenuStore } from "@/stores/menu.store";
+import { translateString } from "@/lib/translate";
 
 type OrderOptionType = {
-  menu_item_option_choice_id: number;
+  choice_id: number;
   menu_item_option_id: number;
 };
 
-const MenuItemDrawer = (item: any) => {
+const MenuItemDrawer = ({
+  item,
+  lang,
+  currency,
+  VAT,
+  base_url,
+}: {
+  item: any;
+  lang: any;
+  currency?: string;
+  VAT?: number;
+  base_url?: string;
+}) => {
   const [orderOptions, setOrderOptions] = useState<OrderOptionType[]>([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
@@ -35,6 +48,8 @@ const MenuItemDrawer = (item: any) => {
     orderNumber,
     setOrderNumber,
     spaceId,
+    orderLoading,
+    setOrderLoading,
   } = useOrderStore();
 
   const { isOpen } = useMenuStore();
@@ -42,7 +57,7 @@ const MenuItemDrawer = (item: any) => {
   useEffect(() => {
     const initialOrderOptions = item.options.map((option: any) => ({
       menu_item_option_id: option.menu_item_option_id,
-      menu_item_option_choice_id: option.default_choice_id,
+      choice_id: option.default_choice_id,
     }));
     setOrderOptions(initialOrderOptions);
   }, [item.options]);
@@ -54,7 +69,7 @@ const MenuItemDrawer = (item: any) => {
       );
       return [
         ...updatedOptions,
-        { menu_item_option_id: optionId, menu_item_option_choice_id: choiceId },
+        { menu_item_option_id: optionId, choice_id: choiceId },
       ];
     });
   };
@@ -65,9 +80,10 @@ const MenuItemDrawer = (item: any) => {
         identifier: orderItems.length + 1,
         note,
         choices: orderOptions,
-        menuItemId: item.menu_item_id,
-        menuItemUrl: item.item_images[0].image_url,
+        menuItemId: item.item_id,
+        menuItemUrl: base_url + item.images[0],
         menuItemTitle: item.title,
+        menuItemTitleAR: item?.title_ar,
         menuItemDescription: item.description,
         menuItemPrice: item.price,
       };
@@ -85,22 +101,28 @@ const MenuItemDrawer = (item: any) => {
             note: item.note,
             status: "PENDING",
             choices: item.choices?.map((choice) => ({
-              menu_item_option_choice_id: choice.menu_item_option_choice_id,
+              menu_item_option_choice_id: choice.choice_id,
             })),
           })),
         };
 
         console.log("order-->", order);
-
+        setOrderLoading(true);
         const response = await submitOrder(order);
+        setOrderLoading(false);
 
         if (response.success) {
           setOrderStatus("Submitted");
           setOrderNumber(response.data.order_number);
-          toast.success("Order submitted successfully", { duration: 1000 });
+          toast.success(
+            `${translateString("Order submitted successfully", lang)}`,
+            { duration: 1000 },
+          );
         } else {
           setOrderStatus("Not Submitted");
-          toast.error("Failed to submit order", { duration: 1000 });
+          toast.error(`${translateString("Failed to submit order", lang)}`, {
+            duration: 1000,
+          });
         }
       };
 
@@ -133,12 +155,22 @@ const MenuItemDrawer = (item: any) => {
       <DialogTrigger
         disabled={orderStatus !== "Not Submitted" || !isOpen || !item.available}
       >
-        <MenuItemCard {...item} />
+        <MenuItemCard
+          currency={currency}
+          VAT={VAT}
+          base_url={base_url}
+          lang={lang}
+          item={item}
+        />
       </DialogTrigger>
 
       <DialogContent>
         {stepIndex === 0 && orderStatus === "Not Submitted" ? (
           <MenuItemDetails
+            currency={currency}
+            VAT={VAT}
+            base_url={base_url}
+            lang={lang}
             item={item}
             note={note}
             setNote={setNote}
@@ -146,9 +178,9 @@ const MenuItemDrawer = (item: any) => {
             handleNext={handleAddToOrder}
           />
         ) : stepIndex === 1 && orderStatus === "Not Submitted" ? (
-          <OrderItemsDetails handleNext={handleAddToOrder} />
+          <OrderItemsDetails lang={lang} handleNext={handleAddToOrder} />
         ) : (
-          <ExtraInfoForm handleNext={handleAddToOrder} />
+          <ExtraInfoForm lang={lang} handleNext={handleAddToOrder} />
         )}
       </DialogContent>
     </Dialog>

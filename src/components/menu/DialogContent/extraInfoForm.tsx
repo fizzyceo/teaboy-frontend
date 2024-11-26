@@ -6,12 +6,19 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { translateString } from "@/lib/translate";
 import { useMenuStore } from "@/stores/menu.store";
 import { useOrderStore } from "@/stores/order.store";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { Send } from "lucide-react";
 
-const ExtraInfoForm = ({ handleNext }: any) => {
+const ExtraInfoForm = ({
+  lang,
+  handleNext,
+}: {
+  lang: string;
+  handleNext: any;
+}) => {
   const { menu } = useMenuStore();
   const {
     customerName = "",
@@ -27,12 +34,14 @@ const ExtraInfoForm = ({ handleNext }: any) => {
   return (
     <>
       <DialogHeader>
-        <DialogTitle className="text-left">Enter Your Name</DialogTitle>
+        <DialogTitle className="text-left">
+          {translateString("Enter Your Name", lang)}
+        </DialogTitle>
       </DialogHeader>
       <div className="grid gap-4">
         {ask_for_name && (
           <Input
-            placeholder="Customer Name"
+            placeholder={`${translateString("Customer Name", lang)}`}
             value={customerName}
             className="text-lg"
             onChange={(e) => setCustomerName(e.target.value)}
@@ -40,7 +49,7 @@ const ExtraInfoForm = ({ handleNext }: any) => {
         )}
         {ask_for_table && (
           <Input
-            placeholder="Table Number"
+            placeholder={`${translateString("Table Number", lang)}`}
             value={tableNumber !== undefined ? tableNumber : ""}
             onChange={(e) =>
               setTableNumber(e.target.value ? parseInt(e.target.value) : 0)
@@ -57,7 +66,7 @@ const ExtraInfoForm = ({ handleNext }: any) => {
             onClick={handleNext}
             variant={"nextStep"}
           >
-            <span>Send Order</span>
+            <span>{translateString("Send Order", lang)}</span>
             <Send />
           </Button>
         </DialogTrigger>

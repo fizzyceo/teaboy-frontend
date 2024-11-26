@@ -4,7 +4,7 @@ import Image from "next/legacy/image";
 const MenuItemCard = ({ item }: { item: any }) => {
   return (
     <div
-      key={`${item.menu_item_id}-${item.title}`}
+      key={`${item.item_id}-${item.title}`}
       className="flex min-h-72 w-full flex-col items-start gap-4 rounded-md border-[1px] border-slate-300 bg-gradient-to-bl from-slate-50 via-slate-100 to-slate-300 p-2"
     >
       <div className="relative h-52 w-full overflow-hidden sm:h-44 md:h-44">

@@ -6,6 +6,7 @@ import { OrderItem, useOrderStore } from "@/stores/order.store";
 import submitOrder from "@/actions/order/submit-order";
 
 import {
+  Loader2,
   PackageCheck,
   Receipt,
   ReceiptText,
@@ -28,8 +29,21 @@ import { Input } from "@/components/ui/input";
 import OrderItemCard from "./orderItemCard";
 import OrderSuccess from "./orderSuccess";
 import OrderItemList from "./orderItemList";
+import { translateString } from "@/lib/translate";
 
-const OrderDialog = ({ table_number }: { table_number: number }) => {
+const OrderDialog = ({
+  table_number,
+  lang,
+  currency,
+  VAT,
+  base_url,
+}: {
+  table_number: number;
+  lang: any;
+  currency?: string;
+  VAT?: number;
+  base_url?: string;
+}) => {
   const {
     orderItems,
     orderStatus,
@@ -37,6 +51,8 @@ const OrderDialog = ({ table_number }: { table_number: number }) => {
     setCustomerName,
     setOrderStatus,
     setOrderNumber,
+    setOrderLoading,
+    orderLoading,
     spaceId,
   } = useOrderStore();
 
@@ -61,12 +77,11 @@ const OrderDialog = ({ table_number }: { table_number: number }) => {
     if (orderStatus === "Submitted" || orderStatus === "Viewed") {
       setStepIndex(2);
     } else {
-      // orderStatus === "Not Submitted"
       if (stepIndex === 0) {
-        // orderItems list
         setStepIndex(1);
       } else if (stepIndex === 1) {
-        // Customer Input his name and submit order
+        console.log(orderItems);
+
         const order = {
           customer_name: customerName || "Anonymous",
           table_number: table_number || 0,
@@ -77,21 +92,29 @@ const OrderDialog = ({ table_number }: { table_number: number }) => {
             note: item.note,
             status: "PENDING",
             choices: item.choices?.map((choice) => ({
-              menu_item_option_choice_id: choice.menu_item_option_choice_id,
+              menu_item_option_choice_id: choice.choice_id,
             })),
           })),
         };
+        console.log(order);
 
+        setOrderLoading(true);
         const response = await submitOrder(order);
+        setOrderLoading(false);
 
         if (response.success) {
           setOrderStatus("Submitted");
           setCustomerName(response.data.customer_name);
           setOrderNumber(response.data.order_number);
-          toast.success("Order submitted successfully", { duration: 1500 });
+          toast.success(
+            `${translateString("Order submitted successfully", lang)}`,
+            { duration: 1500 },
+          );
         } else {
           setOrderStatus("Not Submitted");
-          toast.error("Failed to submit order", { duration: 1500 });
+          toast.error(`${translateString("Failed to submit order", lang)}`, {
+            duration: 1500,
+          });
         }
         setStepIndex(2);
       }
@@ -117,15 +140,26 @@ const OrderDialog = ({ table_number }: { table_number: number }) => {
               orderItems.length === 0 ? "hidden" : "",
               "flex h-12 w-full items-center justify-center gap-4 rounded-3xl py-6 text-xl",
             )}
+            disabled={orderLoading}
             variant={orderStatus === "Not Submitted" ? "sendOrder" : "nextStep"}
           >
-            <span>
-              {orderStatus === "Not Submitted" ? "My Cart" : "Review Order"}
-            </span>
-            {orderStatus === "Not Submitted" ? (
-              <ShoppingCart />
+            {orderLoading ? (
+              <div className="flex h-full items-center justify-center">
+                <Loader2 className="animate-spin" /> {/* Loader component */}
+              </div>
             ) : (
-              <ReceiptText />
+              <>
+                <span>
+                  {orderStatus === "Not Submitted"
+                    ? translateString("My Cart", lang)
+                    : translateString("Review Order", lang)}
+                </span>
+                {orderStatus === "Not Submitted" ? (
+                  <ShoppingCart />
+                ) : (
+                  <ReceiptText />
+                )}
+              </>
             )}
           </Button>
         </div>
@@ -138,7 +172,11 @@ const OrderDialog = ({ table_number }: { table_number: number }) => {
         }
       >
         {stepIndex === 2 ? (
-          <OrderSuccess stepIndex={stepIndex} setStepIndex={setStepIndex} />
+          <OrderSuccess
+            lang={lang}
+            stepIndex={stepIndex}
+            setStepIndex={setStepIndex}
+          />
         ) : (
           <>
             {stepIndex === 0 && openDialog ? (
@@ -146,12 +184,12 @@ const OrderDialog = ({ table_number }: { table_number: number }) => {
                 <DialogHeader>
                   <DialogTitle>
                     {orderItems.length > 0
-                      ? "Order Details"
-                      : "Basket is Empty"}
+                      ? translateString("Order Details", lang)
+                      : translateString("Basket is Empty", lang)}
                   </DialogTitle>
                 </DialogHeader>
 
-                <OrderItemList orderItems={orderItems} />
+                <OrderItemList lang={lang} orderItems={orderItems} />
 
                 <DialogFooter>
                   {orderItems.length === 0 ? (
@@ -160,7 +198,7 @@ const OrderDialog = ({ table_number }: { table_number: number }) => {
                         className="flex h-12 w-full items-center justify-center gap-4 py-6 text-xl"
                         variant={"nextStep"}
                       >
-                        <span>Add Items</span>
+                        <span>{translateString("Add Items", lang)}</span>
                         <SquarePlus />
                       </Button>
                     </DialogTrigger>
@@ -168,6 +206,7 @@ const OrderDialog = ({ table_number }: { table_number: number }) => {
                     <>
                       <Button
                         onClick={handleSubmitOrder}
+                        disabled={orderLoading}
                         className="flex h-12 w-full items-center justify-center gap-4 py-6 text-xl"
                         variant={
                           orderStatus === "Not Submitted"
@@ -175,24 +214,33 @@ const OrderDialog = ({ table_number }: { table_number: number }) => {
                             : "sendOrder"
                         }
                       >
-                        <span>
-                          {orderStatus === "Not Submitted"
-                            ? "Submit Order"
-                            : "Order Number"}
-                        </span>
-                        {orderStatus === "Not Submitted" ? (
-                          <PackageCheck />
+                        {orderLoading ? (
+                          <div className="flex h-full items-center justify-center">
+                            <Loader2 className="animate-spin" />{" "}
+                            {/* Loader component */}
+                          </div>
                         ) : (
-                          <Tag />
+                          <>
+                            <span>
+                              {orderStatus === "Not Submitted"
+                                ? translateString("Submit Order", lang)
+                                : translateString("Order Number", lang)}
+                            </span>
+                            {orderStatus === "Not Submitted" ? (
+                              <PackageCheck />
+                            ) : (
+                              <Tag />
+                            )}
+                          </>
                         )}
                       </Button>
                       {total > 0 && (
                         <div className="flex justify-center rounded-md px-4 py-2">
                           <p className="text-xl font-semibold">
                             <span className="font-bold">
-                              Total Price : {total}
+                              {translateString("Total Price", lang)} : {total}
                             </span>{" "}
-                            <span className="text-sm">$</span>
+                            <span className="text-sm">{currency}</span>
                           </p>
                         </div>
                       )}
@@ -204,12 +252,12 @@ const OrderDialog = ({ table_number }: { table_number: number }) => {
               <>
                 <DialogHeader>
                   <DialogTitle className="text-left">
-                    Enter Your Name
+                    {translateString("Enter Your Name", lang)}
                   </DialogTitle>
                 </DialogHeader>
 
                 <Input
-                  placeholder="Customer Name"
+                  placeholder={`${translateString("Customer Name", lang)}`}
                   value={customerName}
                   className="text-lg"
                   onChange={(e) => setCustomerName(e.target.value)}
@@ -220,9 +268,19 @@ const OrderDialog = ({ table_number }: { table_number: number }) => {
                     className="flex h-12 w-full items-center justify-center gap-4 py-6 text-xl"
                     variant={"nextStep"}
                     onClick={handleSubmitOrder}
+                    disabled={orderLoading}
                   >
-                    <span>Send Order</span>
-                    <Send />
+                    {orderLoading ? (
+                      <div className="flex h-full items-center justify-center">
+                        <Loader2 className="animate-spin" />{" "}
+                        {/* Loader component */}
+                      </div>
+                    ) : (
+                      <>
+                        <span>{translateString("Send Order", lang)}</span>
+                        <Send />
+                      </>
+                    )}
                   </Button>
                 </DialogFooter>
               </>
