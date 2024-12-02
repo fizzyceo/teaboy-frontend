@@ -9,10 +9,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { characterLimiter } from "@/lib/characterLimiter";
 import { translateString } from "@/lib/translate";
 import { ChevronRight } from "lucide-react";
 
 import Image from "next/image";
+import { useState } from "react";
 
 const MenuItemDetails = ({
   lang,
@@ -26,6 +28,19 @@ const MenuItemDetails = ({
   base_url,
 }: any) => {
   const { options } = item;
+  const [isExpanded, setIsExpanded] = useState(false);
+  const MAX_CHARACTERS = 150;
+  const toggleExpand = () => setIsExpanded(!isExpanded);
+
+  const getDisplayText = () => {
+    if (isExpanded) {
+      return item.description; // Show full text if expanded
+    }
+    return item.description.length > MAX_CHARACTERS
+      ? item.description.slice(0, MAX_CHARACTERS) + "..."
+      : item.description; // Truncated text
+  };
+
   return (
     <>
       <DialogHeader>
@@ -42,11 +57,7 @@ const MenuItemDetails = ({
           layout="fill"
           objectFit="cover"
         />
-        {item.description ? (
-          <p className="absolute bottom-2 left-2 w-fit rounded-lg bg-white bg-opacity-55 px-2 text-start text-xl text-black">
-            {item.description}
-          </p>
-        ) : null}
+
         {item.price > 0 ? (
           <Badge
             className="absolute bottom-2 right-2 flex items-end space-x-3 text-xl font-extrabold outline-dashed outline-2 outline-offset-2 drop-shadow-md"
@@ -61,7 +72,17 @@ const MenuItemDetails = ({
           </Badge>
         ) : null}
       </div>
-
+      <div className="text-md w-fit rounded-lg bg-white bg-opacity-55 px-2 text-start text-black">
+        <p>{getDisplayText()}</p>
+        {item.description?.length > MAX_CHARACTERS && (
+          <button
+            onClick={toggleExpand}
+            className="mt-1 text-sm text-blue-500 underline"
+          >
+            {isExpanded ? "Read Less" : "Read More"}
+          </button>
+        )}
+      </div>
       <ScrollArea className="no-scrollbar max-h-[40vh] overflow-scroll">
         {options.length > 0 && (
           <div className="mb-4 flex w-full flex-col gap-3 pb-2">

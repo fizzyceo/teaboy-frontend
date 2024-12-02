@@ -5,7 +5,15 @@ import { Button } from "../ui/button";
 import { useOrderStore } from "@/stores/order.store";
 import { useMenuStore } from "@/stores/menu.store";
 
-const OrderItemCard = ({ lang, item }: { lang: string; item: any }) => {
+const OrderItemCard = ({
+  currency,
+  lang,
+  item,
+}: {
+  currency?: string;
+  lang: string;
+  item: any;
+}) => {
   const { removeOrderItem, orderStatus } = useOrderStore();
   const { menu } = useMenuStore();
 
@@ -89,7 +97,7 @@ const OrderItemCard = ({ lang, item }: { lang: string; item: any }) => {
         <div className="absolute bottom-1 left-1 rounded-md bg-white bg-opacity-75 px-1">
           {item.menuItemPrice !== 0 && (
             <p className="overflow-hidden text-sm font-semibold text-gray-800">
-              {item.menuItemPrice}
+              {item.menuItemPrice} {currency}
             </p>
           )}
         </div>

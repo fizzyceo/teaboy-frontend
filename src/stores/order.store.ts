@@ -7,7 +7,9 @@ export type OrderOptionType = {
 interface OrderStore {
   customerName?: string | undefined;
   orderLoading?: boolean | false;
+  answer?: string;
   setCustomerName: (name: string) => void;
+  setAnswer: (asnwer: string) => void;
   setOrderLoading: (val: boolean) => void;
   tableNumber?: number;
   setTableNumber: (tableNumber: number) => void;
@@ -46,9 +48,11 @@ export interface OrderItem {
 export const useOrderStore = create<OrderStore>((set) => ({
   customerName: undefined,
   orderLoading: false,
+  answer: "",
   setCustomerName: (name) => set({ customerName: name }),
   tableNumber: undefined,
   setTableNumber: (tableNumber) => set({ tableNumber }),
+  setAnswer: (answer?: string) => set({ answer: answer }),
   note: undefined,
   setNote: (note) => set({ note }),
   orderItems: [],

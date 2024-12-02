@@ -48,6 +48,8 @@ const OrderDialog = ({
     orderItems,
     orderStatus,
     customerName,
+    answer,
+    setAnswer,
     setCustomerName,
     setOrderStatus,
     setOrderNumber,
@@ -86,6 +88,7 @@ const OrderDialog = ({
           customer_name: customerName || "Anonymous",
           table_number: table_number || 0,
           spaceId: spaceId,
+          answer: answer,
           order_items: orderItems.map((item) => ({
             menu_item_id: item.menuItemId,
             quantity: 1,
@@ -132,7 +135,7 @@ const OrderDialog = ({
           {total > 0 && (
             <div className="flex w-2/3 items-center justify-center gap-2 rounded-sm border-dotted border-gray-700 bg-white text-lg font-semibold">
               <Receipt />
-              {total} DA
+              {total} {currency}
             </div>
           )}
           <Button
@@ -189,7 +192,11 @@ const OrderDialog = ({
                   </DialogTitle>
                 </DialogHeader>
 
-                <OrderItemList lang={lang} orderItems={orderItems} />
+                <OrderItemList
+                  currency={currency}
+                  lang={lang}
+                  orderItems={orderItems}
+                />
 
                 <DialogFooter>
                   {orderItems.length === 0 ? (
@@ -203,7 +210,7 @@ const OrderDialog = ({
                       </Button>
                     </DialogTrigger>
                   ) : (
-                    <>
+                    <div className="flex w-full flex-col items-center justify-center gap-2">
                       <Button
                         onClick={handleSubmitOrder}
                         disabled={orderLoading}
@@ -238,13 +245,13 @@ const OrderDialog = ({
                         <div className="flex justify-center rounded-md px-4 py-2">
                           <p className="text-xl font-semibold">
                             <span className="font-bold">
-                              {translateString("Total Price", lang)} : {total}
+                              {translateString("Total Price", lang)}: {total}
                             </span>{" "}
                             <span className="text-sm">{currency}</span>
                           </p>
                         </div>
                       )}
-                    </>
+                    </div>
                   )}
                 </DialogFooter>
               </>
@@ -252,7 +259,7 @@ const OrderDialog = ({
               <>
                 <DialogHeader>
                   <DialogTitle className="text-left">
-                    {translateString("Enter Your Name", lang)}
+                    {translateString("Please Answer", lang)}
                   </DialogTitle>
                 </DialogHeader>
 

@@ -5,9 +5,11 @@ import { motion, AnimatePresence } from "framer-motion";
 const OrderItemList = ({
   lang,
   orderItems,
+  currency,
 }: {
   lang: string;
   orderItems: OrderItem[];
+  currency?: string;
 }) => {
   return (
     <div className="no-scrollbar flex max-h-[47vh] w-full snap-y flex-col gap-3 overflow-x-hidden overflow-y-scroll px-1">
@@ -20,7 +22,7 @@ const OrderItemList = ({
             exit={{ opacity: 0, scale: 0.7 }}
             transition={{ duration: 0.3 }}
           >
-            <OrderItemCard lang={lang} item={item} />
+            <OrderItemCard currency={currency} lang={lang} item={item} />
           </motion.div>
         ))}
       </AnimatePresence>

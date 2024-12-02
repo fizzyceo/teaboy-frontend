@@ -65,6 +65,8 @@ interface Menu {
   updated_at: string;
   ask_for_name: boolean;
   ask_for_table: boolean;
+  ask?: string;
+  ask_ar?: string;
   spaces: Space[];
   menu_items: MenuItem[];
 }

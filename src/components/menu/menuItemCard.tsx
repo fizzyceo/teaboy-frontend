@@ -17,8 +17,6 @@ const MenuItemCard = ({
   VAT?: number;
   base_url?: string;
 }) => {
-  console.log(base_url + "" + item.images[0]);
-
   return (
     <div
       key={item.item_id}

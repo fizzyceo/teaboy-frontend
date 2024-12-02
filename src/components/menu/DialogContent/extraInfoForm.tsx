@@ -25,20 +25,33 @@ const ExtraInfoForm = ({
     setCustomerName,
     tableNumber = "",
     setTableNumber,
+    setAnswer,
+    answer,
   } = useOrderStore();
 
   if (!menu) return null;
 
-  const { ask_for_name, ask_for_table } = menu;
+  const { ask_for_name, ask_for_table, ask, ask_ar } = menu;
 
+  const question = lang === "ar" ? ask_ar : ask;
   return (
     <>
       <DialogHeader>
         <DialogTitle className="text-left">
-          {translateString("Enter Your Name", lang)}
+          {translateString(question ? question : "Please Confirm", lang)}
         </DialogTitle>
       </DialogHeader>
       <div className="grid gap-4">
+        {question && (
+          <Input
+            placeholder={translateString("Your Answer...", lang)}
+            value={answer}
+            onChange={(e) => setAnswer(e.target.value)}
+            className="text-lg"
+          />
+        )}
+      </div>
+      {/* <div className="grid gap-4">
         {ask_for_name && (
           <Input
             placeholder={`${translateString("Customer Name", lang)}`}
@@ -57,7 +70,7 @@ const ExtraInfoForm = ({
             className="text-lg"
           />
         )}
-      </div>
+      </div> */}
 
       <DialogFooter>
         <DialogTrigger asChild>

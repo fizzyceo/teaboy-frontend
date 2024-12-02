@@ -50,6 +50,7 @@ const MenuItemDrawer = ({
     spaceId,
     orderLoading,
     setOrderLoading,
+    answer,
   } = useOrderStore();
 
   const { isOpen } = useMenuStore();
@@ -95,6 +96,7 @@ const MenuItemDrawer = ({
           customer_name: customerName || "Anonymous",
           table_number: tableNumber,
           spaceId: spaceId,
+          answer: answer,
           order_items: orderItems.map((item) => ({
             menu_item_id: item.menuItemId,
             quantity: 1,
@@ -178,7 +180,11 @@ const MenuItemDrawer = ({
             handleNext={handleAddToOrder}
           />
         ) : stepIndex === 1 && orderStatus === "Not Submitted" ? (
-          <OrderItemsDetails lang={lang} handleNext={handleAddToOrder} />
+          <OrderItemsDetails
+            currency={currency}
+            lang={lang}
+            handleNext={handleAddToOrder}
+          />
         ) : (
           <ExtraInfoForm lang={lang} handleNext={handleAddToOrder} />
         )}
