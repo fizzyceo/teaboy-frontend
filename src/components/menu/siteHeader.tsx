@@ -2,10 +2,13 @@ import { Home, MapPin, PhoneCall, Utensils } from "lucide-react";
 import Image from "next/image";
 
 const SiteHeader = ({ space, lang }: { space: any; lang: string }) => {
-  const { site } = space;
+  const { site, theme } = space;
+  console.log(space);
+
   return (
     <div className="flex w-full items-center justify-around gap-4 bg-gradient-to-tr from-slate-50 to-slate-400 py-4 md:justify-between md:px-20 lg:justify-between lg:px-20">
       <div className="flex flex-col gap-2">
+        {theme}
         <h1 className="text-2xl font-bold">
           {space.default_lang === "AR" && site.name_ar
             ? site.name_ar

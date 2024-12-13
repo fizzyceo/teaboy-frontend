@@ -4,6 +4,49 @@ export type OrderOptionType = {
   choice_id: number;
   menu_item_option_id: number;
 };
+
+export interface SpaceOrder {
+  order_item_id: number;
+  note: string;
+  quantity: number;
+  menu_item_id: number;
+  order_id: number;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  order: {
+    customer_name: string;
+    table_number: number | null;
+    order_number: string;
+    space: {
+      name: string;
+      name_ar: string;
+      space_id: number;
+      kitchen_id: number;
+    };
+  };
+  choices: {
+    option: string;
+    option_id: number;
+    choice: string;
+    choice_id: number;
+  }[];
+  menu_item: {
+    menu: {
+      menu_id: number;
+      name: string;
+    };
+    title: string;
+    title_ar: string;
+    available: boolean;
+    description: string;
+    price: number;
+    item_images: {
+      image_url: string;
+    }[];
+  };
+}
+
 interface OrderStore {
   customerName?: string | undefined;
   orderLoading?: boolean | false;

@@ -43,7 +43,7 @@ const MenuItemCard = ({
           <h2 className="text-ellipsis text-lg font-bold">
             {lang === "ar" && item.title_ar ? item.title_ar : item.title}
           </h2>
-          <p className="text-ellipsis text-xs">{item.description}</p>
+          {/* <p className="text-ellipsis text-xs">{item.description}</p> */}
           {item.price > 0 && (
             <p className="mt-2 text-xl font-extrabold text-gray-700">
               {item.price}{" "}
