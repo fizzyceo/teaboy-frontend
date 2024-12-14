@@ -69,15 +69,15 @@ interface OrderStore {
     value: "Not Submitted" | "Submitted" | "Viewed" | "Canceled",
   ) => void;
 
-  orderItems: OrderItem[];
+  orderItems: OrderItemUI[];
   setOrderItems: (orderItems: any) => void;
 
-  addOrderItem: (orderItem: OrderItem) => void;
+  addOrderItem: (orderItem: OrderItemUI) => void;
   removeOrderItem: (orderItemId: number) => void;
-  updateOrderItem: (orderItemId: number, orderItem: OrderItem) => void;
+  updateOrderItem: (orderItemId: number, orderItem: OrderItemUI) => void;
 }
 
-export interface OrderItem {
+export interface OrderItemUI {
   identifier?: number;
   note?: string;
   menuItemId: number;
@@ -86,6 +86,40 @@ export interface OrderItem {
   menuItemDescription: string;
   menuItemPrice: number;
   choices?: OrderOptionType[];
+}
+export interface Order {
+  order_id: number;
+  order_number: string;
+  customer_name: string;
+  table_number: number | null;
+  scheduled_at: string | null;
+  spaceId: number;
+  menuId: number;
+  userId: number | null;
+  created_at: string; // ISO date string
+  updated_at: string; // ISO date string
+  answer: string | null;
+  order_items: OrderItem[];
+}
+
+export interface OrderItem {
+  order_item_id: number;
+  note: string;
+  status: string; // e.g., "PENDING", "IN_PROGRESS", etc.
+  menu_item: MenuItem;
+}
+
+export interface MenuItem {
+  menu_item_id: number;
+  title: string;
+  description: string;
+  price: number;
+  available: boolean;
+  item_images: MenuItemImage[];
+}
+
+export interface MenuItemImage {
+  image_url: string;
 }
 
 export const useOrderStore = create<OrderStore>((set) => ({
