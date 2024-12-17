@@ -1,6 +1,6 @@
 "use client";
-import { useState } from "react";
-import { useOrderStore } from "@/stores/order.store";
+import { useEffect, useState } from "react";
+import { SpaceOrder, useOrderStore } from "@/stores/order.store";
 
 import { toast } from "sonner";
 
@@ -12,6 +12,7 @@ import { translateString } from "@/lib/translate";
 import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import cancelOrder from "@/actions/order/cancel-order";
 
 const ServiceDrawer = ({
   item,
@@ -21,6 +22,8 @@ const ServiceDrawer = ({
   base_url,
   isOrdered,
   order_number,
+  order,
+  theme,
 }: {
   item: any;
   lang: any;
@@ -29,6 +32,8 @@ const ServiceDrawer = ({
   base_url?: string;
   isOrdered?: boolean;
   order_number?: string;
+  order?: SpaceOrder | undefined | false;
+  theme: string;
 }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const router = useRouter();
@@ -42,7 +47,29 @@ const ServiceDrawer = ({
     setOrderLoading,
     orderLoading,
   } = useOrderStore();
-
+  const [status, setStatus] = useState<string>("");
+  const [order_id, setOrder_id] = useState<string>("");
+  const [itemImage, setItemImage] = useState<string>("");
+  const [itemDescription, setItemDescription] = useState<string>("");
+  const [itemTitle, setItemTitle] = useState<string>("");
+  const [onCanceling, setOnCanceling] = useState<boolean>(false);
+  const handleCancelOrder = async () => {
+    if (order) {
+      setOnCanceling(true);
+      const response = await cancelOrder(order.order_id);
+      setOnCanceling(false);
+      if (response.success) {
+        toast.info(`${translateString("Order canceled successfully", lang)}`, {
+          duration: 1000,
+        });
+        setOpenDialog(false);
+      } else {
+        toast.error(`${translateString("Failed to cancel order", lang)}`, {
+          duration: 1000,
+        });
+      }
+    }
+  };
   const handleOrderSubmit = async () => {
     if (isOrdered || order_number) return; // Prevent submission if already ordered
 
@@ -61,8 +88,6 @@ const ServiceDrawer = ({
       ],
     };
 
-    console.log("Submitting order:", order);
-
     setOrderLoading(true);
     const response = await submitOrder(order);
     setOrderLoading(false);
@@ -70,7 +95,7 @@ const ServiceDrawer = ({
     if (response.success) {
       setOrderStatus("Submitted");
       setOrderNumber(response.data.order_number);
-      router.push(`/order/${response.data.order_number}`);
+      // router.push(`/order/${response.data.order_number}`);
       toast.success(
         `${translateString("Order submitted successfully", lang)}`,
         { duration: 1000 },
@@ -88,12 +113,29 @@ const ServiceDrawer = ({
 
   const handleDialogOpen = () => setOpenDialog(true);
 
-  const handleNavigateToOrder = () => {
+  const viewDetails = () => {
     if (order_number) {
-      router.push(`/order/${order_number}`);
+      console.log(order);
+
+      // router.push(`/order/${order_number}`);
     }
   };
 
+  useEffect(() => {
+    if (order) {
+      if (order.status === "PENDING") {
+        setStatus("Received");
+      } else if (order.status === "IN_PROGRESS" || order.status === "READY") {
+        setStatus("On The Way");
+      } else {
+        setStatus("");
+      }
+      setOrder_id(order.order.order_number);
+      setItemImage(order.menu_item.item_images[0].image_url);
+      setItemDescription(order.menu_item.description);
+      setItemTitle(order.menu_item.title);
+    }
+  }, [order]);
   return (
     <Dialog
       open={openDialog}
@@ -107,8 +149,10 @@ const ServiceDrawer = ({
     >
       <DialogTrigger disabled={!item.available}>
         <ServiceCard
+          theme={theme}
           isOrdered={isOrdered}
           order_number={order_number}
+          order_status={status}
           currency={currency}
           VAT={VAT}
           base_url={base_url}
@@ -118,43 +162,93 @@ const ServiceDrawer = ({
       </DialogTrigger>
 
       <DialogContent>
-        <div className="p-4">
-          <h2>
+        <div className="space-y-3 p-4">
+          <h2 className="text-xl font-medium underline">
             {isOrdered || order_number
-              ? translateString("Order", lang)
+              ? translateString("Order Information", lang)
               : translateString("Confirm Order", lang)}
           </h2>
           <p>
             {isOrdered || order_number
-              ? translateString("View order details", lang)
+              ? ""
               : translateString(
                   "Are you sure you want to order this item?",
                   lang,
                 )}
           </p>
+          {isOrdered && (
+            <div className="space-y-3">
+              <h1 className="">
+                ORDER#<strong className="text-green-700">{order_id}</strong>
+              </h1>
+              <h1>
+                STATUS: <strong className="text-green-700">{status}</strong>
+              </h1>
+              <div className="flex flex-row gap-3 rounded-md bg-slate-200 p-2">
+                <img
+                  className="rounded-md"
+                  src={itemImage}
+                  width={200}
+                  alt=""
+                />
+
+                <div className="flex flex-col items-start text-sm">
+                  <h2>
+                    <strong>{translateString("Title", lang)}:</strong>{" "}
+                    {itemTitle}
+                  </h2>
+                  {itemDescription && (
+                    <p>
+                      <strong>{translateString("Description", lang)}: </strong>
+                      {itemDescription}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
           <div className="mt-4 flex justify-end gap-2">
-            <Button
-              variant={"secondary"}
-              className="btn-secondary"
-              onClick={handleDialogClose}
-              disabled={orderLoading}
-            >
-              {translateString("Cancel", lang)}
-            </Button>
+            {/**only allow the user to cancel if there's an order and if the order is not being fullfilled yet */}
+            {isOrdered && status.toLowerCase() === "received" && (
+              <Button
+                variant={"destructive"}
+                className="btn-secondary"
+                onClick={handleCancelOrder}
+                disabled={orderLoading || onCanceling}
+              >
+                {onCanceling ? (
+                  <Loader2 className="w-7 animate-spin" />
+                ) : (
+                  translateString("Cancel Order", lang)
+                )}
+              </Button>
+            )}
+
+            {!isOrdered && !order_number && (
+              <Button
+                variant={"secondary"}
+                className="btn-secondary"
+                onClick={handleDialogClose}
+                // disabled={orderLoading || onCanceling}
+              >
+                {translateString("Close", lang)}
+              </Button>
+            )}
             <Button
               variant={isOrdered || order_number ? "nextStep" : "order"}
               onClick={
                 isOrdered || order_number
-                  ? handleNavigateToOrder
+                  ? handleDialogClose
                   : handleOrderSubmit
               }
               // disabled={isOrdered || orderLoading}
               className={`${
                 isOrdered || order_number ? "bg-green-500 text-white" : ""
               }`}
+              disabled={orderLoading || onCanceling}
             >
               {isOrdered || order_number ? (
-                translateString("View", lang)
+                translateString("OK", lang)
               ) : orderLoading ? (
                 <Loader2 className="w-7 animate-spin" />
               ) : (

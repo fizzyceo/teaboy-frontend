@@ -3,6 +3,7 @@ import Image from "next/legacy/image";
 import { Button } from "../ui/button";
 import { ShoppingBasket, CheckCircle } from "lucide-react";
 import { translateString } from "@/lib/translate";
+import { Order, SpaceOrder } from "@/stores/order.store";
 
 const ServiceCard = ({
   item,
@@ -12,6 +13,8 @@ const ServiceCard = ({
   base_url,
   isOrdered,
   order_number,
+  order_status,
+  theme,
 }: {
   item: any;
   lang: any;
@@ -20,17 +23,20 @@ const ServiceCard = ({
   base_url?: string;
   isOrdered?: boolean;
   order_number?: string;
+  order_status: string;
+  theme?: string;
 }) => {
   const handleNavigateToOrder = () => {
-    if (order_number) {
-      window.location.href = `/order/${order_number}`;
-    }
+    // if (order_number) {
+    //   window.location.href = `/order/${order_number}`;
+    // }
   };
 
   return (
     <div
+      style={{ background: theme && theme }}
       key={item.item_id}
-      className="flex flex-col justify-between gap-4 rounded-md border-2 border-slate-300 bg-gradient-to-tr from-slate-100 to-slate-200 p-3 shadow-md md:flex-row lg:flex-row"
+      className={`flex flex-col justify-between gap-4 rounded-md border-2 ${isOrdered ? "border-2 border-green-600" : "border-slate-300"} ${theme ? `bg-[${theme}]` : "bg-gradient-to-tr from-slate-100 to-slate-200"} p-3 shadow-md md:flex-row lg:flex-row`}
     >
       <div className="relative h-40 w-full rounded-md bg-slate-500 sm:h-20 md:h-32 lg:h-36">
         <Image
@@ -66,10 +72,10 @@ const ServiceCard = ({
           }
           disabled={!item.available || isOrdered}
         >
-          {isOrdered || order_number ? (
+          {isOrdered || (order_number && order_status) ? (
             <>
               <CheckCircle size={24} className="mr-2" />
-              <span>{translateString("Ordered", lang)}</span>
+              <span>{translateString(order_status, lang)}</span>
             </>
           ) : (
             <>

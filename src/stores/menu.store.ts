@@ -49,6 +49,7 @@ interface Space {
   space_id: number;
   name: string;
   name_ar?: string;
+  theme: string;
   site: Site;
 }
 

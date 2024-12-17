@@ -1,4 +1,4 @@
-import { OrderItem } from "@/stores/order.store";
+import { OrderItem, OrderItemUI } from "@/stores/order.store";
 import OrderItemCard from "./orderItemCard";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -8,13 +8,13 @@ const OrderItemList = ({
   currency,
 }: {
   lang: string;
-  orderItems: OrderItem[];
+  orderItems: OrderItemUI[];
   currency?: string;
 }) => {
   return (
     <div className="no-scrollbar flex max-h-[47vh] w-full snap-y flex-col gap-3 overflow-x-hidden overflow-y-scroll px-1">
       <AnimatePresence>
-        {orderItems.map((item: OrderItem) => (
+        {orderItems.map((item: OrderItemUI) => (
           <motion.div
             key={item.identifier}
             initial={false}

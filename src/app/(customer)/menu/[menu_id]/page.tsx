@@ -53,22 +53,47 @@ const MenuPage = ({
   useEffect(() => {
     if (spaceId) {
       const loadOrders = async () => {
-        setLoadingOrders(true); // Start loading orders
         try {
-          const spaceOrders = await getSpaceOrders(spaceId);
-          setSpaceOrders(spaceOrders);
-          console.log(spaceOrders);
+          let fetchedOrders = await getSpaceOrders(spaceId);
+          console.log(fetchedOrders);
+
+          const fixedOrders = fetchedOrders.filter(
+            (ord: any) =>
+              ord.status === "PENDING" ||
+              ord.status === "IN_PROGRESS" ||
+              ord.status === "READY",
+          );
+
+          console.log(fixedOrders);
+
+          // Compare fixedOrders with the current state
+          // if (JSON.stringify(fixedOrders) !== JSON.stringify(spaceOrders)) {
+          //   setSpaceOrders(fixedOrders); // Update only if data differs
+          // }
+          setSpaceOrders(fixedOrders);
         } catch (error) {
           console.error("Failed to load orders:", error);
         } finally {
-          setLoadingOrders(false); // End loading orders
         }
       };
+      setLoadingOrders(true); // Start loading orders
 
       loadOrders();
+      setLoadingOrders(false); // End loading orders
+
+      // Set up interval to reload orders every 5 seconds
+      const interval = setInterval(() => {
+        loadOrders();
+      }, 5000);
+
+      // Clean up the interval on component unmount or when spaceId changes
+      return () => clearInterval(interval);
     }
   }, [spaceId]);
 
+  useEffect(() => {
+    console.log(spaceOrders);
+  }, [spaceOrders]);
   // Display loading spinner if menu or orders are loading
   if ((loading && !spaceType) || loadingOrders) {
     return <Loading />;
@@ -79,7 +104,6 @@ const MenuPage = ({
     return <p>{translateString("No menu data available.", lang)}</p>;
   }
 
-  console.log(menu);
   const { menu_items, spaces } = menu;
 
   // Handle case where no spaces are available
@@ -117,7 +141,7 @@ const MenuPage = ({
 
       {/* Render menu items */}
       <div className="grid grid-cols-2 gap-4 px-4 pb-28 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
-        {spaceType === "SERVICE" ? (
+        {spaceType !== "SERVICE" ? (
           <>
             {menu_items &&
               menu_items.map((item: any) => {
@@ -131,6 +155,7 @@ const MenuPage = ({
 
                 return (
                   <ServiceDrawer
+                    theme={space.theme}
                     lang={lang}
                     currency={menu.currency}
                     base_url={menu.image_url}
@@ -142,6 +167,7 @@ const MenuPage = ({
                         ? matchingOrder.order.order_number
                         : undefined
                     } // Pass order number if exists
+                    order={matchingOrder}
                     key={item.item_id}
                   />
                 );

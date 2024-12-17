@@ -6,7 +6,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { translateString } from "@/lib/translate";
-import { OrderItem, useOrderStore } from "@/stores/order.store";
+import { OrderItem, OrderItemUI, useOrderStore } from "@/stores/order.store";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { BookmarkPlus, Send } from "lucide-react";
 
@@ -21,7 +21,7 @@ const OrderItemsDetails = ({
 }) => {
   const { orderItems } = useOrderStore();
   const total = orderItems.reduce(
-    (acc: number, item: OrderItem) => acc + item.menuItemPrice,
+    (acc: number, item: OrderItemUI) => acc + item.menuItemPrice,
     0,
   );
   return (
