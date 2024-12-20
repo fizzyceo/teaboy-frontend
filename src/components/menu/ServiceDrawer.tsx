@@ -53,6 +53,9 @@ const ServiceDrawer = ({
   const [itemDescription, setItemDescription] = useState<string>("");
   const [itemTitle, setItemTitle] = useState<string>("");
   const [onCanceling, setOnCanceling] = useState<boolean>(false);
+
+  const [orderButtonState, setOrderButtonState] = useState<boolean>(false);
+
   const handleCancelOrder = async () => {
     if (order) {
       setOnCanceling(true);
@@ -63,6 +66,9 @@ const ServiceDrawer = ({
           duration: 1000,
         });
         setOpenDialog(false);
+
+        //change state to not ordered
+        setOrderButtonState(false);
       } else {
         toast.error(`${translateString("Failed to cancel order", lang)}`, {
           duration: 1000,
@@ -101,6 +107,8 @@ const ServiceDrawer = ({
         { duration: 1000 },
       );
       setOpenDialog(false);
+      //change state to ordered
+      setOrderButtonState(true);
     } else {
       setOrderStatus("Not Submitted");
       toast.error(`${translateString("Failed to submit order", lang)}`, {
@@ -120,6 +128,12 @@ const ServiceDrawer = ({
       // router.push(`/order/${order_number}`);
     }
   };
+
+  useEffect(() => {
+    if (isOrdered || order_number) {
+      setOrderButtonState(true);
+    }
+  }, [isOrdered, order_number]);
 
   useEffect(() => {
     if (order) {
@@ -152,6 +166,7 @@ const ServiceDrawer = ({
           theme={theme}
           isOrdered={isOrdered}
           order_number={order_number}
+          orderButtonState={orderButtonState}
           order_status={status}
           currency={currency}
           VAT={VAT}
@@ -164,12 +179,12 @@ const ServiceDrawer = ({
       <DialogContent>
         <div className="space-y-3 p-4">
           <h2 className="text-xl font-medium underline">
-            {isOrdered || order_number
+            {orderButtonState
               ? translateString("Order Information", lang)
               : translateString("Confirm Order", lang)}
           </h2>
           <p>
-            {isOrdered || order_number
+            {orderButtonState
               ? ""
               : translateString(
                   "Are you sure you want to order this item?",
@@ -235,19 +250,13 @@ const ServiceDrawer = ({
               </Button>
             )}
             <Button
-              variant={isOrdered || order_number ? "nextStep" : "order"}
-              onClick={
-                isOrdered || order_number
-                  ? handleDialogClose
-                  : handleOrderSubmit
-              }
+              variant={orderButtonState ? "nextStep" : "order"}
+              onClick={orderButtonState ? handleDialogClose : handleOrderSubmit}
               // disabled={isOrdered || orderLoading}
-              className={`${
-                isOrdered || order_number ? "bg-green-500 text-white" : ""
-              }`}
+              className={`${orderButtonState ? "bg-green-500 text-white" : ""}`}
               disabled={orderLoading || onCanceling}
             >
-              {isOrdered || order_number ? (
+              {orderButtonState ? (
                 translateString("OK", lang)
               ) : orderLoading ? (
                 <Loader2 className="w-7 animate-spin" />

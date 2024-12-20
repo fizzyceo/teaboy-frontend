@@ -15,6 +15,7 @@ const ServiceCard = ({
   order_number,
   order_status,
   theme,
+  orderButtonState,
 }: {
   item: any;
   lang: any;
@@ -25,6 +26,7 @@ const ServiceCard = ({
   order_number?: string;
   order_status: string;
   theme?: string;
+  orderButtonState?: boolean;
 }) => {
   const handleNavigateToOrder = () => {
     // if (order_number) {
@@ -36,7 +38,7 @@ const ServiceCard = ({
     <div
       style={{ background: theme && theme }}
       key={item.item_id}
-      className={`flex flex-col justify-between gap-4 rounded-md border-2 ${isOrdered ? "border-2 border-green-600" : "border-slate-300"} ${theme ? `bg-[${theme}]` : "bg-gradient-to-tr from-slate-100 to-slate-200"} p-3 shadow-md md:flex-row lg:flex-row`}
+      className={`flex flex-col justify-between gap-4 rounded-md border-2 ${orderButtonState ? "border-2 border-green-600" : "border-slate-300"} ${theme ? `bg-[${theme}]` : "bg-gradient-to-tr from-slate-50 to-slate-400"} p-3 shadow-md md:flex-row lg:flex-row`}
     >
       <div className="relative h-40 w-full rounded-md bg-slate-500 sm:h-20 md:h-32 lg:h-36">
         <Image
@@ -61,18 +63,14 @@ const ServiceCard = ({
           </h2>
         </div>
         <Button
-          variant={isOrdered || order_number ? "nextStep" : "secondary"}
+          variant={orderButtonState ? "nextStep" : "secondary"}
           className={`flex w-full items-center justify-center border font-semibold ${
-            isOrdered || order_number
-              ? "bg-green-500 text-white"
-              : "border-orange-600"
+            orderButtonState ? "bg-green-500 text-white" : "border-orange-600"
           }`}
-          onClick={
-            isOrdered || order_number ? handleNavigateToOrder : undefined
-          }
-          disabled={!item.available || isOrdered}
+          onClick={orderButtonState ? handleNavigateToOrder : undefined}
+          disabled={!item.available || orderButtonState}
         >
-          {isOrdered || (order_number && order_status) ? (
+          {orderButtonState && order_status ? (
             <>
               <CheckCircle size={24} className="mr-2" />
               <span>{translateString(order_status, lang)}</span>

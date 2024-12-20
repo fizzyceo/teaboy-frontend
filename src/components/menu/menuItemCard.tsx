@@ -10,12 +10,22 @@ const MenuItemCard = ({
   currency,
   VAT,
   base_url,
+  isOrdered,
+  order_number,
+  order_status,
+  theme,
+  orderButtonState,
 }: {
   item: any;
   lang: any;
   currency?: string;
   VAT?: number;
   base_url?: string;
+  isOrdered?: boolean;
+  order_number?: string;
+  order_status?: string;
+  theme?: string;
+  orderButtonState?: boolean;
 }) => {
   return (
     <div

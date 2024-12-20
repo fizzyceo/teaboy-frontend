@@ -176,16 +176,34 @@ const MenuPage = ({
         ) : (
           <>
             {menu_items &&
-              menu_items.map((item: any) => (
-                <MenuItemDrawer
-                  lang={lang}
-                  currency={menu.currency}
-                  base_url={menu.image_url}
-                  VAT={menu.VAT}
-                  item={item}
-                  key={item.item_id}
-                />
-              ))}
+              menu_items.map((item: any) => {
+                // Find the matching order for the current menu item
+
+                const matchingOrder =
+                  spaceOrders.length > 0 &&
+                  spaceOrders?.find(
+                    (order: any) => order.menu_item_id === item.item_id,
+                  );
+
+                return (
+                  <MenuItemDrawer
+                    theme={space.theme}
+                    lang={lang}
+                    currency={menu.currency}
+                    base_url={menu.image_url}
+                    VAT={menu.VAT}
+                    item={item}
+                    isOrdered={!!matchingOrder} // Check if there's a matching order
+                    order_number={
+                      matchingOrder
+                        ? matchingOrder.order.order_number
+                        : undefined
+                    } // Pass order number if exists
+                    order={matchingOrder}
+                    key={item.item_id}
+                  />
+                );
+              })}
           </>
         )}
       </div>

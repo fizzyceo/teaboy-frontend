@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useOrderStore } from "@/stores/order.store";
+import { SpaceOrder, useOrderStore } from "@/stores/order.store";
 
 import { toast } from "sonner";
 
@@ -26,12 +26,20 @@ const MenuItemDrawer = ({
   currency,
   VAT,
   base_url,
+  isOrdered,
+  order_number,
+  order,
+  theme,
 }: {
   item: any;
   lang: any;
   currency?: string;
   VAT?: number;
   base_url?: string;
+  isOrdered?: boolean;
+  order_number?: string;
+  order?: SpaceOrder | undefined | false;
+  theme?: string;
 }) => {
   const [orderOptions, setOrderOptions] = useState<OrderOptionType[]>([]);
   const [openDialog, setOpenDialog] = useState(false);
