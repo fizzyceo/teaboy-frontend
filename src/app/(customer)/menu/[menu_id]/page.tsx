@@ -11,6 +11,7 @@ import { CircleAlert } from "lucide-react";
 import { translateString } from "@/lib/translate";
 import ServiceDrawer from "@/components/menu/ServiceDrawer";
 import getSpaceOrders from "@/actions/order/get-space-orders";
+import RefreshDialog from "@/components/shared/RefreshDialog";
 
 const MenuPage = ({
   params,
@@ -19,7 +20,6 @@ const MenuPage = ({
   params: { menu_id: string };
   searchParams: { [key: string]: string | string[] | undefined };
 }) => {
-  // State management for menu data and loading states
   const { menu, setMenu, isOpen, setIsOpen } = useMenuStore();
   const { spaceId, setSpaceId } = useOrderStore();
   const [loading, setLoading] = useState(true);
@@ -27,6 +27,10 @@ const MenuPage = ({
   const [spaceType, setSpaceType] = useState(null);
   const [spaceOrders, setSpaceOrders] = useState<SpaceOrder[]>([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
+
+  // State for tracking time
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const [showRefreshButton, setShowRefreshButton] = useState(false);
 
   // Fetch menu details on component mount
   useEffect(() => {
@@ -55,35 +59,40 @@ const MenuPage = ({
       const loadOrders = async () => {
         try {
           let fetchedOrders = await getSpaceOrders(spaceId);
-          console.log(fetchedOrders);
-
           const fixedOrders = fetchedOrders.filter(
             (ord: any) =>
               ord.status === "PENDING" ||
               ord.status === "IN_PROGRESS" ||
               ord.status === "READY",
           );
+          console.log(fetchedOrders);
 
-          console.log(fixedOrders);
-
-          // Compare fixedOrders with the current state
-          // if (JSON.stringify(fixedOrders) !== JSON.stringify(spaceOrders)) {
-          //   setSpaceOrders(fixedOrders); // Update only if data differs
-          // }
           setSpaceOrders(fixedOrders);
         } catch (error) {
           console.error("Failed to load orders:", error);
         } finally {
         }
       };
-      setLoadingOrders(true); // Start loading orders
 
+      setLoadingOrders(true); // Start loading orders
       loadOrders();
       setLoadingOrders(false); // End loading orders
 
       // Set up interval to reload orders every 5 seconds
       const interval = setInterval(() => {
-        loadOrders();
+        setElapsedTime((prevElapsedTime) => {
+          const newElapsedTime = prevElapsedTime + 5000; // Increment by 5 seconds each time
+          console.log(newElapsedTime);
+
+          if (newElapsedTime > 1000 * 20) {
+            setShowRefreshButton(true);
+            clearInterval(interval); // Clear the interval
+          } else {
+            loadOrders();
+          }
+
+          return newElapsedTime;
+        });
       }, 5000);
 
       // Clean up the interval on component unmount or when spaceId changes
@@ -91,9 +100,6 @@ const MenuPage = ({
     }
   }, [spaceId]);
 
-  useEffect(() => {
-    console.log(spaceOrders);
-  }, [spaceOrders]);
   // Display loading spinner if menu or orders are loading
   if ((loading && !spaceType) || loadingOrders) {
     return <Loading />;
@@ -112,6 +118,18 @@ const MenuPage = ({
   }
 
   const space = spaces[0];
+
+  const handleRefresh = () => {
+    window.location.reload(); // Refresh the page
+  };
+
+  // Reset the timer function
+  const resetTimer = () => {
+    console.log("reset timer");
+
+    setElapsedTime(0); // Reset elapsed time
+    setShowRefreshButton(false); // Hide refresh button
+  };
 
   return (
     <div className="no-scrollbar relative min-h-screen bg-slate-50">
@@ -134,14 +152,14 @@ const MenuPage = ({
       {/* Display menu details */}
       <div className="flex w-full flex-col items-center p-4">
         <p className="text-xl font-bold">
-          {lang === "ar" && menu.name_ar ? menu.name_ar : menu.name}
+          {/* {lang === "ar" && menu.name_ar ? menu.name_ar : menu.name} */}
         </p>
         <p>{menu.description}</p>
       </div>
 
       {/* Render menu items */}
       <div className="grid grid-cols-2 gap-4 px-4 pb-28 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
-        {spaceType !== "SERVICE" ? (
+        {spaceType === "BEACH" ? (
           <>
             {menu_items &&
               menu_items.map((item: any) => {
@@ -155,6 +173,7 @@ const MenuPage = ({
 
                 return (
                   <ServiceDrawer
+                    resetTimer={resetTimer}
                     theme={space.theme}
                     lang={lang}
                     currency={menu.currency}
@@ -222,10 +241,21 @@ const MenuPage = ({
       {/* Footer link */}
       <a
         href="https://www.clickorder.io"
-        className="absolute bottom-3 left-1/2 -translate-x-1/2 text-gray-600 hover:text-blue-700 hover:underline"
+        className="absolute bottom-3 left-1/2 -translate-x-1/2 font-bold text-gray-700 hover:text-blue-700 hover:underline"
       >
         By ClickOrder.io
       </a>
+      <RefreshDialog resetTimer={resetTimer} isOpen={showRefreshButton} />
+      {/* Refresh Button */}
+      {/* {showRefreshButton && (
+        <button
+          onClick={handleRefresh}
+          style={{ animationDuration: "2s" }}
+          className="fixed bottom-10 right-10 animate-pulse rounded-full border border-white bg-blue-600 px-4 py-7 text-xs text-white shadow-blue-500 transition hover:animate-none hover:bg-blue-700"
+        >
+          Refresh
+        </button>
+      )} */}
     </div>
   );
 };

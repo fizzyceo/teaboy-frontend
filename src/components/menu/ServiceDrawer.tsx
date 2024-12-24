@@ -4,7 +4,12 @@ import { SpaceOrder, useOrderStore } from "@/stores/order.store";
 
 import { toast } from "sonner";
 
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 import ServiceCard from "./ServiceCard";
 import submitOrder from "@/actions/order/submit-order";
@@ -24,6 +29,7 @@ const ServiceDrawer = ({
   order_number,
   order,
   theme,
+  resetTimer, // Add resetTimer prop
 }: {
   item: any;
   lang: any;
@@ -34,6 +40,7 @@ const ServiceDrawer = ({
   order_number?: string;
   order?: SpaceOrder | undefined | false;
   theme: string;
+  resetTimer: () => void; // Define the type
 }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const router = useRouter();
@@ -117,9 +124,15 @@ const ServiceDrawer = ({
     }
   };
 
-  const handleDialogClose = () => setOpenDialog(false);
+  const handleDialogClose = () => {
+    resetTimer(); // Call resetTimer
+    setOpenDialog(false);
+  };
 
-  const handleDialogOpen = () => setOpenDialog(true);
+  const handleDialogOpen = () => {
+    resetTimer(); // Call resetTimer
+    setOpenDialog(true);
+  };
 
   const viewDetails = () => {
     if (order_number) {
@@ -177,17 +190,19 @@ const ServiceDrawer = ({
       </DialogTrigger>
 
       <DialogContent>
+        <DialogTitle></DialogTitle>
         <div className="space-y-3 p-4">
           <h2 className="text-xl font-medium underline">
             {orderButtonState
               ? translateString("Order Information", lang)
-              : translateString("Confirm Order", lang)}
+              : translateString("Confirm Order", lang)}{" "}
+            ({itemTitle})
           </h2>
           <p>
             {orderButtonState
               ? ""
               : translateString(
-                  "Are you sure you want to order this item?",
+                  "Are you sure you want to order this service?",
                   lang,
                 )}
           </p>
@@ -199,7 +214,7 @@ const ServiceDrawer = ({
               <h1>
                 STATUS: <strong className="text-green-700">{status}</strong>
               </h1>
-              <div className="flex flex-row gap-3 rounded-md bg-slate-200 p-2">
+              {/* <div className="flex flex-row gap-3 rounded-md bg-slate-200 p-2">
                 <img
                   className="rounded-md"
                   src={itemImage}
@@ -219,7 +234,7 @@ const ServiceDrawer = ({
                     </p>
                   )}
                 </div>
-              </div>
+              </div> */}
             </div>
           )}
           <div className="mt-4 flex justify-end gap-2">
@@ -241,19 +256,19 @@ const ServiceDrawer = ({
 
             {!isOrdered && !order_number && (
               <Button
-                variant={"secondary"}
+                variant={"destructive"}
                 className="btn-secondary"
                 onClick={handleDialogClose}
                 // disabled={orderLoading || onCanceling}
               >
-                {translateString("Close", lang)}
+                {translateString("Cancel", lang)}
               </Button>
             )}
             <Button
-              variant={orderButtonState ? "nextStep" : "order"}
+              variant={"nextStep"}
               onClick={orderButtonState ? handleDialogClose : handleOrderSubmit}
               // disabled={isOrdered || orderLoading}
-              className={`${orderButtonState ? "bg-green-500 text-white" : ""}`}
+              className={`bg-green-500 text-white`}
               disabled={orderLoading || onCanceling}
             >
               {orderButtonState ? (
@@ -261,7 +276,7 @@ const ServiceDrawer = ({
               ) : orderLoading ? (
                 <Loader2 className="w-7 animate-spin" />
               ) : (
-                translateString("Confirm", lang)
+                translateString("Submit", lang)
               )}
             </Button>
           </div>

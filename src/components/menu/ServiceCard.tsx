@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import { ShoppingBasket, CheckCircle } from "lucide-react";
 import { translateString } from "@/lib/translate";
 import { Order, SpaceOrder } from "@/stores/order.store";
+import { themeToCSS } from "@/lib/themeToCSS";
 
 const ServiceCard = ({
   item,
@@ -36,9 +37,9 @@ const ServiceCard = ({
 
   return (
     <div
-      style={{ background: theme && theme }}
+      style={theme ? themeToCSS(theme) : undefined}
       key={item.item_id}
-      className={`flex flex-col justify-between gap-4 rounded-md border-2 ${orderButtonState ? "border-2 border-green-600" : "border-slate-300"} ${theme ? `bg-[${theme}]` : "bg-gradient-to-tr from-slate-50 to-slate-400"} p-3 shadow-md md:flex-row lg:flex-row`}
+      className={`flex flex-col justify-between gap-4 rounded-md border-2 ${orderButtonState ? "border-4 border-green-600" : "border-slate-300"} ${theme ? `bg-[${theme}]` : "bg-gradient-to-tr from-slate-50 to-slate-400"} p-3 shadow-md md:flex-row lg:flex-row`}
     >
       <div className="relative h-40 w-full rounded-md bg-slate-500 sm:h-20 md:h-32 lg:h-36">
         <Image
