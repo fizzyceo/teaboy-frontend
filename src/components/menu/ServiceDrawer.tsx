@@ -145,11 +145,20 @@ const ServiceDrawer = ({
   useEffect(() => {
     if (isOrdered || order_number) {
       setOrderButtonState(true);
+    } else {
+      setOrderButtonState(false);
     }
   }, [isOrdered, order_number]);
 
   useEffect(() => {
+    console.log(isOrdered);
+
+    if (!isOrdered) {
+      setStatus("");
+    }
     if (order) {
+      console.log(order);
+
       if (order.status === "PENDING") {
         setStatus("Received");
       } else if (order.status === "IN_PROGRESS" || order.status === "READY") {
@@ -162,7 +171,7 @@ const ServiceDrawer = ({
       setItemDescription(order.menu_item.description);
       setItemTitle(order.menu_item.title);
     }
-  }, [order]);
+  }, [order, isOrdered]);
   return (
     <Dialog
       open={openDialog}
@@ -194,9 +203,8 @@ const ServiceDrawer = ({
         <div className="space-y-3 p-4">
           <h2 className="text-xl font-medium underline">
             {orderButtonState
-              ? translateString("Order Information", lang)
+              ? `${translateString("Order Information", lang)} (${itemTitle})`
               : translateString("Confirm Order", lang)}{" "}
-            ({itemTitle})
           </h2>
           <p>
             {orderButtonState

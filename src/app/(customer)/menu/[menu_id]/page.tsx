@@ -59,6 +59,7 @@ const MenuPage = ({
       const loadOrders = async () => {
         try {
           let fetchedOrders = await getSpaceOrders(spaceId);
+          if (!fetchedOrders?.length) return;
           const fixedOrders = fetchedOrders.filter(
             (ord: any) =>
               ord.status === "PENDING" ||
@@ -84,9 +85,9 @@ const MenuPage = ({
           const newElapsedTime = prevElapsedTime + 5000; // Increment by 5 seconds each time
           console.log(newElapsedTime);
 
-          if (newElapsedTime > 1000 * 20) {
+          if (newElapsedTime > 1000 * 60 * 2) {
             setShowRefreshButton(true);
-            clearInterval(interval); // Clear the interval
+            // clearInterval(interval); // Clear the interval
           } else {
             loadOrders();
           }
@@ -104,7 +105,6 @@ const MenuPage = ({
   if ((loading && !spaceType) || loadingOrders) {
     return <Loading />;
   }
-
   // Handle case where no menu data is available
   if (!menu) {
     return <p>{translateString("No menu data available.", lang)}</p>;
@@ -125,7 +125,7 @@ const MenuPage = ({
 
   // Reset the timer function
   const resetTimer = () => {
-    console.log("reset timer");
+    console.log("reset...");
 
     setElapsedTime(0); // Reset elapsed time
     setShowRefreshButton(false); // Hide refresh button

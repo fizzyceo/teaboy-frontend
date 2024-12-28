@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
-import { OrderItem, useOrderStore } from "@/stores/order.store";
+import { OrderItem, OrderItemUI, useOrderStore } from "@/stores/order.store";
 import submitOrder from "@/actions/order/submit-order";
 
 import {
@@ -62,7 +62,7 @@ const OrderDialog = ({
   const [openDialog, setOpenDialog] = useState(false);
 
   const total = orderItems.reduce(
-    (acc: number, item: OrderItem) => acc + item.menuItemPrice,
+    (acc: number, item: OrderItemUI) => acc + item.menuItemPrice,
     0,
   );
 

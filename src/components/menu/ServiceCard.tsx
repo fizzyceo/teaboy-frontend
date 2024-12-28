@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import Image from "next/legacy/image";
 import { Button } from "../ui/button";
-import { ShoppingBasket, CheckCircle } from "lucide-react";
+import { ShoppingBasket, CheckCircle, Loader2 } from "lucide-react";
 import { translateString } from "@/lib/translate";
 import { Order, SpaceOrder } from "@/stores/order.store";
 import { themeToCSS } from "@/lib/themeToCSS";
@@ -71,11 +71,18 @@ const ServiceCard = ({
           onClick={orderButtonState ? handleNavigateToOrder : undefined}
           disabled={!item.available || orderButtonState}
         >
-          {orderButtonState && order_status ? (
-            <>
-              <CheckCircle size={24} className="mr-2" />
-              <span>{translateString(order_status, lang)}</span>
-            </>
+          {orderButtonState ? (
+            order_status ? (
+              <>
+                <CheckCircle size={24} className="mr-2" />
+                <span>{translateString(order_status, lang)}</span>
+              </>
+            ) : (
+              <>
+                <Loader2 className="w-7 animate-spin" />
+                {/* <span>Loading...</span> */}
+              </>
+            )
           ) : (
             <>
               <ShoppingBasket size={24} className="mr-2" />
