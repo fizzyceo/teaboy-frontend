@@ -151,14 +151,10 @@ const ServiceDrawer = ({
   }, [isOrdered, order_number]);
 
   useEffect(() => {
-    console.log(isOrdered);
-
     if (!isOrdered) {
       setStatus("");
     }
     if (order) {
-      console.log(order);
-
       if (order.status === "PENDING") {
         setStatus("Received");
       } else if (order.status === "IN_PROGRESS" || order.status === "READY") {

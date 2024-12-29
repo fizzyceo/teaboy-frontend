@@ -66,7 +66,6 @@ const MenuPage = ({
               ord.status === "IN_PROGRESS" ||
               ord.status === "READY",
           );
-          console.log(fetchedOrders);
 
           setSpaceOrders(fixedOrders);
         } catch (error) {
@@ -83,7 +82,6 @@ const MenuPage = ({
       const interval = setInterval(() => {
         setElapsedTime((prevElapsedTime) => {
           const newElapsedTime = prevElapsedTime + 5000; // Increment by 5 seconds each time
-          console.log(newElapsedTime);
 
           if (newElapsedTime > 1000 * 60 * 2) {
             setShowRefreshButton(true);
@@ -125,8 +123,6 @@ const MenuPage = ({
 
   // Reset the timer function
   const resetTimer = () => {
-    console.log("reset...");
-
     setElapsedTime(0); // Reset elapsed time
     setShowRefreshButton(false); // Hide refresh button
   };

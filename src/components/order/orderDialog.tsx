@@ -82,10 +82,8 @@ const OrderDialog = ({
       if (stepIndex === 0) {
         setStepIndex(1);
       } else if (stepIndex === 1) {
-        console.log(orderItems);
-
         const order = {
-          customer_name: customerName || "Anonymous",
+          customer_name: customerName || answer || "Anonymous",
           table_number: table_number || 0,
           spaceId: spaceId,
           answer: answer,
@@ -99,7 +97,6 @@ const OrderDialog = ({
             })),
           })),
         };
-        console.log(order);
 
         setOrderLoading(true);
         const response = await submitOrder(order);

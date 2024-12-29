@@ -22,7 +22,6 @@ const OrderStatus = ({ params }: { params: { order_id: string } }) => {
       const loadOrderDetails = async () => {
         const response = await getOrderDetails(params.order_id);
 
-        console.log(response);
         if (response?.statusCode === 404) {
           setErrorMsg(response?.message);
         } else {

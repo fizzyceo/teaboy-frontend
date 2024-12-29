@@ -101,7 +101,7 @@ const MenuItemDrawer = ({
     } else if (stepIndex === 2) {
       const handleSubmitOrder = async () => {
         const order = {
-          customer_name: customerName || "Anonymous",
+          customer_name: customerName || answer || "Anonymous",
           table_number: tableNumber,
           spaceId: spaceId,
           answer: answer,
@@ -116,7 +116,6 @@ const MenuItemDrawer = ({
           })),
         };
 
-        console.log("order-->", order);
         setOrderLoading(true);
         const response = await submitOrder(order);
         setOrderLoading(false);

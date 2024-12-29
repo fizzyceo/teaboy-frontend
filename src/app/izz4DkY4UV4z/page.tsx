@@ -51,7 +51,7 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen w-full flex-col items-center justify-center gap-4 px-4 py-10">
+    <main className="flex min-h-screen w-screen flex-col items-center justify-center gap-4 overflow-x-hidden px-4 py-10">
       <div className="grid h-full grid-cols-1 gap-8 md:h-auto md:grid-cols-2 lg:grid-cols-3 xl:h-auto xl:grid-cols-3">
         {currentLinks.map((link: any) => (
           <div

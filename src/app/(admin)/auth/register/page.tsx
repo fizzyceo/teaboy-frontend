@@ -62,7 +62,6 @@ const RegisterPage = () => {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
     const { email, password, phone, name, role } = values;
 
     const registerResponse = await registerUser({
@@ -72,8 +71,6 @@ const RegisterPage = () => {
       name,
       role,
     });
-
-    console.log(registerResponse);
 
     if (registerResponse.user_id) {
       toast.success("User registered successfully");
