@@ -14,7 +14,8 @@ const ServiceCard = ({
   base_url,
   isOrdered,
   order_number,
-  order_status,
+  order_status_text,
+  currentStatus,
   theme,
   orderButtonState,
 }: {
@@ -25,7 +26,8 @@ const ServiceCard = ({
   base_url?: string;
   isOrdered?: boolean;
   order_number?: string;
-  order_status: string;
+  order_status_text: string;
+  currentStatus?: string;
   theme?: string;
   orderButtonState?: boolean;
 }) => {
@@ -39,7 +41,7 @@ const ServiceCard = ({
     <div
       style={theme ? themeToCSS(theme) : undefined}
       key={item.item_id}
-      className={`flex flex-col justify-between gap-4 rounded-md border-2 ${orderButtonState ? "border-4 border-green-600" : "border-slate-300"} ${theme ? `bg-[${theme}]` : "bg-gradient-to-tr from-slate-50 to-slate-400"} p-3 shadow-md md:flex-row lg:flex-row`}
+      className={`flex flex-col justify-between gap-4 rounded-md border-2 ${orderButtonState ? (currentStatus?.toLowerCase() !== "pending" ? "border-4 border-orange-600" : "border-4 border-green-600") : "border-slate-300"} ${theme ? `bg-[${theme}]` : "bg-gradient-to-tr from-slate-50 to-slate-400"} p-3 shadow-md md:flex-row lg:flex-row`}
     >
       <div className="relative h-40 w-full rounded-md bg-slate-500 sm:h-20 md:h-32 lg:h-36">
         <Image
@@ -59,23 +61,27 @@ const ServiceCard = ({
 
       <div className="flex w-full flex-col justify-between gap-4 md:w-2/5 lg:w-2/5">
         <div className="flex w-full flex-col justify-between">
-          <h2 className="text-ellipsis text-lg font-bold">
+          <h2 className="text-ellipsis text-sm font-bold md:text-base lg:text-lg">
             {lang === "ar" && item.title_ar ? item.title_ar : item.title}
           </h2>
         </div>
         <Button
-          variant={orderButtonState ? "nextStep" : "secondary"}
-          className={`flex w-full items-center justify-center border font-semibold ${
-            orderButtonState ? "bg-green-500 text-white" : "border-orange-600"
-          }`}
+          variant={
+            orderButtonState
+              ? currentStatus?.toLowerCase() !== "pending"
+                ? "on_the_way"
+                : "received"
+              : "secondary"
+          }
+          className={`flex w-full items-center justify-center border font-semibold`}
           onClick={orderButtonState ? handleNavigateToOrder : undefined}
-          disabled={!item.available || orderButtonState}
+          disabled={!item.available}
         >
           {orderButtonState ? (
-            order_status ? (
+            order_status_text ? (
               <>
                 <CheckCircle size={24} className="mr-2" />
-                <span>{translateString(order_status, lang)}</span>
+                <span>{translateString(order_status_text, lang)}</span>
               </>
             ) : (
               <>

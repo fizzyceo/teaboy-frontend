@@ -12,6 +12,7 @@ import { translateString } from "@/lib/translate";
 import ServiceDrawer from "@/components/menu/ServiceDrawer";
 import getSpaceOrders from "@/actions/order/get-space-orders";
 import RefreshDialog from "@/components/shared/RefreshDialog";
+import AdCard from "@/components/menu/AdCard";
 
 const MenuPage = ({
   params,
@@ -55,7 +56,7 @@ const MenuPage = ({
 
   // Fetch orders for the selected space
   useEffect(() => {
-    if (spaceId) {
+    if (spaceType === "BEACH" && spaceId) {
       const loadOrders = async () => {
         try {
           let fetchedOrders = await getSpaceOrders(spaceId);
@@ -97,7 +98,7 @@ const MenuPage = ({
       // Clean up the interval on component unmount or when spaceId changes
       return () => clearInterval(interval);
     }
-  }, [spaceId]);
+  }, [spaceType, spaceId]);
 
   // Display loading spinner if menu or orders are loading
   if ((loading && !spaceType) || loadingOrders) {
@@ -166,26 +167,34 @@ const MenuPage = ({
                   spaceOrders?.find(
                     (order: any) => order.menu_item_id === item.item_id,
                   );
-
-                return (
-                  <ServiceDrawer
-                    resetTimer={resetTimer}
-                    theme={space.theme}
-                    lang={lang}
-                    currency={menu.currency}
-                    base_url={menu.image_url}
-                    VAT={menu.VAT}
-                    item={item}
-                    isOrdered={!!matchingOrder} // Check if there's a matching order
-                    order_number={
-                      matchingOrder
-                        ? matchingOrder.order.order_number
-                        : undefined
-                    } // Pass order number if exists
-                    order={matchingOrder}
-                    key={item.item_id}
-                  />
-                );
+                if (item?.ad_url) {
+                  return (
+                    <AdCard
+                      image_url={`${menu.image_url}${item.images[0]}`}
+                      ad_url={item?.ad_url}
+                    />
+                  );
+                } else {
+                  return (
+                    <ServiceDrawer
+                      resetTimer={resetTimer}
+                      theme={space.theme}
+                      lang={lang}
+                      currency={menu.currency}
+                      base_url={menu.image_url}
+                      VAT={menu.VAT}
+                      item={item}
+                      isOrdered={!!matchingOrder} // Check if there's a matching order
+                      order_number={
+                        matchingOrder
+                          ? matchingOrder.order.order_number
+                          : undefined
+                      } // Pass order number if exists
+                      order={matchingOrder}
+                      key={item.item_id}
+                    />
+                  );
+                }
               })}
           </>
         ) : (
@@ -200,24 +209,33 @@ const MenuPage = ({
                     (order: any) => order.menu_item_id === item.item_id,
                   );
 
-                return (
-                  <MenuItemDrawer
-                    theme={space.theme}
-                    lang={lang}
-                    currency={menu.currency}
-                    base_url={menu.image_url}
-                    VAT={menu.VAT}
-                    item={item}
-                    isOrdered={!!matchingOrder} // Check if there's a matching order
-                    order_number={
-                      matchingOrder
-                        ? matchingOrder.order.order_number
-                        : undefined
-                    } // Pass order number if exists
-                    order={matchingOrder}
-                    key={item.item_id}
-                  />
-                );
+                if (item?.ad_url) {
+                  return (
+                    <AdCard
+                      image_url={`${menu.image_url}${item.images[0]}`}
+                      ad_url={item?.ad_url}
+                    />
+                  );
+                } else {
+                  return (
+                    <MenuItemDrawer
+                      theme={space.theme}
+                      lang={lang}
+                      currency={menu.currency}
+                      base_url={menu.image_url}
+                      VAT={menu.VAT}
+                      item={item}
+                      isOrdered={!!matchingOrder} // Check if there's a matching order
+                      order_number={
+                        matchingOrder
+                          ? matchingOrder.order.order_number
+                          : undefined
+                      } // Pass order number if exists
+                      order={matchingOrder}
+                      key={item.item_id}
+                    />
+                  );
+                }
               })}
           </>
         )}

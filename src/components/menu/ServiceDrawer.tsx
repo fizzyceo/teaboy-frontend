@@ -56,6 +56,7 @@ const ServiceDrawer = ({
   } = useOrderStore();
   const [status, setStatus] = useState<string>("");
   const [order_id, setOrder_id] = useState<string>("");
+  const [currentStatus, setCurrentStatus] = useState<string>("");
   const [itemImage, setItemImage] = useState<string>("");
   const [itemDescription, setItemDescription] = useState<string>("");
   const [itemTitle, setItemTitle] = useState<string>("");
@@ -155,6 +156,7 @@ const ServiceDrawer = ({
       setStatus("");
     }
     if (order) {
+      setCurrentStatus(order.status);
       if (order.status === "PENDING") {
         setStatus("Received");
       } else if (order.status === "IN_PROGRESS" || order.status === "READY") {
@@ -185,7 +187,8 @@ const ServiceDrawer = ({
           isOrdered={isOrdered}
           order_number={order_number}
           orderButtonState={orderButtonState}
-          order_status={status}
+          order_status_text={status}
+          currentStatus={currentStatus}
           currency={currency}
           VAT={VAT}
           base_url={base_url}

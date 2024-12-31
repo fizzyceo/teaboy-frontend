@@ -25,6 +25,11 @@ const buttonVariants = cva(
           "bg-orange-600 text-white border border-slate-700 hover:bg-orange-200 hover:border-slate-800 transition-all text-white hover:text-slate-800",
         nextStep:
           "bg-green-500 text-blakc border-2 border-slate-700 hover:bg-green-200 hover:border-slate-800 transition-all text-black",
+        received:
+          "bg-green-600 text-blakc border-2 border-slate-700 hover:bg-green-200 hover:border-slate-800 transition-all text-white",
+
+        on_the_way:
+          "bg-orange-600 text-blakc border-2 border-slate-700 hover:bg-orange-200 hover:border-slate-800 transition-all text-white",
       },
       size: {
         default: "h-10 px-4 py-2",
