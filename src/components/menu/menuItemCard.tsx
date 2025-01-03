@@ -30,9 +30,9 @@ const MenuItemCard = ({
   return (
     <div
       key={item.item_id}
-      className="flex flex-col justify-between gap-4 rounded-md border-2 border-slate-300 bg-gradient-to-tr from-slate-100 to-slate-300 p-3 shadow-md md:flex-row lg:flex-row"
+      className="flex h-[290px] flex-col justify-between gap-4 rounded-md border-2 border-slate-300 bg-gradient-to-tr from-slate-100 to-slate-300 p-3 shadow-md md:h-44 md:flex-row lg:flex-row"
     >
-      <div className="relative h-40 w-full rounded-md bg-slate-500 sm:h-20 md:h-32 lg:h-36">
+      <div className="relative h-40 w-full rounded-md bg-slate-500 md:h-32 lg:h-36">
         <Image
           src={base_url + "" + item.images[0]}
           alt={item.title}

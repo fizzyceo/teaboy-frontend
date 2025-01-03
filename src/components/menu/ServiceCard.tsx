@@ -41,9 +41,9 @@ const ServiceCard = ({
     <div
       style={theme ? themeToCSS(theme) : undefined}
       key={item.item_id}
-      className={`flex flex-col justify-between gap-4 rounded-md border-2 ${orderButtonState ? (currentStatus?.toLowerCase() !== "pending" ? "border-4 border-orange-600" : "border-4 border-green-600") : "border-slate-300"} ${theme ? `bg-[${theme}]` : "bg-gradient-to-tr from-slate-50 to-slate-400"} p-3 shadow-md md:flex-row lg:flex-row`}
+      className={`flex h-[290px] flex-col justify-between gap-4 rounded-md border-2 md:h-44 ${orderButtonState ? (currentStatus?.toLowerCase() !== "pending" ? "border-4 border-orange-600" : "border-4 border-green-600") : "border-slate-300"} ${theme ? `bg-[${theme}]` : "bg-gradient-to-tr from-slate-50 to-slate-400"} p-3 shadow-md md:flex-row lg:flex-row`}
     >
-      <div className="relative h-40 w-full rounded-md bg-slate-500 sm:h-20 md:h-32 lg:h-36">
+      <div className="relative h-40 w-full rounded-md bg-slate-500 md:h-32 lg:h-36">
         <Image
           src={base_url + "" + item.images[0]}
           alt={item.title}
@@ -61,7 +61,7 @@ const ServiceCard = ({
 
       <div className="flex w-full flex-col justify-between gap-4 md:w-2/5 lg:w-2/5">
         <div className="flex w-full flex-col justify-between">
-          <h2 className="text-ellipsis text-sm font-bold md:text-base lg:text-lg">
+          <h2 className="text-ellipsis text-lg font-bold">
             {lang === "ar" && item.title_ar ? item.title_ar : item.title}
           </h2>
         </div>

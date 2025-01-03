@@ -170,6 +170,8 @@ const MenuPage = ({
                 if (item?.ad_url) {
                   return (
                     <AdCard
+                      key={item.item_id}
+                      title={item?.title}
                       image_url={`${menu.image_url}${item.images[0]}`}
                       ad_url={item?.ad_url}
                     />
@@ -208,10 +210,14 @@ const MenuPage = ({
                   spaceOrders?.find(
                     (order: any) => order.menu_item_id === item.item_id,
                   );
+                console.log(item);
 
                 if (item?.ad_url) {
                   return (
                     <AdCard
+                      theme={space.theme}
+                      key={item.item_id}
+                      title={item?.title}
                       image_url={`${menu.image_url}${item.images[0]}`}
                       ad_url={item?.ad_url}
                     />

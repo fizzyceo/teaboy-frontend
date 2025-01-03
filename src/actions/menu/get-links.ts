@@ -8,7 +8,7 @@ const getLinks = async (base_url: string) => {
 
   const data = await response.json();
 
-  const links = data.map((menu: any, index: any) => {
+  const links = data?.map((menu: any, index: any) => {
     return {
       id: menu.encrypted,
       menu_name: menu.menu_name,
